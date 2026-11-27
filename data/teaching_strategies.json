@@ -1,0 +1,50 @@
+[
+  {
+    "id": "TS01",
+    "name": "Câu hỏi mở / biểu quyết",
+    "min_minutes": 2,
+    "max_minutes": 8,
+    "requirements": "Không cần thiết bị; có thể dùng cho lớp đông",
+    "purpose": "Khởi động, kiểm tra hiểu"
+  },
+  {
+    "id": "TS02",
+    "name": "Think-pair-share",
+    "min_minutes": 5,
+    "max_minutes": 15,
+    "requirements": "Có thể trao đổi theo cặp tại chỗ",
+    "purpose": "So sánh và giải thích"
+  },
+  {
+    "id": "TS03",
+    "name": "Ví dụ gần gũi",
+    "min_minutes": 3,
+    "max_minutes": 10,
+    "requirements": "Ví dụ minh họa không thêm khẳng định trái nguồn",
+    "purpose": "Liên hệ lý thuyết"
+  },
+  {
+    "id": "TS04",
+    "name": "Thực hành theo checkpoint",
+    "min_minutes": 10,
+    "max_minutes": 40,
+    "requirements": "Có môi trường thực hành; tiêu chí test rõ",
+    "purpose": "Tiến độ lab"
+  },
+  {
+    "id": "TS05",
+    "name": "Quiz và feedback",
+    "min_minutes": 3,
+    "max_minutes": 10,
+    "requirements": "Câu hỏi và đáp án bám nguồn",
+    "purpose": "Kiểm tra hiểu"
+  },
+  {
+    "id": "TS06",
+    "name": "Giảng giải và tổng kết",
+    "min_minutes": 3,
+    "max_minutes": 20,
+    "requirements": "Có mục tiêu và đoạn nguồn",
+    "purpose": "Bao phủ kiến thức"
+  }
+]

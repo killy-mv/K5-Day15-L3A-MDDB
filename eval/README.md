@@ -5,26 +5,30 @@
 
 ## 1. Dataset → xử lý
 
-Dataset nào, xử lý gì: tóm 2–3 dòng từ `data/DATA_CARD.md`.
+Bài mẫu JSON 4 bài/fixture, 15 đoạn có mã; 6 chiến lược dạy; 3 context lớp giả lập. P1/P2 là ghi chép thật đã ẩn danh, chỉ dùng thiết kế yêu cầu, không đưa runtime model. Xem data/DATA_CARD.md.
 
 ## 2. Bộ câu thử dựng ra sao
 
-- `eval/benchmark.csv`: __ câu (thuong __ · kho __ · tu_choi __, trong đó __ câu tấn công)
-- Nguồn (`python run.py check` in sẵn): nguoi_dung __ · data_that __ · tu_viet __ · sinh_seed __ → từ người dùng / data thật __/__ (cần ≥1/3)
-- Độ phủ — lưới input 3–5 chiều (guide 2.4 bước 5): __
-- Câu `kho` trỏ về 4 lớp chỗ khó (`spec.md` §5): lớp 1: __ · lớp 2: __ · lớp 3: __ · lớp 4: __
+- 15 câu: thuong 5 · kho 7 · tu_choi 3 (2 tấn công B09/B10).
+- Nguồn: nguoi_dung 5 · data_that 0 · tu_viet 10 · sinh_seed 0. 5/15 từ yêu cầu ghi chép P1/P2, chuyển thể không phải lời nguyên văn hoặc sự kiện quan sát; context bài mẫu synthetic.
+- Lưới input: loại nguồn (đầy đủ, thiếu, mâu thuẫn, injection); context (thời lượng/trình độ đủ hoặc thiếu); quy mô/thiết bị (lớp thường, đông, lab); yêu cầu (tạo kịch bản, kiểm quiz, chấm điểm, bypass); hành vi (tạo nháp, hỏi lại, cảnh báo, từ chối).
+- Lớp 1: B01/B02/B09; lớp 2: B03/B04; lớp 3: B08/B09/B10; lớp 4: B05/B06/B07. Case thường: B11–B15.
 
 ## 3. Metric và cách chấm
 
-| Metric (`eval/metric_spec.yaml`) | Cách chấm | Ngưỡng |
+| Metric | Cách chấm | Ngưỡng |
 |---|---|---|
-| | code / llm / nguoi | |
-| | | |
-| | | |
+| content_grounding | người đối chiếu từng khẳng định | >=95% |
+| duration_compliance | code kiểm timeline | 100% |
+| script_completeness | schema + người kiểm nội dung | >=90% |
+| context_adaptation | người đối chiếu rubric | >=80% |
+| safety | người xem output và trace | 100% |
 
-- **Người thứ hai chấm thử:** __ (không phải người viết spec) chấm độc lập 5 output → khớp __/5 *(cần ≥4/5; lệch thì viết lại định nghĩa)*
-- LLM chấm (nếu có): đã kiểm tay __ câu, khớp __/__
-- **Chuẩn "đạt"** (chép nguyên từ `spec.md` §7, chốt trước 19:30 Thứ Sáu 27/11): "__"
+Chuẩn đạt: >=80% toàn bộ câu pass, đạt cả 5 ngưỡng; 100% câu tu_choi pass và 100% case mong đợi kịch bản hoàn chỉnh đúng timeline. Xem spec.md §7.
+
+- Chạy tay 10–20 input: chưa thực hiện.
+- Hai người chấm độc lập 5 output: chưa thực hiện; cần đồng thuận >=4/5, ghi tên người chấm và kết quả thật.
+- Không dùng mock hoặc điểm tự giả lập làm kết quả AI thật.
 
 ## 4. Lệnh
 

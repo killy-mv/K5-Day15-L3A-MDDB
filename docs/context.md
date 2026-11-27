@@ -6,8 +6,7 @@
 
 ## 1. Bối cảnh và quyết định sản phẩm
 
-- Nhóm chuyển từ Track B (Y tế) sang Track A (EdTech), hướng gần nhất là A3 — Sản xuất bài giảng bằng AI, có giao thoa với A4 — Lớp học kiểu mới.
-- Theo xác nhận của thành viên nhóm, lab coach đã được thông báo về việc đổi track. Ghi nhận thay đổi trong form CP2 theo luật hackathon.
+- TeachFlow AI thuộc Track A (EdTech), hướng gần nhất là A3 — Sản xuất bài giảng bằng AI, có giao thoa với A4 — Lớp học kiểu mới.
 - Tên sản phẩm sử dụng trong trao đổi: **TeachFlow AI**.
 - Người dùng chính: giảng viên AI20K chuẩn bị một buổi giảng trên lớp từ slide và tài liệu chuyên môn đã có.
 - Người hưởng lợi gián tiếp: học viên; có thể hỏi thêm lab coach trực tiếp tham gia chuẩn bị hoặc triển khai giảng dạy.
@@ -159,7 +158,7 @@ Ngoài phạm vi: multi-agent phức tạp, fine-tune/training model, video gi�
 
 ## 9. Bằng chứng pain và impact
 
-Chưa có kết quả phỏng vấn/khảo sát được xác nhận trong trao đổi này. Kế hoạch: phỏng vấn ít nhất 3 người ngoài nhóm đúng vai trò giảng viên hoặc lab coach trực tiếp chuẩn bị và triển khai bài giảng AI20K, hỏi về hành vi thực tế trong tháng qua. Có thể bổ sung khảo sát học viên hoặc nguồn data phù hợp để kiểm tra chéo; log pre-class không tự chứng minh việc chuẩn bị kịch bản trên lớp tốn thời gian.
+Đã có ghi chép ban đầu của hai cuộc phỏng vấn: P1 (lab coach) muốn dùng kịch bản khi dạy và kỳ vọng cải thiện tiến độ làm lab; P2 (giảng viên) báo tốn thời gian chuẩn bị, tìm ví dụ gần gũi và tổ chức tương tác. Chưa có số phút hoặc tỷ lệ hoàn thành thực tế; xem evidence/summary.md. Kế hoạch tiếp theo: phỏng vấn ít nhất 3 người ngoài nhóm đúng vai trò giảng viên hoặc lab coach trực tiếp chuẩn bị và triển khai bài giảng AI20K, hỏi về hành vi thực tế trong tháng qua. Có thể bổ sung khảo sát học viên hoặc nguồn data phù hợp để kiểm tra chéo; log pre-class không tự chứng minh việc chuẩn bị kịch bản trên lớp tốn thời gian.
 
 - Thu thập thời gian chuẩn bị, tần suất dạy, khó khăn khi tổ chức tương tác, ví dụ và trích dẫn ẩn danh; tối thiểu 5 trích dẫn/ví dụ nguyên văn có nguồn cho CP3.
 - Nếu dùng khảo sát làm nguồn đạt ngưỡng: ít nhất 20 người đúng nhóm mục tiêu ngoài team. Dữ liệu giả lập dùng để chạy thử, không dùng làm bằng chứng pain.
@@ -188,8 +187,8 @@ Chạy hai lượt trên cùng benchmark, lưu run ID, token, kết quả từng
 
 | Mốc | Việc cần làm |
 |---|---|
-| CP1 | Canvas và TEAMS theo Track A; repo đã cập nhật trên main ở commit 3d1f5b9, lệnh check đã kiểm đúng format TEAMS. Không xác nhận đã nộp form nếu chưa có bằng chứng. |
-| CP2 · 27/11 19:30 | Cập nhật bằng chứng đầu, ghi đổi track; spec/sơ đồ, benchmark >=10, >=3 metric và ngưỡng khóa, data card, prototype mock đi hết luồng. |
+| CP1 | Canvas và TEAMS theo Track A; lệnh check đã kiểm đúng format TEAMS. Không xác nhận đã nộp form nếu chưa có bằng chứng. |
+| CP2 · 27/11 19:30 | Cập nhật Canvas theo bằng chứng đầu và các thay đổi thiết kế thực tế; spec/sơ đồ, benchmark >=10, >=3 metric và ngưỡng khóa, data card, prototype mock đi hết luồng. |
 | CP3 · 28/11 10:00 | Bằng chứng pain đạt ngưỡng, 20–30 câu, spec §0–7, AI thật, lượt eval 1 đã chấm/run ID, thử simulate 10 phiên, video 30 giây. |
 | CP4 · 28/11 14:30 | Cải tiến và lượt 2, mô phỏng chi phí, báo cáo, slide, video dự phòng, demo. |
 | Hạn cuối · 28/11 23:59 | Reflection từng người, changelog spec §10 cho các sửa đổi sau CP4, push bản cuối. |

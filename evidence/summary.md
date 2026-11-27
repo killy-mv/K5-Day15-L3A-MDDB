@@ -1,48 +1,48 @@
-# Tổng hợp bằng chứng pain
+# Tổng hợp bằng chứng pain — TeachFlow AI
 
-> Điền ở guide bước 1.2, xong trước **CP3 10:00 Thứ Bảy 28/11**. Chấm ở rubric R1.
-> Ba nguồn ngang nhau — tối thiểu **≥1 nguồn đạt ngưỡng**. Mạnh nhất: đào data ra insight → hỏi người dùng để kiểm lại (hoặc ngược lại).
+> Bản đầu CP2, ngày 27/11/2026. Nguồn: hai cuộc phỏng vấn do TV1 cung cấp. Chưa đủ ngưỡng CP3; không suy rộng kết quả cho toàn khóa.
 
 ## 1. Nguồn đã dùng
 
-| Nguồn | Đạt ngưỡng? | File |
+| Nguồn | Trạng thái | File |
 |---|---|---|
-| Đào data (x/N, %, cách đếm chạy lại được, ≥5 ví dụ) | ☐ | `evidence/data-mining.md` |
-| Phỏng vấn (≥3 người ngoài nhóm, đúng người dùng) | ☐ | `evidence/interviews/P1.md`… |
-| Khảo sát (≥20 người ngoài nhóm, đúng người dùng) | ☐ | `evidence/survey/` |
+| Phỏng vấn | 2 người: 1 lab coach, 1 giảng viên; cần thêm người đúng vai ngoài nhóm để đạt ngưỡng | [P1](interviews/P1.md), [P2](interviews/P2.md) |
+| Đào data | Chưa thực hiện cho pain này | data-mining.md |
+| Khảo sát | Chưa có kết quả | survey/ |
 
-## 2. Số chính
+## 2. Số chính và phát hiện ban đầu
 
-- Đào data: __/__ (__%) …
-- Phỏng vấn: __/3 người gặp *(n nhỏ không ghi %)* · số lần / tháng: P1 __, P2 __, P3 __ · mỗi lần mất __–__ phút
-- Khảo sát: n = __ · __/__ (__%) …
+| ID | Vai | Phát hiện | Tần suất/thời gian | Cách hiện tại |
+|---|---|---|---|---|
+| P1 | Lab coach | 1/1 lab coach được hỏi có nhu cầu dùng kịch bản khi dạy; kỳ vọng tăng số học viên hoàn thành lab nhanh và giảm thời gian hoàn thành | Chưa có số thực tế | Chưa rõ |
+| P2 | Giảng viên | 1/1 giảng viên được hỏi mô tả mất nhiều thời gian chuẩn bị, tìm ví dụ gần gũi và bảo đảm bao phủ kiến thức | Chưa có số phút/buổi hoặc tần suất | Xem slide có sẵn, nhờ AI tạo phần mới, tổ chức theo giới thiệu–kiến thức–ví dụ–câu hỏi |
 
-Phỏng vấn nhiều vai thì đếm theo từng vai, không cộng chung.
+Hai vai được đếm riêng; không kết luận 2/2 người gặp cùng pain. Chưa có baseline tỷ lệ hoàn thành lab, thời gian làm lab, thời gian chuẩn bị hoặc dữ liệu trước/sau sản phẩm.
 
-| | Vai | Gặp pain? | Số lần / 1 tháng qua | Lần gần nhất mất | Đang xoay xở bằng |
-|---|---|---|---|---|---|
-| P1 | | | | | |
-| P2 | | | | | |
-| P3 | | | | | |
+## 3. Ghi chép minh họa có nguồn
 
-## 3. ≥5 trích dẫn hoặc ví dụ nguyên văn (có nguồn, bỏ tên)
+- P1: Có nhu cầu dùng kịch bản trong lúc giảng dạy (diễn ý).
+- P1: Mong muốn tăng số học viên hoàn thành lab nhanh hơn, giảm thời gian hoàn thành (diễn ý).
+- P2: “Thường xem các slide có sẵn, nếu có mới thì nhờ Ai ren ra…”
+- P2: “Mất nhiều tgian chuẩn bị, làm sao để học sinh hết hết dc bài, nghĩ thêm các ví dụ thực tế gần gũi nhất”
+- P2: “Thường xây dựng theo kiểu giới thiệu kịch bản, trình bày kiến thức, ví dụ và câu hỏi tương tác.”
 
-1. "…" — P_ / dòng data __ / phiếu khảo sát __
-2.
-3.
-4.
-5.
+Ba đoạn P2 được giữ nguyên theo ghi chép người phỏng vấn gửi, chưa xác nhận nguyên văn người trả lời. Hai ý P1 là diễn ý. Chưa tính các đoạn này là đủ 5 trích dẫn/ví dụ nguyên văn theo rubric.
 
-## 4. Các nguồn có khớp nhau không
+## 4. Liên hệ với thiết kế
 
-Data nói __; người dùng nói __. Khớp / lệch ở đâu, vì sao: __
+- P2 củng cố pain chuẩn bị bài và nhu cầu ví dụ gần gũi, bao phủ mục tiêu học tập; kịch bản nên bám slide, có lời dẫn, kiến thức, ví dụ, câu hỏi tương tác.
+- P1 bổ sung nhu cầu sử dụng kịch bản khi hướng dẫn lab. Với buổi lab, có thể gợi ý mốc tiến độ, hoạt động thực hành, cách hỗ trợ khi học viên bị kẹt; đây là đề xuất thiết kế.
+- Đo hiệu quả giảng viên bằng thời gian chuẩn bị và duyệt; đo hiệu quả lab bằng số/tỷ lệ học viên hoàn thành trong thời hạn cố định và thời gian hoàn thành, kèm kiểm tra chất lượng bài lab. Chưa chốt ngưỡng và chưa có kết quả đo.
 
-## 5. Kết luận
+## 5. Kết luận và việc còn thiếu
 
-Giả thuyết ở `evidence/hypothesis.md`: **đúng / sai / phải đổi** — vì __. Điều vẫn chưa biết: __
+Giả thuyết ban đầu về công sức chuẩn bị được P2 ủng hộ định tính; P1 cho thấy nhu cầu sử dụng kịch bản và mục tiêu đầu ra học tập. Chưa đủ để khẳng định tác động hoặc tính phổ biến. Cần thêm phỏng vấn đúng người dùng, ưu tiên giảng viên, xác nhận người tham gia ngoài nhóm; hỏi về một buổi trong tháng qua, số phút chuẩn bị và tần suất dạy, thu ví dụ/trích dẫn nguyên văn ẩn danh. Nếu P1 trực tiếp chuẩn bị và triển khai bài giảng/lab đúng vai mục tiêu thì có thể tính vào nguồn phỏng vấn; nếu không, coi là nguồn bổ trợ.
 
-## Lịch hẹn (dùng cho CP2 — chỉ ghi vai và giờ, không tên)
+## Lịch thu thập CP2
 
-| Vai | Giờ hẹn | Đã xong? |
+| Vai | Ngày | Trạng thái |
 |---|---|---|
-| | | |
+| Lab coach P1 | 27/11/2026 | Đã phỏng vấn theo TV1 |
+| Giảng viên P2 | 27/11/2026 | Đã phỏng vấn theo TV1 |
+| Giảng viên tiếp theo | Chưa hẹn | Cần bổ sung |
