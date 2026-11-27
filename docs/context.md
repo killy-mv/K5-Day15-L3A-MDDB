@@ -19,7 +19,7 @@
 
 **Mục tiêu:** giảm công sức chuẩn bị kịch bản, giúp giảng viên dễ tổ chức các hoạt động tương tác phù hợp với lớp, hướng tới tăng mức độ tham gia và hiệu quả học tập. Chưa khẳng định các lợi ích này đã được chứng minh.
 
-**Lát cắt:** Giảng viên cung cấp nội dung bài giảng và context lớp học; AI Agent lựa chọn hoạt động phù hợp và sinh kịch bản giảng dạy theo thời gian có lời dẫn, câu hỏi, hoạt động tương tác, tham chiếu nguồn và phương án dự phòng để giảng viên duyệt; hệ thống tạo một HTML độc lập từ kịch bản đã duyệt để giảng viên sử dụng trên lớp.
+**Lát cắt:** Giảng viên cung cấp nội dung bài giảng và context lớp học; AI Agent lựa chọn hoạt động phù hợp và sinh kịch bản giảng dạy theo thời gian có lời dẫn, câu hỏi, hoạt động tương tác, tham chiếu nguồn và phương án dự phòng để giảng viên duyệt; khi lên lớp, giảng viên sử dụng kịch bản đã duyệt trên một màn hình phụ riêng để đọc và giảng theo đúng kịch bản đó.
 
 **Quyết định AI trung tâm:** chọn cách tổ chức, dẫn dắt và tương tác phù hợp với nội dung, mục tiêu và điều kiện của một buổi học. Không cần train model riêng.
 
@@ -41,7 +41,7 @@ Cùng một nội dung nhưng lớp 20 người và lớp 200 người có thể
 
 ## 4. Output chính: kịch bản giảng dạy (script-first)
 
-**Đã chốt:** kịch bản giảng dạy là sản phẩm chính. HTML chỉ là bản trình bày được sinh từ kịch bản, không phải một sản phẩm độc lập có nội dung khác.
+**Đã chốt:** kịch bản giảng dạy là sản phẩm chính. Màn hình phụ khi đứng lớp chỉ là giao diện hiển thị phục vụ giảng viên đọc và bám sát kịch bản đã duyệt, không phải một sản phẩm độc lập có nội dung khác.
 
 Kịch bản cần đọc được và thực thi được, không chỉ là văn bản tóm tắt slide. Nội dung đề xuất:
 
@@ -85,22 +85,21 @@ Ví dụ schema rút gọn:
 
 Đây chỉ là ví dụ một segment; output hoàn chỉnh phải có tổng thời lượng khớp yêu cầu.
 
-## 5. Output hỗ trợ: single-file HTML Teaching Playbook
+## 5. Output hỗ trợ: màn hình phụ cho giảng viên (Teaching Mode)
 
-**Đã chốt:** giao diện được sinh từ kịch bản, duy nhất một file HTML, CSS và JS đơn giản nhúng trực tiếp. Không tách CSS/JS thành file khác, không yêu cầu framework frontend hay backend để mở bản HTML đã xuất.
+**Đã chốt:** khi đứng lớp, giảng viên sẽ có một **màn hình phụ riêng** (tách biệt với màn hình chính/màn chiếu của học viên) để đọc trực tiếp kịch bản đã duyệt và giảng theo đúng kịch bản đó.
 
-Đề xuất sử dụng một template HTML/CSS/Vanilla JS cố định và render dữ liệu từ kịch bản đã duyệt, thay vì yêu cầu LLM sinh mã HTML/JS tùy ý mỗi lượt. Lợi ích: giao diện ổn định, tiết kiệm token, dễ test và giảm rủi ro thực thi nội dung không tin cậy. Escape nội dung tài liệu và output AI khi nhúng vào HTML; không chèn API key, script tùy ý hoặc gọi dịch vụ ngoài từ playbook.
+Màn hình phụ đọc dữ liệu trực tiếp từ kịch bản đã được giảng viên duyệt, giữ nội dung hiển thị nhất quán, ổn định và không để AI tự sinh mã giao diện tùy ý mỗi lượt. Nếu giảng viên chỉnh sửa kịch bản, màn hình phụ phải cập nhật lại từ phiên bản đã duyệt mới nhất để tránh lệch nội dung.
 
-Giao diện nên chạy offline bằng trình duyệt, tự chứa dữ liệu kịch bản.
-
-| Tính năng HTML đề xuất | Ưu tiên |
+| Tính năng màn hình phụ đề xuất | Ưu tiên |
 |---|---|
+| Hiển thị lời dẫn chi tiết để giảng viên đọc và giảng theo đúng kịch bản | P0 |
 | Timeline, danh sách phân đoạn, điều hướng trước/sau | P0 |
-| Lời dẫn, hoạt động học viên, mục tiêu, tham chiếu slide, fallback | P0 |
+| Hoạt động học viên, mục tiêu, tham chiếu slide, phương án dự phòng (fallback) | P0 |
 | Timer từng hoạt động, tiến độ, đánh dấu hoàn thành | P0 |
-| Ẩn/hiện đáp án quiz, ghi chú cá nhân, chế độ tối, in | P1 |
+| Ẩn/hiện đáp án quiz, ghi chú cá nhân, chế độ hiển thị dễ đọc khi đứng lớp | P1 |
 
-Hai chế độ đã được thảo luận: Planning Mode để chuẩn bị/duyệt kịch bản, Teaching Mode để theo dõi khi đứng lớp. Không bắt buộc xây hai ứng dụng; planning có thể thực hiện qua CLI hoặc tài liệu, còn Teaching Mode là file HTML độc lập. Nếu giảng viên chỉnh sửa kịch bản, xuất lại HTML từ phiên bản đã duyệt để tránh lệch nội dung.
+Hai chế độ đã được thảo luận: Planning Mode để chuẩn bị/duyệt kịch bản, Teaching Mode trên màn hình phụ để giảng viên đọc và theo dõi kịch bản khi đứng lớp. Không bắt buộc xây hai ứng dụng; planning có thể thực hiện qua CLI hoặc tài liệu, còn Teaching Mode tập trung hiển thị kịch bản trên màn hình phụ cho giảng viên.
 
 ## 6. Kiến trúc kỹ thuật đề xuất
 
@@ -114,7 +113,7 @@ flowchart TD
     E --> F[Giảng viên chỉnh sửa và duyệt]
     F --> G[Kịch bản đã duyệt]
     G --> H[Tài liệu kịch bản]
-    G --> I[Render HTML độc lập]
+    G --> I[Hiển thị trên màn hình phụ giảng viên]
 ```
 
 - Hình dạng ưu tiên: single agent có tools trong luồng kiểm soát, kết hợp validator bằng code. Không cần multi-agent; nếu luồng xác định hoàn toàn thì có thể triển khai dưới dạng workflow đơn giản. Lý do chính là chỉ có một quyết định AI trung tâm, dễ kiểm chứng, giới hạn chi phí và thời gian.
@@ -122,7 +121,7 @@ flowchart TD
 - Parser chuẩn hóa nguồn thành đoạn/mã slide. Retrieval nếu cần, không bắt buộc vector DB.
 - Validator kiểm schema, tham chiếu tồn tại, timeline/tổng thời lượng, mục tiêu/hoạt động, thiếu nguồn và cảnh báo; kiểm tra đúng kiến thức về ngữ nghĩa cần rubric và người duyệt, không thể bảo đảm chỉ bằng check cấu trúc.
 - Nếu validation thất bại, sửa có giới hạn số lượt hoặc yêu cầu giảng viên bổ sung; không chạy lặp vô hạn.
-- Xuất tài liệu và HTML bằng code/template từ cùng một kịch bản. Không tự xuất bản lên LMS hoặc gửi nội dung cho người khác.
+- Xuất tài liệu và dữ liệu hiển thị cho màn hình phụ bằng code/template từ cùng một kịch bản. Không tự xuất bản lên LMS hoặc gửi nội dung cho người khác.
 
 Tools đề xuất:
 
@@ -133,11 +132,11 @@ Tools đề xuất:
 | get_teaching_strategy | mục tiêu và context | phương pháp/hoạt động phù hợp | Không |
 | check_duration | segments, thời lượng | tổng và lỗi timeline | Không |
 | validate_script | kịch bản, nguồn, context | lỗi/cảnh báo | Không |
-| export_script | kịch bản đã duyệt | tài liệu/HTML | Chỉ ghi file local, sau duyệt |
+| export_script | kịch bản đã duyệt | tài liệu kịch bản / dữ liệu màn hình phụ | Chỉ ghi file local, sau duyệt |
 
-Stack đề xuất: Python, Gemini, JSON, Vanilla HTML/CSS/JS; PyMuPDF, python-pptx, python-docx nếu cần hỗ trợ định dạng tương ứng. Không cần database, triển khai server, hoặc training model.
+Stack đề xuất: Python, Gemini, JSON; PyMuPDF, python-pptx, python-docx nếu cần hỗ trợ định dạng tương ứng. Không cần database, triển khai server, hoặc training model.
 
-Giữ hợp đồng starter repo: `codebase/agent.py` có `answer(text)`; model call nằm trong `codebase/ai.py` và giữ tracing token; `python run.py`, `eval`, `simulate` vẫn dùng được. Có thể bổ sung `parser.py`, `validator.py`, `exporter.py`, `templates/teaching-mode.html` và thư mục output; mỗi playbook được xuất vẫn chỉ là một file HTML. Đây là cấu trúc dự kiến, chưa phải file đã triển khai.
+Giữ hợp đồng starter repo: `codebase/agent.py` có `answer(text)`; model call nằm trong `codebase/ai.py` và giữ tracing token; `python run.py`, `eval`, `simulate` vẫn dùng được. Có thể bổ sung `parser.py`, `validator.py`, `exporter.py`, module màn hình phụ cho giảng viên và thư mục output. Đây là cấu trúc dự kiến, chưa phải file đã triển khai.
 
 ## 7. Autonomy, guardrails và HITL
 
@@ -151,7 +150,7 @@ Giữ hợp đồng starter repo: `codebase/agent.py` có `answer(text)`; model 
 
 ## 8. Phạm vi MVP
 
-P0: nhận nội dung bài giảng và context; sinh kịch bản có cấu trúc; tham chiếu nguồn; kiểm tra thời lượng và nội dung theo rubric; giảng viên duyệt; render HTML một file với timeline và điều hướng.
+P0: nhận nội dung bài giảng và context; sinh kịch bản có cấu trúc; tham chiếu nguồn; kiểm tra thời lượng và nội dung theo rubric; giảng viên duyệt; hiển thị kịch bản trên màn hình phụ cho giảng viên đọc và giảng theo từng phân đoạn với timeline và điều hướng.
 
 P1 (nếu còn thời gian): DOCX/PDF, chức năng ghi chú, in, tùy chọn giao diện, quiz ẩn/hiện đáp án. Không cần xây portal planning hoàn chỉnh.
 
