@@ -196,3 +196,7 @@ Chạy hai lượt trên cùng benchmark, lưu run ID, token, kết quả từng
 Phân công dự kiến giữ theo TEAMS.md: Minh điều phối/kiến trúc/tích hợp AI; Bảo prototype/tools/guardrails; Đạt evidence/impact; Dũng benchmark/evaluation/chi phí. Cả nhóm cùng xác minh pain, review chéo và hiểu toàn bộ câu chuyện; chưa thay thế phân công thực tế nếu nhóm thống nhất khác.
 
 Tài liệu tham chiếu trong repo: README.md (bộ đề), 01-challenge-brief.md, 02-guide.md, 03-rubric.md, tracks/track-a-edtech.md, canvas.md, TEAMS.md, starter-repo/README.md. Khi có quyết định mới, cập nhật spec/canvas và tài liệu này tương ứng; không sửa chuẩn đạt sau CP2.
+
+## 12. Prototype HTML (sau CP2)
+
+Đã có codebase/prototype.html và launcher python run.py. Kịch bản chính xuất Markdown/JSON; HTML Teaching Mode sinh từ bản đã duyệt, offline. Mock theo quy tắc, không gọi model thật; chưa nối Python answer/tools với luồng này. Xem docs/prototype.md. Giữ nguyên metric và chuẩn đạt đã khóa.

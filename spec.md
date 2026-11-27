@@ -70,7 +70,7 @@ flowchart TD
 
 **Hình dạng:** một agent có tools, đặt trong workflow kiểm soát cố định. Agent chọn đoạn cần tra, phương pháp, hoạt động và điều chỉnh theo context hoặc lỗi validator; không chỉ đi qua một chuỗi gọi model bất biến. Một agent đủ vì có một quyết định AI trung tâm; multi-agent thêm chi phí và độ khó đánh giá mà không có vai độc lập cần thiết. Parser, check và export là code xác định. Giới hạn dự kiến 5 lượt quyết định model, tối đa 2 lượt sửa, hết giới hạn thì dừng và yêu cầu hỗ trợ, không duyệt tự động.
 
-**AI dựa vào đâu:** đoạn slide/tài liệu được giảng viên cung cấp và được phép sử dụng, mã nguồn ổn định, mục tiêu học, thời lượng, trình độ, quy mô và điều kiện lớp; danh mục chiến lược dạy học nhỏ do nhóm biên soạn (chưa tạo). Kiến thức chuyên môn phải dựa vào nguồn bài, không dùng chiến lược dạy học như nguồn kiến thức môn học.
+**AI dựa vào đâu:** đoạn slide/tài liệu được giảng viên cung cấp và được phép sử dụng, mã nguồn ổn định, mục tiêu học, thời lượng, trình độ, quy mô và điều kiện lớp; danh mục chiến lược dạy học nhỏ do nhóm biên soạn (data/teaching_strategies.json đã có; HTML mock dùng lựa chọn hoạt động cố định tương ứng). Kiến thức chuyên môn phải dựa vào nguồn bài, không dùng chiến lược dạy học như nguồn kiến thức môn học.
 
 | Công cụ / thành phần | Input | Output | Tác động ra ngoài? |
 |---|---|---|---|
@@ -104,7 +104,7 @@ Hai tool tra cứu sẽ được đăng ký @tool trong codebase/tools.py; parse
 | G9 — Dễ sửa | F/G: cho giảng viên đổi lời dẫn, hoạt động, phút, bỏ phần không phù hợp; kiểm lại trước khi duyệt. |
 | G11 — Giải thích vì sao | D/F: mỗi đoạn có mã nguồn, mục tiêu và lý do chọn hoạt động để giảng viên tự đối chiếu. |
 
-**Phần còn giả / chưa có:** hiện codebase vẫn là starter, chưa có agent TeachFlow hoặc dữ liệu bài mẫu riêng. CP2 sẽ dùng mock model và dữ liệu tự dựng có nhãn synthetic để đi hết luồng, không dùng mock để chứng minh chất lượng AI. CP3 thay model giả bằng model thật tại quyết định trung tâm. Thiết kế và tool contracts cần đồng bộ khi cặp prototype triển khai; chưa tuyên bố đã chạy. Tham chiếu docs/context.md §3–8.
+**Phần còn giả / chưa có (cập nhật sau CP2):** prototype HTML độc lập tại codebase/prototype.html, mở bằng python run.py. Mock theo quy tắc tạo kịch bản từ đoạn nguồn và context, kiểm timeline/mã nguồn, cho sửa và duyệt rõ ràng, xuất Markdown/JSON/HTML local. Chưa có model thật, vòng lặp agent/tool tracing, kiểm ngữ nghĩa tổng quát hoặc parser PDF/PPTX; Python answer/tools vẫn là starter cho CP3. Mock chỉ minh họa luồng, không tính điểm eval thật. Xem docs/prototype.md.
 
 ## §5. Chỗ khó — 4 lớp + kịch bản + tấn công *(guide 2.3)*
 
@@ -152,7 +152,7 @@ Rủi ro đáng lo nhất khi demo: B07 — đáp án sai có vẻ hợp lý, m�
 **Chuẩn đạt CP2 (theo yêu cầu áp dụng đề xuất): Đạt khi >=80% toàn bộ câu benchmark pass, đồng thời đạt cả 5 ngưỡng metric trên; 100% câu tu_choi (gồm hai tấn công) pass và 100% case mong đợi kịch bản hoàn chỉnh có timeline đúng thời lượng.** Không sửa chuẩn sau CP2; lỗi, output thiếu và case chưa chấm không được tính pass, chưa chấm đủ thì chưa kết luận đạt. Một case pass khi đáp ứng toàn bộ pass_criterion của nó; với case kịch bản, phải có schema và trạng thái chờ duyệt. Chấm đối chiếu nguồn, output và trace theo metric spec, không chấm dựa trên lời tự nhận.
 
 - Đo giá trị thực tế sau prototype: phút chuẩn bị và duyệt kịch bản của giảng viên (đề xuất giảm >=30% so với cách cũ), tỷ lệ hoàn thành lab trong thời hạn cố định, thời gian hoàn thành lab và chất lượng theo test/rubric. Đây là chỉ số kiểm chứng sản phẩm, chưa có baseline và không tính vào chuẩn benchmark CP2 của hướng A3. Không kết luận học nhanh hơn từ output AI.
-- Chưa chạy thử 10–20 output hoặc chấm độc lập 5 output; cần ghi kết quả thật trong eval/README.md. Chưa triển khai mock riêng TeachFlow. Lượt eval 1/2: chưa chạy, chưa có run ID hay điểm.
+- Chưa chạy thử 10–20 output hoặc chấm độc lập 5 output; cần ghi kết quả thật trong eval/README.md. Mock HTML đã có; xem docs/prototype.md, chưa chạy benchmark model thật. Lượt eval 1/2: chưa chạy, chưa có run ID hay điểm.
 
 ## §8. Chi phí khi dùng thật *(guide 4.2)*
 - Persona + giá: `cost/personas.yaml` · lượt mô phỏng: `cost/simulate-__.csv` (__ phiên)
@@ -174,7 +174,7 @@ Rủi ro đáng lo nhất khi demo: B07 — đáp án sai có vẻ hợp lý, m�
 
 | Thời điểm | Đổi gì | Vì sao (trỏ về câu thử / lỗi / bằng chứng nào) |
 |---|---|---|
-|  |  |  |
+| 27/11/2026, sau 19:30 | Thêm prototype HTML mock, launcher, smoke tests, hướng dẫn chạy | Minh họa lát cắt §4, tình huống B02–B05/B09; chưa phải eval thật; giữ nguyên chuẩn đạt. |
 
 **Sau CP4 (đến 23:59 Thứ Bảy 28/11)** (sửa theo góp ý — không sửa chuẩn "đạt", câu thử, số bằng chứng, kết quả các lượt đã chạy)
 

@@ -26,7 +26,7 @@ def _where(e):
     base = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     return os.path.relpath(p, base).replace(os.sep, "/") if p.startswith(base) else path
 
-def main() -> int:
+def cli_main() -> int:
     try:
         import tracing
         from agent import answer
@@ -65,5 +65,21 @@ def main() -> int:
               % (", ".join(s["models"]) or "—", s["model_calls"], s["tool_calls"], s["tokens_in"], s["tokens_out"]))
 
 
+def main() -> int:
+    """Open the self-contained CP2 prototype; no server or API key."""
+    from pathlib import Path
+    import webbrowser
+    page = Path(__file__).resolve().with_name("prototype.html")
+    if not page.is_file():
+        print("Không tìm thấy prototype.html")
+        return 1
+    print("TeachFlow AI — Mock prototype: " + str(page))
+    if os.environ.get("TEACHFLOW_NO_BROWSER") == "1":
+        return 0
+    if not webbrowser.open(page.as_uri()):
+        print("Mở file HTML trên bằng trình duyệt.")
+    return 0
+
+
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(cli_main() if "--cli" in sys.argv else main())

@@ -20,6 +20,20 @@ Bài của nhóm phải cân bằng hai nửa: **tư duy sản phẩm** (đúng 
 
 ---
 
+## TeachFlow AI — demo của nhóm MDDB
+
+Track A · Kịch bản giảng dạy từ nội dung có sẵn. Chạy prototype Mock AI:
+
+```bash
+python run.py
+```
+
+Hoặc mở trực tiếp [codebase/prototype.html](codebase/prototype.html) trong trình duyệt. Chọn bài mẫu, sinh kịch bản, đối chiếu nguồn, sửa và duyệt; xuất Markdown/JSON hoặc HTML độc lập dùng offline. Không cần API key. Xem [hướng dẫn và giới hạn](docs/prototype.md).
+
+Dùng AI: ChatGPT hỗ trợ thiết kế, viết prototype và test; nhóm cần kiểm tra nội dung và giải thích code. Không dùng mock làm kết quả đánh giá AI thật.
+
+---
+
 ## Đọc theo thứ tự này
 
 | # | File | Đọc khi nào | Trong đó có gì |
