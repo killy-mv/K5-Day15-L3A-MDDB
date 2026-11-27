@@ -1,52 +1,52 @@
-# Mô phỏng chi phí khi dùng thật — điền ở guide bước 4.2.
-# Ôn lại: ngày 13, ngày 1, ngày 14 · lab ngày 13, lab ngày 14.
-# Mọi số phải có nguồn (data / phỏng vấn / khảo sát / quy mô khoá có nguồn) hoặc ghi rõ "(tự ước tính)".
-# Chạy: python run.py simulate --try   (10 phiên, kiểm khung — làm trước CP3)
-#       python run.py simulate         (đủ số phiên dưới đây — bản nộp CP4)
-# Thay mọi dòng "(ví dụ)" bằng số và nguồn của nhóm; simulate nhắc nếu còn sót.
+# Mô phỏng chi phí khi dùng thật — TeachFlow AI (T3-10 & T4-04)
+# Đúng vai người dùng chính: giảng viên và lab coach AI20K (KHÔNG lấy 700 học viên làm số giảng viên).
+# Mọi con số đều có nguồn tham chiếu hoặc ghi rõ "(tự ước tính)".
+# Chạy thử 10 phiên (sau khi M3-04 nối model thật): python run.py simulate --try
+# Chạy chính thức ≥50 phiên (sau khi M4-01 & Run 2 chấm xong): python run.py simulate --rate-from eval/run-2.csv
 
-sessions: 50        # số phiên mô phỏng — bản nộp ≥50
+sessions: 50        # bản nộp CP4 cần >=50 phiên
 seed: 42            # giữ cố định để chạy lại ra cùng chuỗi phiên
 
-users:              # số người dùng thật nếu đưa vào dùng — 3 kịch bản, ở quy mô thật của sản phẩm
-                    # track A: khoá học · track B–F: người dùng của sản phẩm / nhóm nhắm tới, nguồn công khai có link
-  low: 300
-  base: 700
-  high: 1000
-  source: "(ví dụ) track A — thay bằng số của nhóm. Cơ sở: lớp L3 hơn 700 học viên (README hackathon); thấp, cao: (tự ước tính)"
+users:              # quy mô người dùng đúng vai (giảng viên + lab coach), không mặc định theo số học viên
+  low: 22           # chỉ đội ngũ giảng viên đứng lớp chính của 1 khóa AI20K
+  base: 84          # 22 giảng viên + 62 lab coach của 1 khóa AI20K
+  high: 168         # quy mô mở rộng 2 khóa song song / nhiều chương trình đào tạo cùng cỡ
+  source: "data/training-ops/README.md (mô hình vận hành 1 khóa AI20K gồm 22 giảng viên và 62 lab coach, lưu ý file lịch là giả lập theo cấu trúc khóa thật); low=22 chỉ tính giảng viên chính (tự ước tính), base=84 giảng viên+lab coach, high=168 tương đương 2 khóa (tự ước tính)"
 
-personas:           # ≥3 kiểu người dùng; share cộng lại = 1
-  - name: dung_it
-    share: 0.5              # tỉ lệ người dùng kiểu này
-    uses_per_month: 4       # số phiên / người / tháng
-    turns_per_session: 1    # số lượt hỏi trong một phiên
-    source: "(ví dụ) phỏng vấn P1, P3 — thay bằng nguồn của nhóm"
-  - name: dung_vua
-    share: 0.3
+personas:           # 3 kiểu người dùng đúng vai giảng viên / lab coach; tổng share = 1.00
+  - name: giang_vien_thinh_giang
+    share: 0.40
+    uses_per_month: 3
+    turns_per_session: 2
+    types: [thuong, kho]
+    source: "data/training-ops/teaching-schedule.xlsx (Nhan_su: 7/14 GV nhận 1-3 buổi/khóa) & lab-coach-schedule.xlsx (Workload: 21/62 coach nhận <=4 ca/khóa, tổng 28/76≈37% làm tròn 0.40); tần suất 3 phiên/tháng và 2 lượt hỏi/phiên (sinh nháp + chỉnh context): (tự ước tính)"
+  - name: lab_coach_chinh
+    share: 0.45
+    uses_per_month: 6
+    turns_per_session: 2
+    types: [thuong, kho]
+    source: "data/training-ops/lab-coach-schedule.xlsx (Workload: 35/62 coach nhận 5-8 ca, trung vị 6 ca/khóa 21 ngày≈1 tháng) & teaching-schedule.xlsx (4/14 GV nhận 5-7 buổi, tổng 39/76≈51% điều chỉnh 0.45); P1 nêu nhu cầu dùng kịch bản khi dạy lab; 2 lượt/phiên: (tự ước tính)"
+  - name: giang_vien_chu_chot
+    share: 0.15
     uses_per_month: 10
     turns_per_session: 3
-    source: "(ví dụ) khảo sát n = 24, câu 3"
-  - name: dung_nhieu
-    share: 0.2
-    uses_per_month: 20
-    turns_per_session: 5
-    source: "(ví dụ) data/preclass: đếm số lượt / người — cách đếm ở evidence/data-mining.md"
-# Mỗi lượt hỏi lấy ngẫu nhiên một đầu vào trong eval/benchmark.csv (type thuong và kho).
-# Persona hỏi kiểu riêng: thêm vào persona đó
-#     types: [thuong, kho, tu_choi]
-# hoặc
-#     inputs: ["câu hỏi kiểu 1", "câu hỏi kiểu 2"]
+    types: [thuong, kho]
+    source: "data/training-ops/teaching-schedule.xlsx (Nhan_su: 3/14 GV nhận 10-11 buổi/khóa) & lab-coach-schedule.xlsx (6/62 coach nhận 9-10 ca, tổng 9/76≈12% làm tròn 0.15); P2 mô tả tốn thời gian chuẩn bị ví dụ và câu hỏi tương tác; 3 lượt/phiên (nháp + tinh chỉnh ví dụ/quiz + kiểm lại): (tự ước tính)"
 
-prices:             # USD / 1 triệu token — chép từ further-reading/model-prices.md của repo đề. ≥2 mức model
+prices:             # USD / 1 triệu token (giá gói trả phí chuẩn), lấy từ further-reading/model-prices.md (kiểm 25/11/2026)
   - model: gemini-3.1-flash-lite
     input: 0.25
     output: 1.50
-    source: "(ví dụ) https://ai.google.dev/gemini-api/docs/pricing · xem 25/11/2026"
+    source: "further-reading/model-prices.md · https://ai.google.dev/gemini-api/docs/pricing · xem 25/11/2026 (tầng Nhỏ)"
+  - model: gpt-6.1-terra
+    input: 1.00
+    output: 5.00
+    source: "further-reading/model-prices.md · https://developers.openai.com/api/docs/pricing · xem 25/11/2026 (tầng Vừa)"
   - model: gemini-4-hydrogen
     input: 1.50
     output: 7.50
-    source: "(ví dụ) https://ai.google.dev/gemini-api/docs/pricing · xem 25/11/2026"
+    source: "further-reading/model-prices.md · https://ai.google.dev/gemini-api/docs/pricing · xem 25/11/2026 (tầng Lớn)"
 
-usd_to_vnd:         # tuỳ chọn: điền thì bản tóm tắt in thêm tiền Việt
+usd_to_vnd:         # để trống cho tới khi chốt tỷ giá có nguồn công khai; mọi bảng chính dùng USD theo quy định BTC
   rate:
   source:
