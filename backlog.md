@@ -61,17 +61,17 @@ Chuẩn bị dữ liệu và cách chấm ngay; chỉ chạy chính thức khi t
 
 | Mã việc | Mô tả | Người phụ trách | Tiêu chí hoàn thành | Trạng thái | Ghi chú |
 |---|---|---|---|:---:|---|
-| T3-01 | Mở rộng benchmark | Tạ Tiến Dũng | 20–30 case; giữ nguyên B01–B15, >=5 kho, >=2 tu_choi gồm 2 tấn công, >=1/3 nguồn thật có căn cứ; đủ 6 cột | ❌ | Mục tiêu 24 case, >=8 nguồn thật; phối hợp Minh thu bằng chứng |
-| T3-02 | Lưới độ phủ và tập chấm | Tạ Tiến Dũng | eval/README.md cập nhật nguồn, độ phủ 3–5 chiều, danh sách case cần kịch bản hoàn chỉnh trước khi chạy | ❌ | |
-| T3-03 | Chuẩn bị grader tự động | Tạ Tiến Dũng | Kiểm duration/schema/mã nguồn theo metric đã khóa; có test; phần ngữ nghĩa và context chấm người | ❌ | Không sửa metric_spec.yaml |
-| T3-04 | Chuẩn bị rubric chấm người | Tạ Tiến Dũng | Phiếu chấm có từng metric, tử/mẫu, pass_criterion, ghi chú và đối chiếu nguồn/trace | ❌ | |
-| T3-05 | Chạy thử và hiệu chuẩn | Tạ Tiến Dũng | Ghi 10–20 output thử, lỗi thực; hai người chấm độc lập 5 output, khớp >=4/5 hoặc báo thật phần chưa đạt | ❌ | Không đổi chuẩn khóa CP2; ghi chênh lệch và cách áp dụng chuẩn |
-| T3-06 | Eval --try | Tạ Tiến Dũng | python run.py eval --try chạy 3 case, token/model thật, trace; ghi lỗi/quota nếu có | ❌ | Chờ M3-04 |
-| T3-07 | Eval Run 1 | Tạ Tiến Dũng | Chạy toàn bộ benchmark đã chốt, có eval/run-1.csv và traces/run-1.jsonl với run ID, token thật | ❌ | Chờ T3-01 và T3-06 |
-| T3-08 | Chấm Run 1 | Tạ Tiến Dũng | Điền pass và ghi chú từng case theo tiêu chí; chạy score; tổng hợp 5 metric và kết quả thật | ❌ | Cả nhóm hỗ trợ chấm; điểm thấp vẫn báo |
-| T3-09 | Hồ sơ Eval 1 | Tạ Tiến Dũng | eval/README.md và report.md có cấu hình, run ID, điểm, giới hạn và file trace; gửi Minh cập nhật §7 | ❌ | |
-| T3-10 | Persona sơ bộ | Tạ Tiến Dũng | >=3 persona phù hợp giảng viên/lab coach, share tổng 1, tần suất có nguồn hoặc ghi tự ước tính | ❌ | Phối hợp Minh lấy impact |
-| T3-11 | Simulate thử 10 phiên | Tạ Tiến Dũng | python run.py simulate --try chạy qua agent thật, có token/call/latency và ghi lỗi nếu có | ❌ | Chờ M3-04; không tính là 50 phiên CP4 |
+| T3-01 | Mở rộng benchmark | Tạ Tiến Dũng | 20–30 case; giữ nguyên B01–B15, >=5 kho, >=2 tu_choi gồm 2 tấn công, >=1/3 nguồn thật có căn cứ; đủ 6 cột | ✅ | 28/11: 24 case (B01–B15 giữ nguyên, thêm B16–B24); 9 thuong/11 kho/4 tu_choi (2 tấn công B09–B10); 11/24=45.8% nguồn thật (7 nguoi_dung + 4 data_that tái lập qua eval/preclass_stats.py); python run.py check 0 cảnh báo |
+| T3-02 | Lưới độ phủ và tập chấm | Tạ Tiến Dũng | eval/README.md cập nhật nguồn, độ phủ 3–5 chiều, danh sách case cần kịch bản hoàn chỉnh trước khi chạy | ✅ | 28/11: eval/README.md cập nhật nguồn, lưới độ phủ 5 chiều B01–B24, khóa 12 case kịch bản hoàn chỉnh (B05, B06, B11–B19, B21) trước Run 1; đồng bộ data/DATA_CARD.md |
+| T3-03 | Chuẩn bị grader tự động | Tạ Tiến Dũng | Kiểm duration/schema/mã nguồn theo metric đã khóa; có test; phần ngữ nghĩa và context chấm người | ✅ | 28/11: eval/auto_grader.py + tests/test_auto_grader.py (21/21 unit test pass); giữ nguyên eval/metric_spec.yaml |
+| T3-04 | Chuẩn bị rubric chấm người | Tạ Tiến Dũng | Phiếu chấm có từng metric, tử/mẫu, pass_criterion, ghi chú và đối chiếu nguồn/trace | ✅ | 28/11: eval/human_rubric.md + eval/grading_sheet_template.csv đủ 5 metric, tử/mẫu, 24 pass_criterion, danh mục nhãn lỗi và checklist trace |
+| T3-05 | Chạy thử và hiệu chuẩn | Tạ Tiến Dũng | Ghi 10–20 output thử, lỗi thực; hai người chấm độc lập 5 output, khớp >=4/5 hoặc báo thật phần chưa đạt | ❌ | Đã chuẩn bị eval/calibration_kit.md, calibration_grader_a/b.csv và lệnh --agreement; BLOCKER: chờ output thật sau M3-04 và người chấm độc lập thứ 2 trong nhóm (không bịa người chấm) |
+| T3-06 | Eval --try | Tạ Tiến Dũng | python run.py eval --try chạy 3 case, token/model thật, trace; ghi lỗi/quota nếu có | ❌ | BLOCKER: chờ M3-04 (codebase/ai.py và agent.py trên main vẫn ở chế độ fake, chưa nối API thật) |
+| T3-07 | Eval Run 1 | Tạ Tiến Dũng | Chạy toàn bộ benchmark đã chốt, có eval/run-1.csv và traces/run-1.jsonl với run ID, token thật | ❌ | BLOCKER: chờ M3-04 và T3-06 |
+| T3-08 | Chấm Run 1 | Tạ Tiến Dũng | Điền pass và ghi chú từng case theo tiêu chí; chạy score; tổng hợp 5 metric và kết quả thật | ❌ | BLOCKER: chờ T3-07; đã sẵn auto_grader.py + human_rubric.md + grading_sheet_template.csv |
+| T3-09 | Hồ sơ Eval 1 | Tạ Tiến Dũng | eval/README.md và report.md có cấu hình, run ID, điểm, giới hạn và file trace; gửi Minh cập nhật §7 | ❌ | BLOCKER: chờ T3-08 |
+| T3-10 | Persona sơ bộ | Tạ Tiến Dũng | >=3 persona phù hợp giảng viên/lab coach, share tổng 1, tần suất có nguồn hoặc ghi tự ước tính | ✅ | 28/11: cost/personas.yaml có 3 persona GV/lab coach (share 0.40+0.45+0.15=1.00), dẫn nguồn training-ops/P1/P2 và ghi rõ tự ước tính; load_config() 0 cảnh báo |
+| T3-11 | Simulate thử 10 phiên | Tạ Tiến Dũng | python run.py simulate --try chạy qua agent thật, có token/call/latency và ghi lỗi nếu có | ❌ | BLOCKER: chờ M3-04; đã test cấu hình và plan_sessions trong tests/test_auto_grader.py |
 
 ## 4. CP3 — Nguyễn Văn Minh: Điều phối, Evidence, Integration, Demo
 
@@ -100,15 +100,15 @@ Deadline 14:30 ngày 28/11. Run 2 phải dùng đúng benchmark đã chạy Run 
 
 | Mã việc | Mô tả | Người phụ trách | Tiêu chí hoàn thành | Trạng thái | Ghi chú |
 |---|---|---|---|:---:|---|
-| T4-01 | Phân tích lỗi Run 1 | Tạ Tiến Dũng | Nhóm lỗi có số case và >=3 ví dụ input/output/vì sao sai trong eval/report.md; cả nhóm chọn nhóm lỗi đau nhất | ❌ | |
+| T4-01 | Phân tích lỗi Run 1 | Tạ Tiến Dũng | Nhóm lỗi có số case và >=3 ví dụ input/output/vì sao sai trong eval/report.md; cả nhóm chọn nhóm lỗi đau nhất | ❌ | BLOCKER: chờ T3-07 và T3-08 |
 | D4-01 | Cải tiến AI Core | Nguyễn Đức Đạt | Cải tiến prompt/retrieval/generator nhắm nhóm lỗi đã chọn; ghi cấu hình và lý do; không sửa benchmark/metric | ❌ | Chờ T4-01 |
 | B4-01 | Cải tiến kiểm tra an toàn | Hoàng Văn Bảo | Sửa parser/validator/guardrail nếu liên quan nhóm lỗi đã chọn; regression test và ghi rõ phạm vi | ❌ | Chờ T4-01 |
 | M4-01 | Tích hợp bản cải tiến | Nguyễn Văn Minh | Merge thay đổi có chọn lọc, demo case thường/khó, test luồng thật; changelog mô tả một nhóm lỗi mục tiêu | ❌ | |
-| T4-02 | Chạy Eval Run 2 | Tạ Tiến Dũng | Toàn bộ cùng benchmark, eval/run-2.csv và traces/run-2.jsonl, run ID/model/token thật | ❌ | Chờ M4-01 |
-| T4-03 | Chấm và so sánh Run 2 | Tạ Tiến Dũng | Điền pass, ghi chú, chạy score; report và README có số lượt 1/2, đủ metric, nhóm lỗi cải thiện và lỗi còn lại/tệ đi | ❌ | Cả nhóm chấm |
-| T4-04 | Chốt personas và giá | Tạ Tiến Dũng | >=3 persona, share tổng 1, số người dùng/tần suất có nguồn hoặc ghi tự ước tính; >=2 mức model có nguồn giá/ngày | ❌ | Dùng số người dùng đúng vai, không mặc định 700 học viên là giảng viên |
-| T4-05 | Mô phỏng >=50 phiên thật | Tạ Tiến Dũng | Seed cố định; qua answer thật; CSV và trace có token in/out, lượt gọi, latency, model; không tính mock | ❌ | Kiểm quota sớm |
-| T4-06 | Chi phí và quy mô | Tạ Tiến Dũng | cost-estimate.md có thấp/cơ sở/cao, >=2 mức model, chi phí/task thành công = trung bình phiên chia tỷ lệ đạt lượt 2; ghi giới hạn nếu giá ước tính | ❌ | Không mặc định tỷ lệ đạt 100% |
+| T4-02 | Chạy Eval Run 2 | Tạ Tiến Dũng | Toàn bộ cùng benchmark, eval/run-2.csv và traces/run-2.jsonl, run ID/model/token thật | ❌ | BLOCKER: chờ M4-01 |
+| T4-03 | Chấm và so sánh Run 2 | Tạ Tiến Dũng | Điền pass, ghi chú, chạy score; report và README có số lượt 1/2, đủ metric, nhóm lỗi cải thiện và lỗi còn lại/tệ đi | ❌ | BLOCKER: chờ T4-02 |
+| T4-04 | Chốt personas và giá | Tạ Tiến Dũng | >=3 persona, share tổng 1, số người dùng/tần suất có nguồn hoặc ghi tự ước tính; >=2 mức model có nguồn giá/ngày | ✅ | 28/11: cost/personas.yaml & cost/cost-estimate.md §1 chốt users đúng vai 22/84/168 (GV+lab coach), 3 persona share=1.00, 3 tầng model từ further-reading/model-prices.md (25/11/2026); kiểm load_config() 0 cảnh báo |
+| T4-05 | Mô phỏng >=50 phiên thật | Tạ Tiến Dũng | Seed cố định; qua answer thật; CSV và trace có token in/out, lượt gọi, latency, model; không tính mock | ❌ | BLOCKER: chờ M3-04/M4-01 và T4-03; đã kiểm plan_sessions 50 phiên seed=42 |
+| T4-06 | Chi phí và quy mô | Tạ Tiến Dũng | cost-estimate.md có thấp/cơ sở/cao, >=2 mức model, chi phí/task thành công = trung bình phiên chia tỷ lệ đạt lượt 2; ghi giới hạn nếu giá ước tính | ❌ | Đã hoàn thiện §1 đầu vào; BLOCKER: chờ T4-05 và tỷ lệ đạt Run 2 (T4-03) để điền §2–§3 |
 | M4-02 | Impact so với chi phí | Nguyễn Văn Minh | Spec §8 và cost-estimate có so sánh chi phí/người/tháng với impact cùng đơn vị hoặc giải thích quy đổi, kết luận go/iterate/stop có căn cứ | ❌ | Chờ T4-06 |
 | B4-02 | Hồ sơ an toàn | Hoàng Văn Bảo | §9 mô tả ẩn danh, quyền, rủi ro, giới hạn; test guardrails có kết quả thật | ❌ | |
 | B4-03 | Người dùng thử (bonus) | Hoàng Văn Bảo | 2–3 người ngoài nhóm đúng vai, khoảng 10 phút/người, log hành vi và trích dẫn thật, tổng hợp 4 ý | ❌ | Không thay thế evidence pain |
@@ -124,11 +124,11 @@ Deadline 14:30 ngày 28/11. Run 2 phải dùng đúng benchmark đã chạy Run 
 | F-01 | Demo và giải thích tích hợp | Nguyễn Văn Minh | Demo live theo lịch, giải thích lát cắt và kết quả; mỗi thành viên nói ít nhất một phần | ❌ | |
 | F-02 | Demo và giải thích RAG | Nguyễn Đức Đạt | Giải thích quyết định LLM, nguồn, lỗi và giới hạn; sẵn sàng chạy câu lạ | ❌ | |
 | F-03 | Demo và giải thích guardrails | Hoàng Văn Bảo | Giải thích parser, validator, HITL và cách chặn lỗi thực tế | ❌ | |
-| F-04 | Demo và giải thích số liệu | Tạ Tiến Dũng | Giải thích grader, câu trượt, trace, tỷ lệ đạt, chi phí/task thành công | ❌ | |
+| F-04 | Demo và giải thích số liệu | Tạ Tiến Dũng | Giải thích grader, câu trượt, trace, tỷ lệ đạt, chi phí/task thành công | ❌ | Sự kiện demo trực tiếp 28/11 (chờ thêm số liệu Run 1/Run 2/simulate thật) |
 | F-05 | Reflection cá nhân | Nguyễn Văn Minh | reflection/nguyen-van-minh.md có vai trò, phần làm, AI hỗ trợ, bài học từ lỗi thật | ❌ | |
 | F-06 | Reflection cá nhân | Nguyễn Đức Đạt | reflection/nguyen-duc-dat.md có đủ nội dung theo guide | ❌ | |
 | F-07 | Reflection cá nhân | Hoàng Văn Bảo | reflection/hoang-van-bao.md có đủ nội dung theo guide | ❌ | |
-| F-08 | Reflection cá nhân | Tạ Tiến Dũng | reflection/ta-tien-dung.md có đủ nội dung theo guide | ❌ | |
+| F-08 | Reflection cá nhân | Tạ Tiến Dũng | reflection/ta-tien-dung.md có đủ nội dung theo guide | ❌ | BLOCKER: câu 3 yêu cầu 1 câu thử trượt thật của nhóm (chờ Run 1, không bịa lỗi) |
 | F-09 | Xử lý phản hồi demo | Nguyễn Văn Minh | Điều phối sửa lỗi đã thống nhất, ghi giờ/đổi gì/vì sao vào §10; lượt chạy bổ sung ghi run mới | ❌ | Cả nhóm hỗ trợ |
 | F-10 | Khóa bản nộp cuối | Nguyễn Văn Minh | Repo đủ hồ sơ, không secret/dữ liệu cá nhân, link công khai, main đã push trước 23:59; không sửa lịch sử eval | ❌ | |
 
