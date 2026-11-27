@@ -61,3 +61,8 @@ evidence/**/raw-*
 # Nguyên file data BTC cấp (data/preclass, data/training-ops… của repo đề): để ở đây, không commit
 data-btc
 data-btc/
+
+# External lecture source: license/redistribution not yet verified
+data/local/
+lect01a_b-oop-with-ano.pdf
+oop_annotations_full.json

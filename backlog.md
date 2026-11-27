@@ -79,7 +79,7 @@ Chuẩn bị dữ liệu và cách chấm ngay; chỉ chạy chính thức khi t
 
 | Mã việc | Mô tả | Người phụ trách | Tiêu chí hoàn thành | Trạng thái | Ghi chú |
 |---|---|---|---|:---:|---|
-| M3-01 | Thống nhất interface | Nguyễn Văn Minh | Nhóm xác nhận schema input/context/source/output, hàm parser/retrieve/generate/validate, trạng thái hỏi lại/từ chối/chờ duyệt; ghi docs | ❌ | Làm đầu tiên, không đổi metric khóa |
+| M3-01 | Thống nhất interface | Nguyễn Văn Minh | Nhóm xác nhận schema input/context/source/output, hàm parser/retrieve/generate/validate, trạng thái hỏi lại/từ chối/chờ duyệt; ghi docs | ❌ | Contract v1.0, dataset OOP 131 trang, fixture và mock đã có; chờ thành viên xác nhận contract. Không đổi metric khóa. |
 | M3-02 | Chuẩn bị backend local | Nguyễn Văn Minh | API/CLI nhận input và trả JSON theo contract, lỗi rõ, key chỉ ở server; có thể test bằng mock | ❌ | |
 | M3-03 | Tích hợp answer(text) | Nguyễn Văn Minh | agent.py nhận nguyên ô input benchmark, dùng parser/tool/LLM/validator; trả {"output": str}; ghi trace và giới hạn bước | ❌ | Chờ Đạt/Bảo bàn giao module |
 | M3-04 | Chạy end-to-end AI thật | Nguyễn Văn Minh | python run.py dùng AI thật cho case thường và khó; eval/ simulate gọi cùng answer(), không bypass agent | ❌ | Điều kiện mở khóa eval |

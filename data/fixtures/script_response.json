@@ -1,0 +1,85 @@
+{
+  "lesson_title": "Thiết kế lớp Customer với annotation",
+  "duration_minutes": 60,
+  "learning_objectives": [
+    "Giải thích domain constraint",
+    "Phân biệt Mutator và Observer"
+  ],
+  "status": "pending_review",
+  "model": "mock-fixture",
+  "warnings": [
+    "Ví dụ tự soạn từ tóm lược slide; đối chiếu PDF gốc trước khi dạy."
+  ],
+  "assumptions": [
+    "Context lớp là giả lập; chỉ dạy phần đã chọn, không bao phủ 131 slide."
+  ],
+  "segments": [
+    {
+      "title": "Khởi động: quy tắc của Customer",
+      "start_minute": 0,
+      "duration_minutes": 5,
+      "slide_refs": [
+        "OOP-P040",
+        "OOP-P041"
+      ],
+      "activity_type": "question",
+      "teacher_script": "Chiếu slide 40–41. Hỏi: nếu nhập id bằng 0, thiết kế Customer trong slide có chấp nhận không? Vì sao?",
+      "teacher_actions": "Mời học viên dự đoán, sau đó đối chiếu bảng ràng buộc.",
+      "student_activity": "Nêu dự đoán và chỉ ra thuộc tính liên quan.",
+      "expected_outcome": "Nhận ra id có giá trị nhỏ nhất là 1.",
+      "assessment": "id=0 vi phạm min=1 trong bảng Customer.",
+      "fallback_strategy": "Cho hai lựa chọn id=0 và id=1 để học viên đối chiếu."
+    },
+    {
+      "title": "Giải thích domain constraint",
+      "start_minute": 5,
+      "duration_minutes": 15,
+      "slide_refs": [
+        "OOP-P040",
+        "OOP-P041"
+      ],
+      "activity_type": "explanation",
+      "teacher_script": "Dùng slide 40–41 giải thích type, mutable, optional, length, min và max. Trong ví dụ Customer, id không đổi, bắt buộc và min=1; name có thể đổi, bắt buộc, tối đa 50 ký tự.",
+      "teacher_actions": "Chiếu bảng gốc, yêu cầu học viên giải thích từng ô của id và name.",
+      "student_activity": "Ghi hai nhóm ràng buộc, phân biệt mutable và optional.",
+      "expected_outcome": "Đọc được ràng buộc của hai thuộc tính.",
+      "assessment": "Hỏi name có được đổi không? Có; mutable=true. Giới hạn chiều dài là 50.",
+      "fallback_strategy": "Chỉ vào cột mutable và length, giải thích lại bằng một ví dụ ngắn."
+    },
+    {
+      "title": "Mutator và Observer",
+      "start_minute": 20,
+      "duration_minutes": 20,
+      "slide_refs": [
+        "OOP-P104",
+        "OOP-P106",
+        "OOP-P041"
+      ],
+      "activity_type": "discussion",
+      "teacher_script": "Chiếu slide 104 và 106. Mutator cập nhật trạng thái của thuộc tính mutable, Observer lấy thông tin trạng thái. Với Customer, hãy đề xuất setName và getId, giải thích vì sao không cần setter cho id bất biến.",
+      "teacher_actions": "Chia cặp, mời trình bày phân loại phương thức; kiểm tra lại với bảng Customer.",
+      "student_activity": "Thảo luận và phân loại phương thức đọc/ghi.",
+      "expected_outcome": "Phân biệt Mutator với Observer và liên hệ mutable.",
+      "assessment": "setName là Mutator; getId là Observer; id bất biến không có mutator thay đổi id.",
+      "fallback_strategy": "Dùng biểu quyết bằng tay nếu học viên không có laptop."
+    },
+    {
+      "title": "Luyện tập và tổng kết",
+      "start_minute": 40,
+      "duration_minutes": 20,
+      "slide_refs": [
+        "OOP-P040",
+        "OOP-P041",
+        "OOP-P104",
+        "OOP-P106"
+      ],
+      "activity_type": "practice_quiz",
+      "teacher_script": "Yêu cầu học viên đối chiếu ràng buộc Customer và mô tả setter hợp lệ; nhấn mạnh getter không nhận đối số và trả kiểu thuộc tính theo slide 106. Chốt lại hai mục tiêu.",
+      "teacher_actions": "Cho thời gian viết mô tả, lấy hai bài trả lời và phản hồi theo nguồn.",
+      "student_activity": "Viết mô tả setName/getId và tự đối chiếu bảng.",
+      "expected_outcome": "Áp dụng ràng buộc và loại phương thức vào thiết kế.",
+      "assessment": "Setter name nhận kiểu thuộc tính và trả false khi đầu vào không hợp lệ theo slide 104; getter id không nhận đối số và trả kiểu của thuộc tính theo slide 106.",
+      "fallback_strategy": "Nếu thiếu thời gian, cho học viên nói miệng hai điểm khác nhau giữa setter và getter."
+    }
+  ]
+}

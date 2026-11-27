@@ -177,6 +177,8 @@ Rủi ro đáng lo nhất khi demo: B07 — đáp án sai có vẻ hợp lý, m�
 | 27/11/2026, sau 19:30 | Thêm prototype HTML mock, launcher, smoke tests, hướng dẫn chạy | Minh họa lát cắt §4, tình huống B02–B05/B09; chưa phải eval thật; giữ nguyên chuẩn đạt. |
 | 27/11/2026, sau CP2 | Nhóm thống nhất chỉ sinh kịch bản; màn hình phụ riêng cho giảng viên, slide gốc vẫn trình chiếu; HTML chỉ là định dạng đọc tùy chọn | Quyết định nhóm và PR #2 (chỉ nhận commit context); không sửa benchmark hoặc chuẩn đạt. |
 
+| 28/11/2026, sau CP2 | Bàn giao dataset tóm lược 131 trang OOP ngoài AI20K, interface contract và fixture/mock Python | Giảm phụ thuộc giữa các module; chưa đánh giá AI thật; quyền phân phối PDF gốc chưa xác minh; giữ nguyên chuẩn đạt. |
+
 **Sau CP4 (đến 23:59 Thứ Bảy 28/11)** (sửa theo góp ý — không sửa chuẩn "đạt", câu thử, số bằng chứng, kết quả các lượt đã chạy)
 
 | Thời điểm | Đổi gì | Vì sao |

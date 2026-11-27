@@ -30,6 +30,8 @@ python run.py
 
 Hoặc mở trực tiếp [codebase/prototype.html](codebase/prototype.html) trong trình duyệt. Chọn bài mẫu, sinh kịch bản, đối chiếu nguồn, sửa và duyệt; xuất Markdown/JSON hoặc HTML độc lập dùng offline. Không cần API key. Xem [hướng dẫn và giới hạn](docs/prototype.md).
 
+**Bàn giao CP3:** [Interface contract](docs/interface-contract.md) · [Dataset OOP 131 trang](data/lessons/oop_annotations.json) · [Input mẫu](data/fixtures/lesson_request.json) · [Output mẫu](data/fixtures/script_response.json) · [Data Card](data/DATA_CARD.md). Chạy mock Python riêng bằng `python codebase/contract_mock.py`; không phải AI thật.
+
 Dùng AI: ChatGPT hỗ trợ thiết kế, viết prototype và test; nhóm cần kiểm tra nội dung và giải thích code. Không dùng mock làm kết quả đánh giá AI thật.
 
 ---
