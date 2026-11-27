@@ -2,7 +2,7 @@
 
 - Tên nhóm: MDDB
 - Lớp: L3A
-- Track: B
+- Track: A
 - Link repo: https://github.com/killy-mv/K5-Day15-L3A-MDDB
 
 | STT | Họ và tên | Mã học viên | Vai trò | Phần việc chính |

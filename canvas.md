@@ -1,12 +1,12 @@
-# Canvas — MDDB · Track B
+# Canvas — MDDB · Track A
 
 | # | Dòng | Nhóm điền |
 |---|---|---|
-| 1 | Track + lát cắt dự kiến | B – Y tế: hỗ trợ chọn chuyên khoa trước khi đặt lịch khám. |
-| 2 | Người dùng chính (một vai cụ thể — không phải "học viên nói chung") | Người trưởng thành có triệu chứng bất thường, muốn đặt lịch khám nhưng chưa biết chọn chuyên khoa. |
-| 3 | Pain một câu: ai — đang làm gì — vướng đâu — hậu quả | Người bệnh khi có triệu chứng bất thường muốn đặt lịch khám nhưng không biết chọn chuyên khoa nào, dẫn đến mất thời gian tra cứu hoặc đặt lịch không phù hợp. |
-| 4 | Bằng chứng đầu — CP1: giả thuyết + nguồn sẽ kiểm · CP2: số đầu tiên + 1 trích dẫn | Giả thuyết: việc chọn chuyên khoa gây mất thời gian và có thể dẫn đến đặt lịch sai. Dự kiến phỏng vấn ít nhất 3 người ngoài nhóm từng đặt lịch khám trong tháng qua và đối chiếu thông tin chuyên khoa công khai của cơ sở y tế. Chưa có kết quả xác minh. |
-| 5 | **Lát cắt MỘT CÂU** (1 người dùng · 1 việc · 1 quyết định AI · 1 kết quả) | Người bệnh mô tả triệu chứng, AI đối chiếu thông tin chuyên khoa để gợi ý nơi khám phù hợp hoặc hướng dẫn tìm trợ giúp y tế khẩn cấp khi có dấu hiệu nguy hiểm, không chẩn đoán bệnh. |
-| 6 | AI tự làm đến đâu + 1 dòng lý do: sai thì ai chịu gì | Chỉ gợi ý và giải thích giới hạn; hỏi lại khi thiếu thông tin, ưu tiên cảnh báo khẩn cấp, không chẩn đoán, kê thuốc hoặc tự đặt lịch; người dùng và nhân viên y tế quyết định vì sai có thể làm chậm chăm sóc. |
-| 7 | Phân công có tên | Nguyễn Văn Minh: điều phối, kiến trúc và tích hợp AI; Hoàng Văn Bảo: prototype, công cụ và guardrails; Nguyễn Đức Đạt: bằng chứng pain và impact; Tạ Tiến Dũng: benchmark, đánh giá và chi phí. Phân công dự kiến, cả nhóm cùng xác minh pain và review. |
-| — | *(CP2)* Đã đổi gì so với CP1 | Chưa đến CP2. |
+| 1 | Track + lát cắt dự kiến | A – EdTech (hướng A3): xây dựng kịch bản giảng dạy tương tác từ nội dung bài giảng có sẵn cho giảng viên AI20K. |
+| 2 | Người dùng chính (một vai cụ thể — không phải "học viên nói chung") | Giảng viên AI20K chuẩn bị một buổi giảng trên lớp từ slide và tài liệu chuyên môn có sẵn. |
+| 3 | Pain một câu: ai — đang làm gì — vướng đâu — hậu quả | Giảng viên AI20K đã có slide và tài liệu chuyên môn nhưng phải dành thêm thời gian thiết kế lời dẫn, câu hỏi và hoạt động tương tác phù hợp với lớp, gây áp lực chuẩn bị và hạn chế cơ hội tham gia chủ động của học viên. |
+| 4 | Bằng chứng đầu — CP1: giả thuyết + nguồn sẽ kiểm · CP2: số đầu tiên + 1 trích dẫn | Giả thuyết: giảng viên mất thời gian chuyển slide thành kịch bản tương tác. Dự kiến phỏng vấn ít nhất 3 giảng viên hoặc lab coach trực tiếp chuẩn bị và triển khai bài giảng AI20K, ngoài nhóm, về các buổi dạy trong tháng qua; đối chiếu thời gian chuẩn bị và khó khăn thực tế. Chưa có số liệu hay trích dẫn đã xác minh. |
+| 5 | **Lát cắt MỘT CÂU** (1 người dùng · 1 việc · 1 quyết định AI · 1 kết quả) | Giảng viên cung cấp slide, tài liệu và context lớp học; AI Agent lựa chọn hoạt động phù hợp và sinh kịch bản giảng dạy theo mốc thời gian có lời dẫn, câu hỏi kiểm tra kiến thức, hoạt động tương tác, tham chiếu slide và phương án dự phòng để giảng viên duyệt; từ kịch bản đã duyệt, hệ thống render một file HTML độc lập nhúng CSS và JavaScript để sử dụng trên lớp. |
+| 6 | AI tự làm đến đâu + 1 dòng lý do: sai thì ai chịu gì | AI chỉ tạo bản nháp kịch bản dựa trên nguồn và context, hỏi lại hoặc báo giới hạn khi thiếu thông tin; kiểm tra nguồn, thời lượng và mục tiêu học tập; giảng viên chỉnh sửa và duyệt trước khi sử dụng, vì nội dung sai hoặc hoạt động không phù hợp ảnh hưởng việc học. Kịch bản là output chính, HTML là bản trình bày sinh từ kịch bản, không tự xuất bản hay gửi lên LMS. |
+| 7 | Phân công có tên | Nguyễn Văn Minh: điều phối, kiến trúc và tích hợp AI; Hoàng Văn Bảo: prototype, công cụ và guardrails; Nguyễn Đức Đạt: khảo sát, bằng chứng pain và impact; Tạ Tiến Dũng: benchmark, đánh giá và mô phỏng chi phí. Phân công dự kiến, cả nhóm cùng xác minh pain và review. |
+| — | *(CP2)* Đã đổi gì so với CP1 | Ngày 27/11/2026: nhóm đổi từ Track B – Y tế (gợi ý chuyên khoa) sang Track A – EdTech (kịch bản giảng dạy tương tác), thay đổi người dùng, pain, lát cắt và nguồn bằng chứng; chốt kịch bản là output chính, HTML một file là output hỗ trợ. Cần báo lab coach và ghi thay đổi trong form CP2. |
