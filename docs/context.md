@@ -86,7 +86,7 @@ Ví dụ schema rút gọn:
 
 ## 5. Output hỗ trợ: màn hình phụ cho giảng viên (Teaching Mode)
 
-**Đã chốt:** khi đứng lớp, giảng viên sẽ có một **màn hình phụ riêng** (tách biệt với màn hình chính/màn chiếu của học viên) để đọc trực tiếp kịch bản đã duyệt và giảng theo đúng kịch bản đó.
+**Đã chốt:** khi đứng lớp, giảng viên sẽ có một **màn hình phụ riêng** (tách biệt với màn hình chính/màn chiếu của học viên) để đọc trực tiếp kịch bản đã duyệt và giảng theo đúng kịch bản đó. Giảng viên vẫn trình chiếu slide gốc cho học viên; TeachFlow không tạo giao diện trình chiếu thay slide. Kịch bản là output duy nhất về nội dung, có thể lưu dưới dạng HTML đọc riêng, Markdown, DOCX hoặc định dạng phù hợp; không bắt buộc sinh thêm HTML.
 
 Màn hình phụ đọc dữ liệu trực tiếp từ kịch bản đã được giảng viên duyệt, giữ nội dung hiển thị nhất quán, ổn định và không để AI tự sinh mã giao diện tùy ý mỗi lượt. Nếu giảng viên chỉnh sửa kịch bản, màn hình phụ phải cập nhật lại từ phiên bản đã duyệt mới nhất để tránh lệch nội dung.
 
@@ -196,6 +196,6 @@ Phân công dự kiến giữ theo TEAMS.md: Minh điều phối/kiến trúc/t�
 
 Tài liệu tham chiếu trong repo: README.md (bộ đề), 01-challenge-brief.md, 02-guide.md, 03-rubric.md, tracks/track-a-edtech.md, canvas.md, TEAMS.md, starter-repo/README.md. Khi có quyết định mới, cập nhật spec/canvas và tài liệu này tương ứng; không sửa chuẩn đạt sau CP2.
 
-## 12. Prototype HTML (sau CP2)
+## 12. Prototype hiện có và định hướng sau CP2
 
-Đã có codebase/prototype.html và launcher python run.py. Kịch bản chính xuất Markdown/JSON; HTML Teaching Mode sinh từ bản đã duyệt, offline. Mock theo quy tắc, không gọi model thật; chưa nối Python answer/tools với luồng này. Xem docs/prototype.md. Giữ nguyên metric và chuẩn đạt đã khóa.
+Đã có codebase/prototype.html và launcher python run.py. Prototype trước đó xuất Markdown/JSON và HTML Teaching Mode offline. Theo quyết định mới, HTML nếu dùng chỉ là định dạng đọc kịch bản riêng cho giảng viên, không phải output trình chiếu độc lập; slide gốc vẫn dùng để giảng. Mock theo quy tắc, không gọi model thật; chưa nối Python answer/tools với luồng này. Xem docs/prototype.md. Giữ nguyên metric và chuẩn đạt đã khóa.
