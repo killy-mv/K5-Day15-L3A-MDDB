@@ -80,11 +80,11 @@ Chuẩn bị dữ liệu và cách chấm ngay; chỉ chạy chính thức khi t
 | Mã việc | Mô tả | Người phụ trách | Tiêu chí hoàn thành | Trạng thái | Ghi chú |
 |---|---|---|---|:---:|---|
 | M3-01 | Thống nhất interface | Nguyễn Văn Minh | Nhóm xác nhận schema input/context/source/output, hàm parser/retrieve/generate/validate, trạng thái hỏi lại/từ chối/chờ duyệt; ghi docs | ❌ | Contract v1.0, dataset OOP 131 trang, fixture và mock đã có; chờ thành viên xác nhận contract. Không đổi metric khóa. |
-| M3-02 | Chuẩn bị backend local | Nguyễn Văn Minh | API/CLI nhận input và trả JSON theo contract, lỗi rõ, key chỉ ở server; có thể test bằng mock | ❌ | |
-| M3-03 | Tích hợp answer(text) | Nguyễn Văn Minh | agent.py nhận nguyên ô input benchmark, dùng parser/tool/LLM/validator; trả {"output": str}; ghi trace và giới hạn bước | ❌ | Chờ Đạt/Bảo bàn giao module |
+| M3-02 | Chuẩn bị backend local | Nguyễn Văn Minh | API/CLI nhận input và trả JSON theo contract, lỗi rõ, key chỉ ở server; có thể test bằng mock | ✅ | Backend local /api/health, /api/lessons, /api/generate; 12 API tests pass. |
+| M3-03 | Tích hợp answer(text) | Nguyễn Văn Minh | agent.py nhận nguyên ô input benchmark, dùng parser/tool/LLM/validator; trả {"output": str}; ghi trace và giới hạn bước | ❌ | Agent orchestration chạy mock end-to-end; có đường real mode không fallback. Chờ module Đạt/Bảo và xác minh budget model/trace thật. |
 | M3-04 | Chạy end-to-end AI thật | Nguyễn Văn Minh | python run.py dùng AI thật cho case thường và khó; eval/ simulate gọi cùng answer(), không bypass agent | ❌ | Điều kiện mở khóa eval |
-| M3-05 | Kết nối giao diện | Nguyễn Văn Minh | Planning Mode gửi nội dung/context tới agent, nhận nháp thật, hiện lỗi, nguồn và cảnh báo; fallback CLI nếu gấp | ❌ | |
-| M3-06 | Teaching Mode đúng phạm vi | Nguyễn Văn Minh | Màn hình riêng đọc kịch bản đã duyệt; dùng slide gốc để chiếu; không tạo slide mới; HTML tùy chọn chỉ là định dạng đọc | ❌ | |
+| M3-05 | Kết nối giao diện | Nguyễn Văn Minh | Planning Mode gửi nội dung/context tới agent, nhận nháp thật, hiện lỗi, nguồn và cảnh báo; fallback CLI nếu gấp | ❌ | studio.html đã gọi Python API, browser smoke pass ở mock mode; chờ nháp LLM thật. |
+| M3-06 | Teaching Mode đúng phạm vi | Nguyễn Văn Minh | Màn hình riêng đọc kịch bản đã duyệt; dùng slide gốc để chiếu; không tạo slide mới; HTML tùy chọn chỉ là định dạng đọc | ✅ | Cửa sổ riêng từ bản duyệt, timer, tiến độ, nguồn, đóng khi sửa; Edge smoke pass. Không tạo slide/HTML xuất mới. |
 | M3-07 | Xác minh P1/P2 và phỏng vấn bổ sung | Nguyễn Văn Minh | >=3 người ngoài nhóm đúng vai, 10–15 phút/người, hỏi việc tháng qua, mỗi người 1 file; xác nhận lại P1/P2 hoặc thay bằng nguồn hợp lệ | ❌ | Nhờ cả nhóm hỗ trợ tìm người |
 | M3-08 | Bằng chứng nguyên văn | Nguyễn Văn Minh | >=5 trích dẫn/ví dụ thật có nguồn, bỏ tên; summary có số đếm và kết luận giả thuyết, không bịa số | ❌ | |
 | M3-09 | Impact và lựa chọn | Nguyễn Văn Minh | §2 so sánh >=3 hướng; người × lần × phút/tháng, nguồn hoặc tự ước tính từng số; ghi hướng loại và lý do | ❌ | |

@@ -22,13 +22,13 @@ Bài của nhóm phải cân bằng hai nửa: **tư duy sản phẩm** (đúng 
 
 ## TeachFlow AI — demo của nhóm MDDB
 
-Track A · Kịch bản giảng dạy từ nội dung có sẵn. Chạy prototype Mock AI:
+Track A · Kịch bản giảng dạy từ nội dung có sẵn. Chạy studio local (Python backend; mặc định mock nếu chưa cấu hình model):
 
 ```bash
 python run.py
 ```
 
-Hoặc mở trực tiếp [codebase/prototype.html](codebase/prototype.html) trong trình duyệt. Chọn bài mẫu, sinh kịch bản, đối chiếu nguồn, sửa và duyệt; xuất Markdown/JSON hoặc HTML độc lập dùng offline. Không cần API key. Xem [hướng dẫn và giới hạn](docs/prototype.md).
+Mở http://127.0.0.1:8765/ nếu trình duyệt không tự mở. Chọn bài mẫu, sinh kịch bản qua API, sửa và duyệt; mở cửa sổ riêng cho giảng viên (slide gốc vẫn chiếu cho học viên). Xuất Markdown/JSON. Prototype CP2 cũ vẫn giữ tại codebase/prototype.html. Xem [hướng dẫn](docs/prototype.md).
 
 **Bàn giao CP3:** [Interface contract](docs/interface-contract.md) · [Dataset OOP 131 trang](data/lessons/oop_annotations.json) · [Input mẫu](data/fixtures/lesson_request.json) · [Output mẫu](data/fixtures/script_response.json) · [Data Card](data/DATA_CARD.md). Chạy mock Python riêng bằng `python codebase/contract_mock.py`; không phải AI thật.
 

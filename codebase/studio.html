@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TeachFlow AI — Teaching Studio</title>
+<style>
+:root{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#17332f;background:#f4f7f6;line-height:1.5;--green:#096b58;--muted:#60736e;--line:#dce6e2}
+*{box-sizing:border-box}body{margin:0}header{background:#103e35;color:white;padding:20px clamp(18px,5vw,72px);display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}header h1{font-size:24px;margin:0}header p{margin:2px 0;color:#c0ded4;font-size:13px}.pill{display:inline-block;background:#e5f3ec;color:#175f4d;border-radius:20px;padding:5px 12px;font-size:12px;font-weight:700}.mock{background:#fcebc9;color:#754b09}main{max-width:1360px;margin:auto;padding:24px clamp(14px,3vw,40px)}.intro{margin:0 0 20px}.intro h2{font-size:28px;margin:0 0 6px;letter-spacing:-.5px}.muted,small{color:var(--muted)}.layout{display:grid;grid-template-columns:minmax(300px,365px) minmax(0,1fr);gap:20px;align-items:start}.card{background:white;border:1px solid var(--line);border-radius:14px;padding:20px;box-shadow:0 2px 8px #123b3210;margin-bottom:16px}.card h2,.card h3{margin:0 0 12px}.section-title{font-size:18px}.field{display:block;margin:12px 0;font-size:13px;font-weight:650}input,select,textarea{display:block;width:100%;font:inherit;font-weight:400;border:1px solid #cbdad5;border-radius:7px;padding:9px 10px;margin-top:5px;background:white;color:inherit}textarea{resize:vertical;min-height:80px}input:focus,select:focus,textarea:focus{outline:2px solid #70b8a8;outline-offset:1px}.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}button{font:inherit;font-size:13px;font-weight:650;border:1px solid #c5d8d1;background:white;color:#21483e;border-radius:8px;padding:9px 14px;cursor:pointer}button.primary{background:var(--green);border-color:var(--green);color:white}button:disabled{opacity:.42;cursor:not-allowed}.wide{width:100%}.actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.check{display:flex;align-items:flex-start;gap:8px;font-size:13px;margin:12px 0}.check input{width:auto;margin:4px 0 0}.notice{border-left:3px solid #d49b39;background:#fff8e9;padding:12px;border-radius:6px;font-size:13px;margin:12px 0;white-space:pre-wrap}.notice.ok{background:#edf8f1;border-color:#24815c}.notice.bad{background:#fff1f0;border-color:#bd4540}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}.stat{padding:12px;background:#f1f6f4;border-radius:8px;font-size:12px;color:var(--muted)}.stat strong{display:block;font-size:22px;color:#17332f}.segment{border-top:1px solid var(--line);padding:14px 0}.segment:first-child{border:0}.segment h3{font-size:16px;margin:4px 0}.segment p{margin:6px 0;font-size:14px}.segment summary{cursor:pointer;font-weight:600}.source{font:12px system-ui;color:#266854;background:#e9f3ef;border-radius:5px;padding:3px 6px}.timeline{display:flex;gap:3px;margin:14px 0;height:9px}.timeline span{background:#84bcad;border-radius:3px}.timeline span.active{background:#096b58}.teaching{display:grid;grid-template-columns:205px minmax(0,1fr);gap:16px}.navitem{width:100%;text-align:left;margin:4px 0}.navitem.active{background:#e1f1eb;border-color:#72a99a}.navitem.done{border-left:4px solid #278267}.timer{font-size:36px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-1px}.script{font-size:19px;background:#eef6f3;padding:16px;border-radius:10px;white-space:pre-wrap}.pre{white-space:pre-wrap;overflow-wrap:anywhere}.divider{border:0;border-top:1px solid var(--line);margin:16px 0}.empty{padding:44px 12px;text-align:center;color:var(--muted)}[hidden]{display:none!important}footer{text-align:center;font-size:12px;color:var(--muted);padding:16px} @media(max-width:850px){.layout,.teaching{grid-template-columns:1fr}.stats{grid-template-columns:repeat(3,1fr)}} @media print{header,footer,#setup,#actions,#teachActions,#nav,button,.notice{display:none!important}.layout,.teaching{display:block}.card{box-shadow:none;border:0}body{background:white}}
+</style>
+</head>
+<body>
+<header><div><h1>TeachFlow AI</h1><p>Teaching Studio / MDDB · AI20K</p></div><span class="pill mock" id="modeBadge">Đang kết nối backend</span></header>
+<main>
+<section class="intro"><h2 id="pageTitle">Từ nội dung bài giảng đến kịch bản đứng lớp</h2><p class="muted" id="pageSubtitle">Nhập context, sinh bản nháp, kiểm tra và duyệt kịch bản; vẫn trình chiếu slide gốc.</p></section>
+<div class="layout" id="workspace">
+<aside class="card" id="setup">
+<h2 class="section-title">01 / Nội dung & context</h2>
+<label class="field">Bài giảng mẫu<select id="lesson"><option value="oop_annotations">OOP với Annotation (131 trang)</option><option value="agent_intro">Workflow và AI Agent</option><option value="lab_tools">Thực hành agent gọi tool</option><option value="conflict">Kiểm thử: nguồn mâu thuẫn</option><option value="injection">Kiểm thử: prompt injection</option><option value="custom">Nội dung tự nhập</option></select></label>
+<label class="field">Tiêu đề nguồn<input id="title" readonly></label><label class="field">Mã slide cần dạy (tùy chọn)<input id="refs" placeholder="OOP-P040, OOP-P041"></label>
+<label class="field">Nội dung nguồn (mỗi dòng một đoạn)<textarea id="source" rows="7"></textarea></label>
+<label class="field">Hoặc đọc file TXT / Markdown local<input id="upload" type="file" accept=".txt,.md,text/plain,text/markdown"></label>
+<small>Backend hiện đọc text đã chuẩn hóa, chưa trích xuất PDF/PPTX; dán text đã trích xuất. Không nhập dữ liệu cá nhân.</small>
+<div class="two"><label class="field">Phút<input id="duration" type="number" min="5" max="240" value="60"></label><label class="field">Số học viên<input id="size" type="number" min="1" max="1000" value="40"></label></div>
+<div class="two"><label class="field">Trình độ<select id="level"><option value="">Chọn trình độ</option><option value="beginner" selected>Cơ bản</option><option value="intermediate">Trung cấp</option><option value="advanced">Nâng cao</option><option value="mixed">Hỗn hợp</option></select></label><label class="field">Hình thức<select id="mode"><option>offline</option><option>online</option><option>hybrid</option></select></label></div>
+<label class="field">Thiết bị / điều kiện<input id="equipment" value="Máy chiếu và laptop"></label>
+<label class="field">Mục tiêu học tập (mỗi dòng một mục tiêu)<textarea id="objectives" rows="3"></textarea></label>
+<label class="field">Yêu cầu bổ sung<textarea id="request" rows="2"></textarea></label><label class="check"><input type="checkbox" id="permission"><span>Tôi có quyền sử dụng nội dung, không chứa dữ liệu cá nhân.</span></label>
+<button class="primary wide" id="generate">Sinh kịch bản</button>
+<div id="inputNotice" role="status" hidden></div>
+</aside>
+<section>
+<div class="card" id="review"><div class="actions"><h2 class="section-title" style="margin:0">02 / Kịch bản giảng dạy</h2><span class="pill" id="status">Chưa tạo</span></div>
+<div id="result" class="empty">Chọn bài mẫu hoặc nhập nội dung rồi sinh kịch bản.</div>
+<div id="actions" hidden><hr class="divider"><label class="check"><input type="checkbox" id="reviewed"><span>Tôi đã đối chiếu nguồn, nội dung, đáp án và tính khả thi của hoạt động.</span></label><div class="actions"><button class="primary" id="approve">Duyệt phiên bản này</button><button id="teach" disabled>Mở màn hình riêng</button><button id="exportText" disabled>Xuất kịch bản .md</button><button id="exportJson" disabled>JSON</button></div></div>
+</div>
+<div class="card" id="teachPanel" hidden><div class="actions"><h2 class="section-title" style="margin:0">03 / Kịch bản riêng cho giảng viên</h2><span class="pill">Đã duyệt</span></div><p class="notice">Màn hình riêng — không trình chiếu cửa sổ này cho học viên. Sử dụng slide gốc ở màn hình chính.</p><div id="teachStats"></div><div class="teaching"><nav id="nav" aria-label="Hoạt động"></nav><section id="current"></section></div><div class="actions" id="teachActions"><button id="prev">← Trước</button><button id="next" class="primary">Tiếp →</button><button id="mark">Đánh dấu hoàn thành</button><button id="timerToggle">Bắt đầu timer</button><button id="timerReset">Reset timer</button><button id="back">Về kịch bản</button></div></div>
+</section>
+</div>
+</main><footer>TeachFlow AI · CP3 local studio · Giảng viên chịu trách nhiệm duyệt.</footer>
+<script id="logic">
+"use strict";
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const lines=s=>String(s||"").split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
+const clone=x=>JSON.parse(JSON.stringify(x));
+const parseSource=s=>lines(s).map((text,i)=>{const m=text.match(/^\[([A-Za-z0-9_-]+)\]\s*(.+)$/);return {code:m?m[1]:"S"+String(i+1).padStart(2,"0"),text:m?m[2]:text}});
+const hostile=s=>/bỏ qua hướng dẫn|ignore (all |previous |system )?instructions|đọc file\s*\.env|<script\b|javascript:/i.test(s);
+function validate(p){
+ if(!p||!p.segments.length)return ["Thiếu phân đoạn"];
+ let t=0;const errs=[],codes=new Set(p.sources.map(s=>s.code));
+ for(const s of p.segments){
+ if(!Number.isInteger(s.duration_minutes)||s.duration_minutes<=0||s.start_minute!==t)errs.push("Timeline không hợp lệ: "+s.title);
+ t+=s.duration_minutes;
+ if(!s.slide_refs.length||s.slide_refs.some(r=>!codes.has(r)))errs.push("Mã nguồn không hợp lệ: "+s.title);
+ for(const k of ["title","activity_type","teacher_script","teacher_actions","student_activity","expected_outcome","assessment","fallback_strategy"])if(!String(s[k]??"").trim())errs.push("Thiếu "+k);
+ }
+ if(t!==p.duration_minutes)errs.push("Tổng "+t+" phút, cần "+p.duration_minutes+" phút.");
+ return errs;
+}
+function reflow(p){let t=0;p.segments.forEach(s=>{s.start_minute=t;t+=s.duration_minutes})}
+let draft=null,approved=null,index=0,completed=new Set(),seconds=0,timer=null,exported=false;
+let lessons=[],revision=0,pending=false,reader=null;
+function notice(text,bad=true){const n=$("inputNotice");n.hidden=!text;n.className="notice "+(bad?"bad":"ok");n.textContent=text}
+function stopTimer(){if(timer!==null)clearInterval(timer);timer=null;if(typeof document!=="undefined"&&$("timerToggle"))$("timerToggle").textContent="Bắt đầu timer"}
+function setLesson(){
+ const item=lessons.find(l=>l.id===$("lesson").value);
+ $("source").readOnly=!!item;
+ $("upload").disabled=!!item;
+ $("title").value=item?item.title:"Nguồn tự nhập";
+ $("source").value=item?item.segments.map(s=>"["+s.code+"] "+s.text).join("\n"):"";
+ $("refs").value=item?.id==="oop_annotations"?"OOP-P040, OOP-P041, OOP-P104, OOP-P106":"";
+ $("objectives").value=item?.id==="oop_annotations"?"Giải thích domain constraint\nPhân biệt Mutator và Observer":item?.id==="lab_tools"?"Viết hàm lookup\nKiểm thử mã hợp lệ và mã thiếu":item?.id==="agent_intro"?"Phân biệt workflow và agent\nHiểu giới hạn của tool và guardrail":"";
+ $("request").value=item?.id==="oop_annotations"?"Soạn kịch bản cho phần thiết kế lớp Customer.":"";
+ $("level").value=item?.id==="oop_annotations"?"intermediate":"beginner";
+ $("size").value=item?.id==="lab_tools"?35:40;
+ $("equipment").value=item?.id==="lab_tools"?"Laptop và Python":"Máy chiếu và laptop";
+ $("permission").checked=false;
+}
+function context(){
+ const lesson_id=$("lesson").value;
+ const req={lesson_id,duration_minutes:$("duration").value?Number($("duration").value):null,class_size:$("size").value?Number($("size").value):null,level:$("level").value||null,mode:$("mode").value,equipment:$("equipment").value,objectives:lines($("objectives").value),request:$("request").value};
+ const refs=$("refs").value.split(/[\s,;]+/).filter(Boolean);
+ if(refs.length)req.source_refs=refs;
+ if(lesson_id==="custom"){req.sources=parseSource($("source").value);req.permission=$("permission").checked;}
+ return req;
+}
+
+function updateButtons(){const valid=!!draft&&validate(draft).length===0;$("approve").disabled=!valid||!$("reviewed").checked||!!approved;for(const id of ["teach","exportText","exportJson"])$(id).disabled=!approved;$("status").textContent=approved?"Đã duyệt":draft?"Chờ duyệt":"Chưa tạo"}
+function invalidate(){stopTimer();if(reader&&!reader.closed)reader.close();reader=null;approved=null;$("reviewed").checked=false;$("teachPanel").hidden=true;$("review").hidden=false;if(draft)draft.status="pending_review";updateButtons()}
+const fields={title:"Tên hoạt động",activity_type:"Phương pháp",teacher_script:"Lời dẫn",teacher_actions:"Việc giảng viên làm",student_activity:"Việc học viên làm",expected_outcome:"Kết quả mong đợi",assessment:"Kiểm tra hiểu / đáp án",fallback_strategy:"Phương án dự phòng"};
+function stats(p){return '<div class="stats"><div class="stat">Thời lượng<strong>'+p.duration_minutes+' phút</strong></div><div class="stat">Hoạt động<strong>'+p.segments.length+'</strong></div><div class="stat">Đoạn nguồn<strong>'+p.sources.length+'</strong></div></div>'}
+function renderReview(){
+ $("actions").hidden=!draft;
+ if(!draft){$("result").className="empty";$("result").textContent="Chọn bài mẫu hoặc nhập nội dung rồi sinh kịch bản.";updateButtons();return}
+ $("result").className="";
+ const errors=validate(draft),p=draft;
+ $("result").innerHTML='<h3 style="margin-top:16px">'+esc(p.lesson_title)+'</h3>'+stats(p)+'<div class="notice '+(errors.length?"bad":"ok")+'">'+esc(errors.length?errors.join("\n"):"Kiểm cấu trúc và timeline: đạt. Chưa xác minh ngữ nghĩa.")+'</div><p><strong>Mục tiêu:</strong> '+esc(p.learning_objectives.join("; "))+'</p><div class="notice">'+esc(p.warnings.join("\n"))+'</div><details><summary>Đối chiếu nguồn bài giảng</summary><p class="pre">'+esc(p.sources.map(s=>"["+s.code+"] "+s.text).join("\n"))+'</p></details><div class="timeline">'+p.segments.map(s=>'<span style="flex:'+Math.max(1,s.duration_minutes)+'"></span>').join("")+'</div>'+p.segments.map((s,i)=>'<details class="segment" '+(i===0?"open":"")+'><summary>'+esc(s.start_minute+"–"+(s.start_minute+s.duration_minutes)+" phút · "+s.title)+'</summary><p><span class="source">'+esc(s.slide_refs.join(", "))+'</span></p><label class="field">Thời lượng (phút)<input type="number" min="1" data-i="'+i+'" data-k="duration_minutes" value="'+s.duration_minutes+'"></label>'+Object.entries(fields).map(([k,v])=>'<label class="field">'+esc(v)+'<textarea data-i="'+i+'" data-k="'+k+'" rows="'+(k==="teacher_script"?4:2)+'">'+esc(s[k])+'</textarea></label>').join("")+'</details>').join("");
+ updateButtons();
+}
+async function generate(){
+ if(pending)return;
+ invalidate();draft=null;renderReview();
+ const req=context(),version=++revision;
+ if(!$("permission").checked){notice("Xác nhận quyền sử dụng nguồn trước.");return;}
+ pending=true;$("generate").disabled=true;notice("Backend đang xử lý yêu cầu...",false);
+ try{
+   const response=await fetch("/api/generate",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(req)});
+   const result=await response.json();
+   if(version!==revision)return;
+   if(!response.ok||result.status!=="pending_review"){notice(result.message||"Không có kịch bản hợp lệ.");return;}
+   draft=result;
+   if(validate(draft).length){draft=null;notice("Backend trả kịch bản sai cấu trúc.");return;}
+   notice(result.generation_mode==="mock"?"Đã nhận kịch bản MOCK từ Python backend; không phải AI thật.":"Đã nhận bản nháp từ AI; cần đối chiếu nguồn.",false);
+ }catch(err){if(version===revision)notice("Không kết nối được backend hoặc phản hồi không hợp lệ. Kiểm tra python run.py.")}
+ finally{pending=false;$("generate").disabled=false;renderReview()}
+}
+
+function approve(){if(!draft||validate(draft).length||!$("reviewed").checked)return;approved=clone(draft);approved.status="approved";draft.status="approved";updateButtons();notice("Phiên bản đã được giảng viên duyệt.",false)}
+function clock(){const el=$("clock");if(el)el.textContent=String(Math.floor(seconds/60)).padStart(2,"0")+":"+String(seconds%60).padStart(2,"0")}
+function renderTeach(){
+ const p=approved;if(!p)return;const s=p.segments[index];
+ $("teachStats").innerHTML='<p class="muted">'+esc(p.lesson_title)+' · '+p.duration_minutes+' phút · '+completed.size+'/'+p.segments.length+' hoàn thành</p><div class="timeline">'+p.segments.map((x,i)=>'<span class="'+(i===index?"active":"")+'" style="flex:'+x.duration_minutes+'"></span>').join("")+'</div>';
+ $("nav").innerHTML=p.segments.map((x,i)=>'<button class="navitem '+(i===index?"active ":"")+(completed.has(i)?"done":"")+'" data-step="'+i+'">'+esc((completed.has(i)?"✓ ":"")+x.start_minute+"′ · "+x.title)+'</button>').join("");
+ $("current").innerHTML='<p class="muted">'+esc(s.activity_type+" · "+s.slide_refs.join(", "))+'</p><h2>'+esc(s.title)+'</h2><div class="timer" id="clock"></div><p class="muted">Thời lượng dự kiến: '+s.duration_minutes+' phút</p><h3>Lời dẫn</h3><div class="script">'+esc(s.teacher_script)+'</div>'+Object.entries(fields).filter(([k])=>!["title","activity_type","teacher_script","assessment"].includes(k)).map(([k,v])=>'<h3 style="margin-top:15px">'+esc(v)+'</h3><p class="pre">'+esc(s[k])+'</p>').join("")+'<details><summary>Kiểm tra hiểu / đáp án</summary><p class="pre">'+esc(s.assessment)+'</p></details><details><summary>Đoạn nguồn tham chiếu</summary><p class="pre">'+esc(p.sources.filter(x=>s.slide_refs.includes(x.code)).map(x=>"["+x.code+"] "+x.text).join("\n"))+'</p></details>';
+ $("prev").disabled=index===0;$("next").disabled=index===p.segments.length-1;$("mark").textContent=completed.has(index)?"Bỏ đánh dấu":"Đánh dấu hoàn thành";clock();
+}
+function go(i){if(!approved||i<0||i>=approved.segments.length)return;stopTimer();index=i;seconds=approved.segments[i].duration_minutes*60;renderTeach()}
+function startTeach(){$("review").hidden=true;$("teachPanel").hidden=false;completed=new Set();go(0)}
+function download(name,text,type){const url=URL.createObjectURL(new Blob([text],{type}));const a=document.createElement("a");a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+function markdown(p){return "# "+p.lesson_title+"\n\nThời lượng: "+p.duration_minutes+" phút · Đã duyệt\n\nMục tiêu: "+p.learning_objectives.join("; ")+"\n\n"+p.segments.map(s=>"## "+s.start_minute+"–"+(s.start_minute+s.duration_minutes)+" phút: "+s.title+"\nNguồn: "+s.slide_refs.join(", ")+"\n\n"+Object.entries(fields).filter(([k])=>k!=="title").map(([k,v])=>"**"+v+":** "+s[k]).join("\n\n")).join("\n\n")+"\n\n## Nguồn\n"+p.sources.map(s=>"["+s.code+"] "+s.text).join("\n")+"\n\n## Cảnh báo\n"+p.warnings.join("\n")}
+function openReader(){
+ if(!approved)return;
+ if(reader&&!reader.closed){reader.focus();return}
+ reader=window.open("","teachflow_private_reader","width=1050,height=850");
+ if(!reader){notice("Trình duyệt chặn cửa sổ phụ. Cho phép popup hoặc đọc tại đây.");startTeach();return}
+ const win=reader,doc=win.document;
+ doc.open();
+ doc.write("<!doctype html><html lang='vi'><meta charset='utf-8'><title>TeachFlow — Riêng giảng viên</title><style>"+document.querySelector("style").textContent+"</style><body></body></html>");
+ doc.close();
+ const h=doc.createElement("header");h.textContent="TeachFlow · KỊCH BẢN RIÊNG CHO GIẢNG VIÊN";doc.body.append(h);
+ const main=doc.createElement("main");
+ const panel=$("teachPanel").cloneNode(true);panel.hidden=false;main.append(panel);doc.body.append(main);
+ let idx=0,left=0,tick=null,done=new Set();
+ const p=clone(approved), q=id=>doc.getElementById(id);
+ function stop(){if(tick!==null)win.clearInterval(tick);tick=null;q("timerToggle").textContent="Bắt đầu timer"}
+ function clockReader(){q("clock").textContent=String(Math.floor(left/60)).padStart(2,"0")+":"+String(left%60).padStart(2,"0")}
+ function show(){
+   const seg=p.segments[idx];
+   q("teachStats").textContent=p.lesson_title+" · "+done.size+"/"+p.segments.length+" hoạt động hoàn thành";
+   q("nav").replaceChildren();
+   p.segments.forEach((s,i)=>{const b=doc.createElement("button");b.className="navitem"+(idx===i?" active":"");b.textContent=(done.has(i)?"✓ ":"")+s.start_minute+"′ "+s.title;b.onclick=()=>goReader(i);q("nav").append(b)});
+   const area=q("current");area.replaceChildren();
+   const add=(tag,text,cls)=>{const el=doc.createElement(tag);el.textContent=text;if(cls)el.className=cls;area.append(el);return el};
+   add("h2",seg.title);add("p","Slide gốc: "+seg.slide_refs.join(", ")+" · "+seg.duration_minutes+" phút","muted");
+   add("div","","timer").id="clock";clockReader();
+   add("h3","Lời dẫn");add("div",seg.teacher_script,"script");
+   for(const k of ["teacher_actions","student_activity","expected_outcome","fallback_strategy"]){add("h3",fields[k]);add("p",seg[k],"pre")}
+   const det=doc.createElement("details"),sum=doc.createElement("summary"),ans=doc.createElement("p");sum.textContent="Đáp án / kiểm tra hiểu";ans.textContent=seg.assessment;det.append(sum,ans);area.append(det);
+   const src=doc.createElement("details"),sh=doc.createElement("summary"),sp=doc.createElement("p");sh.textContent="Nguồn tham chiếu";sp.textContent=p.sources.filter(x=>seg.slide_refs.includes(x.code)).map(x=>"["+x.code+"] "+x.text).join("\n");sp.className="pre";src.append(sh,sp);area.append(src);
+   q("prev").disabled=idx===0;q("next").disabled=idx===p.segments.length-1;q("mark").textContent=done.has(idx)?"Bỏ đánh dấu":"Đánh dấu hoàn thành";
+ }
+ function goReader(i){if(i<0||i>=p.segments.length)return;stop();idx=i;left=p.segments[i].duration_minutes*60;show()}
+ q("prev").onclick=()=>goReader(idx-1);q("next").onclick=()=>goReader(idx+1);
+ q("mark").onclick=()=>{done.has(idx)?done.delete(idx):done.add(idx);show()};
+ q("timerReset").onclick=()=>goReader(idx);
+ q("timerToggle").onclick=()=>{if(tick!==null){stop();return}if(left<=0)return;q("timerToggle").textContent="Tạm dừng timer";tick=win.setInterval(()=>{left=Math.max(0,left-1);clockReader();if(!left)stop()},1000)};
+ q("back").textContent="Đóng màn hình riêng";q("back").onclick=()=>win.close();
+ goReader(0);win.focus();
+}
+async function init(){
+ $("generate").disabled=true;
+ $("lesson").addEventListener("change",()=>{setLesson();revision++;invalidate();draft=null;renderReview()});
+ $("setup").addEventListener("input",()=>{revision++;if(draft){invalidate();draft=null;renderReview();notice("Context đã thay đổi. Sinh lại kịch bản trước khi duyệt.")}});
+ $("upload").addEventListener("change",async e=>{const f=e.target.files[0];if(!f)return;if(f.size>1500000||! /\.(txt|md)$/i.test(f.name)){notice("Chỉ hỗ trợ TXT/MD dưới 1.5 MB.");return}try{$("source").value=await f.text();revision++;invalidate();draft=null;renderReview();notice("Đã đọc file; nhập mục tiêu rồi sinh kịch bản.",false)}catch{notice("Không đọc được file.")}});
+ $("generate").onclick=generate;
+ $("reviewed").onchange=updateButtons;
+ $("result").addEventListener("input",e=>{const i=e.target.dataset.i,k=e.target.dataset.k;if(!draft||i===undefined||!k)return;invalidate();draft.segments[Number(i)][k]=k==="duration_minutes"?Number(e.target.value):e.target.value;if(k==="duration_minutes")reflow(draft);updateButtons()});
+ $("result").addEventListener("change",e=>{if(e.target.dataset.k==="duration_minutes")renderReview()});
+ $("approve").onclick=approve;$("teach").onclick=openReader;
+ $("exportText").onclick=()=>{if(approved)download("teaching-script.md",markdown(approved),"text/markdown;charset=utf-8")};
+ $("exportJson").onclick=()=>{if(approved)download("teaching-script.json",JSON.stringify(approved,null,2),"application/json")};
+ $("back").onclick=()=>{stopTimer();$("teachPanel").hidden=true;$("review").hidden=false};
+ $("prev").onclick=()=>go(index-1);$("next").onclick=()=>go(index+1);
+ $("nav").onclick=e=>{const b=e.target.closest("[data-step]");if(b)go(Number(b.dataset.step))};
+ $("mark").onclick=()=>{completed.has(index)?completed.delete(index):completed.add(index);renderTeach()};
+ $("timerReset").onclick=()=>go(index);
+ $("timerToggle").onclick=()=>{if(timer!==null){stopTimer();return}if(seconds<=0)return;$("timerToggle").textContent="Tạm dừng timer";timer=setInterval(()=>{seconds=Math.max(0,seconds-1);clock();if(seconds===0)stopTimer()},1000)};
+ try{
+   const responses=await Promise.all([fetch("/api/health"),fetch("/api/lessons")]);
+   if(responses.some(r=>!r.ok))throw Error("API");
+   const [health,data]=await Promise.all(responses.map(r=>r.json()));
+   lessons=data.lessons;$("modeBadge").textContent=health.mode==="mock"?"MOCK · Python backend":"AI THẬT · Python backend";
+   setLesson();$("generate").disabled=false;
+ }catch{notice("Không tải được dữ liệu. Chạy python run.py rồi tải lại.")}
+}
+if(typeof document!=="undefined")init();
+
+</script>
+</body>
+</html>
