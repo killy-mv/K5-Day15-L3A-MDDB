@@ -66,18 +66,28 @@ def cli_main() -> int:
 
 
 def main() -> int:
-    """Open the self-contained CP2 prototype; no server or API key."""
-    from pathlib import Path
+    """Run the local TeachFlow studio; Ctrl+C stops it."""
     import webbrowser
-    page = Path(__file__).resolve().with_name("prototype.html")
-    if not page.is_file():
-        print("Không tìm thấy prototype.html")
+    import threading
+    from backend import make_server
+    from agent import active_mode
+
+    port = int(os.environ.get("TEACHFLOW_PORT", "8765"))
+    try:
+        server = make_server(port)
+    except OSError:
+        print("Port đang bận. Đổi TEACHFLOW_PORT hoặc tắt server cũ.")
         return 1
-    print("TeachFlow AI — Mock prototype: " + str(page))
-    if os.environ.get("TEACHFLOW_NO_BROWSER") == "1":
-        return 0
-    if not webbrowser.open(page.as_uri()):
-        print("Mở file HTML trên bằng trình duyệt.")
+    url = "http://127.0.0.1:%d/" % server.server_port
+    print("TeachFlow AI — %s mode — %s" % (active_mode().upper(), url), flush=True)
+    if os.environ.get("TEACHFLOW_NO_BROWSER") != "1":
+        threading.Timer(0.3, lambda: webbrowser.open(url)).start()
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        pass
+    finally:
+        server.server_close()
     return 0
 
 

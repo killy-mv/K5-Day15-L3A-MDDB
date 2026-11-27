@@ -1,13 +1,15 @@
-# TeachFlow AI — Prototype Mock
+# TeachFlow AI — Studio local CP3
 
-Chạy python run.py hoặc mở codebase/prototype.html trực tiếp. Không cần server, framework, Internet hoặc API key.
+Chạy `python run.py` từ repo; mở http://127.0.0.1:8765/ nếu trình duyệt không tự mở. Ctrl+C để tắt. Có thể đổi port bằng TEACHFLOW_PORT; TEACHFLOW_NO_BROWSER=1 chỉ tắt tự mở trình duyệt, không tắt server. CLI: `python codebase/app.py --cli`, nhập LessonRequest JSON.
 
-1. Chọn bài mẫu hoặc dán nội dung đã trích xuất / đọc TXT, Markdown local.
-2. Điền mục tiêu, thời lượng, trình độ, quy mô và thiết bị; xác nhận quyền dùng tài liệu.
-3. Sinh kịch bản bằng mock quy tắc; xem timeline, nguồn và cảnh báo.
-4. Sửa từng hoạt động, kiểm lại tổng phút; đánh dấu đã review và duyệt. Sửa đổi làm mất quyền xuất.
-5. Xuất teaching-script.md/JSON (kịch bản chính), hoặc teaching-mode.html (HTML độc lập với CSS/JS nhúng). Teaching Mode có điều hướng, timer, tiến độ, nguồn, fallback, ẩn/hiện đáp án.
+Studio mới (codebase/studio.html) gọi GET /api/health, GET /api/lessons và POST /api/generate trên cùng origin. Backend chỉ bind 127.0.0.1, không cần framework, không gửi key sang browser. Chọn OOP hoặc fixture cũ; nguồn cố định chỉ đọc, chọn mã nguồn nếu cần. Custom chỉ đọc TXT/MD hoặc dán text; xác nhận quyền sử dụng. Chưa có parser PDF/PPTX trực tiếp.
 
-Kiểm thử: node tests/test_prototype.js (15 smoke test pass, bao gồm toàn dải 5–240 phút); đã chạy smoke test trình duyệt Edge headless với Playwright: tạo nháp, chặn export trước duyệt, duyệt, export và mở playbook offline, điều hướng, đánh dấu hoàn thành, sửa mất duyệt, không có page error. TEACHFLOW_NO_BROWSER=1 python run.py kiểm launcher không bật cửa sổ.
+Giảng viên sửa và duyệt bản nháp, xuất Markdown/JSON hoặc mở cửa sổ riêng đọc kịch bản đã duyệt. Cửa sổ có timer, tiến độ, điều hướng, lời dẫn, tham chiếu và đáp án; sửa kịch bản đóng cửa sổ và hủy duyệt. Nếu popup bị chặn thì đọc tại chỗ. Slide gốc vẫn chiếu cho học viên, không tạo slide mới. Prototype HTML offline CP2 cũ giữ nguyên để tái lập mốc, không phải luồng sản phẩm hiện tại.
 
-Giới hạn: mock tạo 4 phân đoạn theo quy tắc, chưa hiểu ngữ nghĩa nguồn/mục tiêu tổng quát, chưa cá nhân hóa sâu, chưa đọc PDF/PPTX trực tiếp. Phát hiện mâu thuẫn fixture và injection theo mẫu, không phải bộ lọc toàn diện. Danh mục chiến lược trong data là tài liệu thiết kế; mock dùng lựa chọn cố định, chưa gọi tool có tracing. Python answer, eval, simulate vẫn cần tích hợp thật ở CP3. Không có kết quả benchmark AI thật, không suy ra hiệu quả học tập. Chuẩn đạt và metric giữ nguyên.
+Agent dùng contract_mock khi TEACHFLOW_MODE=mock (mặc định nếu MODEL_PROVIDER=fake), dùng module thật khi TEACHFLOW_MODE=real hoặc provider khác fake. Chưa có module thật của Đạt/Bảo; real mode sẽ báo lỗi thay vì tự chuyển mock. Một lần gọi generator, không repair ở orchestration hiện tại; cần kiểm chứng giới hạn 5 quyết định/2 repair và trace token sau tích hợp. Mock chỉ sinh khung đơn giản, không có chấm ngữ nghĩa hoặc kết quả eval thật.
+
+Kiểm thử:
+- python -m unittest discover -s tests -p "test_local_studio.py" -v (12/12 pass).
+- python tests/browser_studio_smoke.py (Playwright + Edge cài local; tùy chọn, đã pass luồng API/duyệt/popup/timer/export/sửa hủy duyệt/hỏi lại).
+- python -m unittest discover -s tests -p "test_contract_mock.py" -v
+- node tests/test_prototype.js (prototype CP2).
