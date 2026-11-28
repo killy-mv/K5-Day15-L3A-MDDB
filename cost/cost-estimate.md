@@ -54,11 +54,38 @@
 
 Chi phí / task thành công = chi phí trung bình mỗi phiên ÷ tỉ lệ đạt thật của Run 2 — **không coi như đạt 100%**.
 
-## 3. So với impact
+## 3. So với impact — M4-02 (phân tích sơ bộ trước CP4)
 
-- Impact / người / tháng (`spec.md` §2): *(chờ `M3-09` & `M4-02` hoàn thiện bảng impact có số)*
-- Chi phí / người / tháng (cơ sở, model __): *(chờ mục 2)*
-- **Kết luận một dòng — đáng làm không:** *(chờ kết quả đo thật mục 2 và impact §2)*
+**Nguồn:** spec.md §2 (impact), cost/personas.yaml (tần suất/quy mô), §2.1 (báo cáo 10 phiên thử của Dũng, PR #17). Chưa có CSV/trace của lượt thử trên repo để kiểm toán từng phiên. Không coi bảng này là kết quả chính thức 50 phiên; giữ nguyên số liệu đã báo cáo ở §2.1. Tỷ lệ đạt tạm dùng 16/24 (66,7%) từ Run 1 Flash, trong khi token đo trên Flash Lite, nên chi phí/task dưới đây chưa chứng minh chất lượng của Lite.
+
+| Quy mô | Phiên/tháng (ước tính) | Impact tiềm năng (giờ/tháng) | Lite USD/tháng (sơ bộ) | Flash USD/tháng (quy đổi) |
+|---|---:|---:|---:|---:|
+| Thấp: 22 người | 118,8 | 39,6 | 0,4116 | 2,14 |
+| Cơ sở: 84 người | 453,6 | 151,2 | 1,57 | 8,19 |
+| Cao: 168 người | 907,2 | 302,4 | 3,14 | 16,38 |
+
+Tần suất bình quân 0,40 × 3 + 0,45 × 6 + 0,15 × 10 = 5,4 phiên/người/tháng. Impact tiềm năng 5,4 × 20 = 108 phút/người/tháng (1,8 giờ), chưa đo thực nghiệm; số người là quy mô giả định dựa trên training-ops giả lập, không phải người dùng đã xác nhận pain.
+
+### Quy đổi cùng đơn vị và độ nhạy
+
+So sánh chi phí AI với giá trị giờ công tiết kiệm ròng, không quy 108 phút tiềm năng thành tiền thực thu. Gọi S là phút tiết kiệm ròng bình quân mỗi phiên (tính cả phiên lỗi, công nạp nguồn, chờ, đọc, sửa, duyệt và chuẩn bị thủ công nếu cần; chất lượng phải tương đương), W là giá trị giờ công USD/giờ.
+
+Giá trị tiết kiệm/người/tháng = 5,4 × S / 60 × W. Hòa vốn riêng chi phí token khi giá trị này >= chi phí model/người/tháng.
+
+| Giả định S (phút/phiên, chưa đo) | Giờ tiết kiệm/người/tháng | W hòa vốn Lite (USD/giờ) | W hòa vốn Flash (USD/giờ) |
+|---|---:|---:|---:|
+| 0 | 0 | Không hòa vốn | Không hòa vốn |
+| 5 | 0,45 | 0,0416 | 0,2167 |
+| 10 | 0,90 | 0,0208 | 0,1083 |
+| 20 | 1,80 | 0,0104 | 0,0542 |
+
+Công thức W hòa vốn = chi phí model/người/tháng chia số giờ tiết kiệm/người/tháng. Chi phí cơ sở lấy từ §2.1: Lite 0,0187 USD/người/tháng, Flash 0,0975 USD/người/tháng; các giá trị hòa vốn làm tròn 4 chữ số. Mốc 20 phút là lượng công việc tiềm năng theo §2 của spec, không khẳng định tiết kiệm ròng được toàn bộ. Nếu S âm thì tăng công việc, không đáng triển khai dù giá token thấp.
+
+Chi phí/task thành công sơ bộ: Lite $0,0052, Flash $0,0271 (đơn giá quy đổi từ token Lite, dùng tỷ lệ đạt Run 1; xem §2.1). Không cộng các khoản này lần nữa vào bảng chi phí tháng. Chưa có persona giảng viên chủ chốt trong 10 phiên thử; harness dùng chi phí phiên trung bình khi persona không có mẫu. Tần suất và mức áp dụng chưa được đo; giá chưa gồm hosting, vận hành, rà soát chất lượng, chi phí phát triển, thuế; giờ duyệt đã được trừ khi đo S nên không trừ lần hai. Giá Flash theo bảng BTC từ 01/01/2027.
+
+**Kết luận tạm thời — ITERATE:** chi phí token sơ bộ thấp, có cơ sở tiếp tục pilot giới hạn với giảng viên/lab coach; chưa GO vì Run 1 chỉ 16/24 và không đạt 3 ngưỡng metric, chưa đo S, chưa có Run 2 và 50 phiên. Nếu Run 2 đạt chuẩn CP2 và đo được tiết kiệm ròng dương đủ bù tổng chi phí vận hành, xem xét GO pilot rộng hơn; nếu không cải thiện chất lượng/giờ công thì thu hẹp hoặc STOP. Không lấy riêng 10/10 phiên không lỗi làm tỷ lệ task thành công.
+
+**Chốt sau T4-06:** thay số sơ bộ bằng bảng chính thức từ simulate-N-summary.md, ghi run ID/model đo token, tỷ lệ đạt thực Run 2 và 3 quy mô, tính lại W hòa vốn theo chi phí/người/tháng mới; đối chiếu spec §8 và slide 6–7. Không sửa số liệu/trace lịch sử.
 
 ## 4. Giới hạn và ghi chú mở rộng
 
