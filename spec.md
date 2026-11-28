@@ -181,6 +181,14 @@ Case đặc thù: lớp đông thiếu thiết bị, nội dung quá tải, mixe
 - Đo giá trị thực tế sau prototype: phút chuẩn bị và duyệt kịch bản của giảng viên (đề xuất giảm >=30% so với cách cũ), tỷ lệ hoàn thành lab trong thời hạn cố định, thời gian hoàn thành lab và chất lượng theo test/rubric. Đây là chỉ số kiểm chứng sản phẩm, chưa có baseline và không tính vào chuẩn benchmark CP2 của hướng A3. Không kết luận học nhanh hơn từ output AI.
 - Chưa chạy thử 10–20 output hoặc chấm độc lập 5 output; cần ghi kết quả thật trong eval/README.md. Mock HTML đã có; xem docs/prototype.md, chưa chạy benchmark model thật. Lượt eval 1/2: chưa chạy, chưa có run ID hay điểm.
 
+
+**Cập nhật CP3 (28/11/2026):** 24 câu (9 thường, 11 khó, 4 từ chối; 11/24 nguồn thật), giữ B01–B15 và bổ sung B16–B24. Tập 12 case mong đợi kịch bản hoàn chỉnh đã khóa trước Run 1: B05, B06, B11–B19, B21.
+
+- Đã chạy thử và thu thập 19 output thực tế từ `gemini-3.8-flash` (`eval/run-try.csv` và `eval/run-1.csv`), ghi nhận lỗi thực trong `eval/calibration_kit.md`; Grader A (Tạ Tiến Dũng) đã chấm bộ 5 câu hiệu chuẩn tại `eval/calibration_grader_a.csv`, chờ người chấm độc lập thứ 2 hoàn tất `eval/calibration_grader_b.csv`.
+- **Kết quả Lượt eval 1 (`eval/run-1.csv`, Run ID `run-1@20261128-092011`, model `gemini-3.8-flash`, trace `traces/run-1.jsonl`):** đạt **16/24 câu (67% / 66,7%)** — `thuong` **5/9 (56%)**, `kho` **7/11 (64%)**, `tu_choi` **4/4 (100%)**. Kết quả 5 metric: `content_grounding` **50/50 (100,0% — đạt)**, `duration_compliance` **7/12 (58,3% — chưa đạt)**, `script_completeness` **7/12 (58,3% — chưa đạt)**, `context_adaptation` **6/12 (50,0% — chưa đạt)**, `safety` **4/4 (100,0% — đạt)** → **chưa đạt chuẩn CP2** (chủ yếu do 7 câu gặp lỗi API `HTTP 503/429` khi `codebase/ai.py` chưa có retry backoff và 1 câu `B15` lệch thứ tự 4 phần giảng viên yêu cầu; toàn bộ 7/7 kịch bản sinh thành công đều đạt 100% timeline và schema). Chi tiết: [eval/README.md](eval/README.md) và [eval/report.md](eval/report.md). Lượt eval 2: chưa chạy.
+
+Ghi chú: phần 15 câu và trạng thái chưa chạy ở trên là mốc lịch sử CP2, không phải trạng thái hiện tại. Kết quả chấm do Dũng cung cấp; hiệu chuẩn người chấm thứ hai chưa hoàn tất.
+
 ## §8. Chi phí khi dùng thật *(guide 4.2)*
 - Persona + giá: `cost/personas.yaml` · lượt mô phỏng: `cost/simulate-__.csv` (__ phiên)
 - Chi phí / task thành công: __ (model __) · __ (model __)
@@ -236,6 +244,8 @@ Case đặc thù: lớp đông thiếu thiết bị, nội dung quá tải, mixe
 | 28/11/2026, trước CP3 | TV1 xác nhận nguyên văn P2 và trực tiếp sử dụng các giải pháp tương tự | Đủ 5 trích dẫn có nguồn; hoàn thành M3-08 và ghi nhận M3-11. Không thêm log trải nghiệm giả, không đổi benchmark hoặc chuẩn đạt. |
 | 28/11/2026, trước CP3 | Merge AI Core PR #8, chốt Gemini 3.8 Flash, smoke tích hợp thật B11/B05 | 2 model calls, 4 tool calls, 9.077 token, 82,5 giây; kiểm cấu trúc pass, chưa phải Run 1. Mỗi thành viên dùng key local riêng. Không đổi benchmark/chuẩn đạt. |
 | 28/11/2026, trước CP3 | Nhóm xác nhận contract v1.0; browser smoke thật M3-05 | Gemini 3.8 Flash sinh 5 hoạt động/60 phút, 5 nguồn, 4 cảnh báo; 1 model/2 tool, 4.662 token, 28,6 giây; duyệt/reader/JSON/sửa hủy duyệt/hỏi lại pass. Không phải Run 1; giữ chuẩn đạt. |
+| 28/11/2026, trước CP3 | Mở rộng `eval/benchmark.csv` lên 24 câu (giữ nguyên B01–B15, thêm B16–B24); khóa danh sách 12 case kịch bản hoàn chỉnh trong `eval/README.md`; thêm `eval/preclass_stats.py`, `eval/auto_grader.py` (tương thích Interface Contract v1.0 & `oop_annotations`), `eval/human_rubric.md`, `eval/grading_sheet_template.csv`, `eval/calibration_kit.md`; chuẩn hóa `cost/personas.yaml` (3 persona đúng vai GV/lab coach, quy mô 22/84/168, 3 tầng giá model) | Phủ các lỗ hổng online/intermediate/mixed/thiếu nguồn/thiếu mục tiêu/ngoài phạm vi và 4 tình huống lỗi pre-class thật (`B16–B18, B21`); đảm bảo >=1/3 nguồn thật (11/24=45.8%); không sửa `eval/metric_spec.yaml` hay chuẩn đạt CP2. |
+| 28/11/2026, trước CP3 | Chạy `eval --try` (T3-06) và Eval Run 1 (`run-1@20261128-092011`, T3-07) trên 24 câu với `gemini-3.8-flash`; chấm điểm 5 metric (T3-08), cập nhật `eval/README.md`, `eval/report.md`, `spec.md` §7 (T3-09) và phân tích nhóm lỗi (T4-01) | Kết quả thật Run 1: 16/24 (67%), `content_grounding` 100%, `safety` 100%, `duration_compliance` 7/12 (58,3%), `script_completeness` 7/12 (58,3%), `context_adaptation` 6/12 (50,0%). Phát hiện 7 câu lỗi `HTTP 503/429` do thiếu retry trong `ai.py` và 1 câu `B15` lệch thứ tự 4 phần. Giữ nguyên chuẩn đạt CP2. |
 
 **Sau CP4 (đến 23:59 Thứ Bảy 28/11)** (sửa theo góp ý — không sửa chuẩn "đạt", câu thử, số bằng chứng, kết quả các lượt đã chạy)
 
