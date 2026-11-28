@@ -7,7 +7,7 @@ README của nhóm có mục "Dùng AI vào việc gì" (2–3 dòng, bắt bu�
 | Việc | Công cụ AI | AI làm gì | Người kiểm/sửa gì | Ai phụ trách |
 |---|---|---|---|---|
 | Code bản chạy thử | ChatGPT | HTML/CSS/JS mock, launcher, smoke tests | Test tự động đã chạy; nhóm cần review code và nội dung | Nhóm kỹ thuật |
-| Code parser / guardrails / validator (B3) | Claude Code | Viết `parser.py`, `guardrails.py`, `validator.py`, 32 unit test, tài liệu bàn giao, nháp spec §9 theo interface contract | 32 test và 77 test nhóm đã chạy pass (model giả lập); đối chiếu tay hành vi 24 câu benchmark; Bảo cần đọc hiểu mẫu regex và mã lỗi trước demo | Hoàng Văn Bảo |
+| Code parser, guardrails, validator (B3) | Claude Code | Viết 3 module, 32 unit test, tài liệu bàn giao và bản nháp spec §9 theo interface contract | Đã chạy 32 test và 77 test của nhóm (model giả lập), tự đối chiếu 24 câu benchmark; cần đọc hiểu các mẫu chặn và mã lỗi trước khi demo | Hoàng Văn Bảo |
 | Prompt / thiết kế lời gọi mô hình | | | | |
 | Đào data (viết script đếm, gợi ý nhãn) | | | Kiểm tay __ dòng, khớp __ | |
 | Rà câu hỏi phỏng vấn / khảo sát | | Chỉ rà câu dẫn dắt | | |

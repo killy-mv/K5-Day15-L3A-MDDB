@@ -162,31 +162,31 @@ Rủi ro đáng lo nhất khi demo: B07 — đáp án sai có vẻ hợp lý, m�
 
 ## §9. Rủi ro & an toàn
 - **Dữ liệu:**
-  - Ghi chép phỏng vấn P1/P2 đã bỏ tên và không nạp vào runtime.
-  - Dữ liệu BTC (`data/preclass`, `data/training-ops`) chỉ dùng số tổng hợp để thiết kế câu thử và persona, không gửi bản ghi cá nhân lên model.
-  - Bài OOP chỉ có tóm lược từng trang, không có PDF gốc. Quyền phân phối và quyền gửi nguyên PDF tới nhà cung cấp LLM chưa xác minh (DATA_CARD), nên model chỉ nhận đoạn tóm lược đã chọn.
-  - Input không thu tên, email hay điểm học viên. Nguồn custom có email/SĐT bị dừng lại để giảng viên xóa trước khi gửi model (`PERSONAL_DATA_SOURCE`).
-  - API key chỉ nằm trong `.env` ở server local: trình duyệt không nhận key, tool không đọc `.env`.
-- **AI không được làm, kể cả khi được yêu cầu** (chặn bằng code trước khi gọi model, `codebase/guardrails.py`, kèm mã lỗi):
-  - chấm điểm cuối hoặc xếp hạng học viên (`GRADING`, B08);
-  - tự gán "đã duyệt" (`SELF_APPROVE`, B10, kiểm lại ở validator `STATUS`);
-  - nhúng script ngoài (`EXTERNAL_SCRIPT`, B10);
+  - Ghi chép phỏng vấn P1, P2 đã bỏ tên người trả lời và không đưa vào lúc chạy.
+  - Dữ liệu BTC cấp (`data/preclass`, `data/training-ops`) chỉ dùng số tổng hợp để viết câu thử và persona. Không gửi bản ghi của từng học viên lên model.
+  - Bài OOP chỉ lưu bản tóm tắt từng trang, không lưu PDF gốc. Nhóm chưa xác minh được quyền phân phối PDF và quyền gửi nguyên tài liệu cho nhà cung cấp LLM (xem DATA_CARD), nên model chỉ nhận những đoạn tóm tắt đã chọn.
+  - Form nhập không hỏi tên, email hay điểm của học viên. Nếu tài liệu tự nạp có email hoặc số điện thoại, hệ thống dừng lại và nhắc giảng viên xóa trước khi gửi model (`PERSONAL_DATA_SOURCE`).
+  - API key chỉ để trong `.env` trên máy chạy server. Trình duyệt không nhận được key, công cụ của agent cũng không đọc file này.
+- **Những việc AI không được làm, kể cả khi người dùng yêu cầu.** Các yêu cầu này bị chặn bằng code trong `codebase/guardrails.py` trước khi gọi model:
+  - chấm điểm cuối hoặc xếp hạng học viên (`GRADING`, câu B08);
+  - tự đánh dấu "đã duyệt" (`SELF_APPROVE`, câu B10; validator kiểm thêm lần nữa ở mã `STATUS`);
+  - nhúng script từ bên ngoài (`EXTERNAL_SCRIPT`, câu B10);
   - đọc `.env`, key hoặc mật khẩu (`SECRETS`);
-  - đăng LMS hoặc gửi email (`EXTERNAL_ACTION`, B24);
-  - theo dõi học viên bằng camera (`SURVEILLANCE`, B24);
-  - xử lý dữ liệu cá nhân học viên (`PERSONAL_DATA`);
-  - làm theo chỉ dẫn nằm trong slide (`FOLLOW_SOURCE`, `INJECTION_SOURCE`, B09);
-  - soạn khi chưa có nguồn (`MISSING_SOURCES`, B22).
-- **Ai bị hại nếu AI sai và nhóm chặn thế nào:**
-  - *Học viên* học sai nếu kịch bản sai kiến thức hoặc có đáp án sai. Kịch bản chỉ được dẫn mã nguồn đã cung cấp (validator `REF`). Mọi bản luôn ở `pending_review`, kèm cảnh báo `REVIEW`/`SOURCE_REVIEW`. Giảng viên phải tích "đã đối chiếu" mới duyệt được, và sửa bất kỳ chỗ nào thì mất duyệt.
-  - *Giảng viên* mất thời gian, hoặc lớp bị lệch giờ, nếu timeline sai. Validator `TIMELINE` bắt tổng phút, chồng/hở và số phút không nguyên.
-  - *Máy giảng viên* chạy mã độc nếu bản xuất ra chứa script. Validator `UNSAFE` chặn từ gốc; giao diện escape hoặc dùng `textContent`; file xuất là `.md`/`.json`.
-  - *Khi thiếu context* (thời lượng, trình độ, mục tiêu) thì hỏi lại, không đoán (B03, B04, B23).
+  - đăng lên LMS hoặc gửi email (`EXTERNAL_ACTION`, câu B24);
+  - theo dõi học viên bằng camera (`SURVEILLANCE`, câu B24);
+  - xử lý thông tin cá nhân của học viên (`PERSONAL_DATA`);
+  - làm theo chỉ dẫn ghi trong slide (`FOLLOW_SOURCE`, `INJECTION_SOURCE`, câu B09);
+  - soạn bài khi chưa có tài liệu nguồn (`MISSING_SOURCES`, câu B22).
+- **Ai có thể bị ảnh hưởng nếu AI sai, và nhóm chặn thế nào:**
+  - Học viên có thể học sai nếu kịch bản sai kiến thức hoặc đáp án sai. Kịch bản chỉ được dẫn mã nguồn đã gửi cho model (validator kiểm ở mã `REF`). Bản nào cũng ở trạng thái `pending_review` và có cảnh báo nhắc giảng viên đối chiếu. Giảng viên phải tích ô "đã đối chiếu" mới duyệt được, và chỉ cần sửa một chỗ là mất duyệt.
+  - Giảng viên có thể mất thời gian hoặc bị lệch giờ nếu timeline sai. Validator kiểm tổng số phút, các hoạt động có chồng hay hở nhau không, và số phút có phải số nguyên không.
+  - Máy của giảng viên có thể bị chạy mã độc nếu file xuất ra chứa script. Validator chặn từ đầu (mã `UNSAFE`). Giao diện escape nội dung trước khi hiển thị, và file xuất chỉ là `.md` hoặc `.json`.
+  - Khi thiếu thời lượng, trình độ hoặc mục tiêu, hệ thống hỏi lại chứ không tự đoán (câu B03, B04, B23).
 - **Giới hạn còn lại:**
-  - Bộ lọc dựa trên mẫu câu, diễn đạt lách mẫu vẫn có thể lọt.
-  - Code không kiểm được ngữ nghĩa (nguồn mâu thuẫn, đáp án sai: B01, B02, B07, B20). Các trường hợp này dựa vào model và người duyệt.
-  - Tóm lược OOP chưa có chuyên gia duyệt.
-  - Kết quả test guardrails hiện tại (32/32 pass, `tests/test_bao_modules.py`) chạy với model giả lập. Hiệu quả với model thật sẽ ghi sau Run 1. Chi tiết: `docs/parser-validator-guardrails.md`.
+  - Bộ lọc bắt theo mẫu câu, người dùng viết lách đi vẫn có thể lọt.
+  - Code không kiểm được nội dung đúng hay sai về mặt kiến thức, ví dụ nguồn mâu thuẫn hay đáp án sai (câu B01, B02, B07, B20). Phần này dựa vào model và người duyệt.
+  - Bản tóm tắt bài OOP chưa có chuyên gia đọc lại.
+  - 32 test guardrails (`tests/test_bao_modules.py`) đang pass với model giả lập. Kết quả với model thật sẽ bổ sung sau Run 1. Chi tiết xem `docs/parser-validator-guardrails.md`.
 
 ## §10. Phân công & changelog
 - Phân công có tên (theo chặng, chia cặp — guide "Cách chia việc"): __
@@ -201,7 +201,7 @@ Rủi ro đáng lo nhất khi demo: B07 — đáp án sai có vẻ hợp lý, m�
 | 27/11/2026, sau CP2 | Nhóm thống nhất chỉ sinh kịch bản; màn hình phụ riêng cho giảng viên, slide gốc vẫn trình chiếu; HTML chỉ là định dạng đọc tùy chọn | Quyết định nhóm và PR #2 (chỉ nhận commit context); không sửa benchmark hoặc chuẩn đạt. |
 
 | 28/11/2026, sau CP2 | Bàn giao dataset tóm lược 131 trang OOP ngoài AI20K, interface contract và fixture/mock Python | Giảm phụ thuộc giữa các module; chưa đánh giá AI thật; quyền phân phối PDF gốc chưa xác minh; giữ nguyên chuẩn đạt. |
-| 28/11/2026, trước CP3 | Thêm `codebase/parser.py`, `guardrails.py`, `validator.py` theo contract §5 (B3-01–B3-09), 32 unit test, tài liệu bàn giao; điền §9 | Chặn bằng code B03/B04/B22/B23 (hỏi lại) và B08/B09/B10/B24 (từ chối) trước khi gọi model; validator bắt timeline/mã nguồn/HTML/tự duyệt. Test với model giả lập, chưa phải kết quả eval; không sửa benchmark, metric hay chuẩn đạt. |
+| 28/11/2026, trước CP3 | Thêm `codebase/parser.py`, `guardrails.py`, `validator.py` theo mục 5 của contract (B3-01 đến B3-09), 32 unit test, tài liệu bàn giao; viết §9 | Code chặn trước khi gọi model: B03, B04, B22, B23 được hỏi lại; B08, B09, B10, B24 bị từ chối. Validator bắt lỗi timeline, mã nguồn, HTML và tự duyệt. Mới test với model giả lập, chưa phải kết quả eval. Không sửa benchmark, metric hay chuẩn đạt. |
 
 **Sau CP4 (đến 23:59 Thứ Bảy 28/11)** (sửa theo góp ý — không sửa chuẩn "đạt", câu thử, số bằng chứng, kết quả các lượt đã chạy)
 
