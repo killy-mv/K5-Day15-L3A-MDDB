@@ -1,16 +1,17 @@
-"""Validator kịch bản (interface-contract §4–5, owner: Bảo). B3-04, B3-05, B3-06, B3-08.
+"""Validator: kiểm kịch bản model trả về trước khi giảng viên xem (B3-04, B3-05, B3-06, B3-08). Người làm: Bảo.
 
-validate_script(script, context, sources) -> {"ok": bool, "errors": list[str], "warnings": list[str]}
+Hàm chính là validate_script(script, context, sources), trả về {"ok", "errors", "warnings"}.
 
-Kiểm CẤU TRÚC bằng code sau khi model sinh, trước khi giảng viên thấy bản nháp:
-  [SCHEMA]    đủ trường root + từng segment, đúng kiểu, chuỗi không rỗng
-  [STATUS]    chỉ pending_review; mọi dấu hiệu "approved" từ model là lỗi (AI không tự duyệt)
-  [TIMELINE]  phút nguyên dương, bắt đầu 0, liên tục, không chồng/hở, tổng = duration_minutes input
-  [REF]       slide_refs không rỗng, mọi mã thuộc nguồn THỰC SỰ được cung cấp
-  [UNSAFE]    không thẻ HTML/script, không javascript: trong nội dung (bản đọc escape, nhưng chặn từ gốc)
-Mỗi lỗi ghi vị trí dạng segments[i].field. Warnings: phần code không chứng minh được (ngữ nghĩa,
-độ phủ mục tiêu, nguồn cần review) — giảng viên vẫn phải đối chiếu slide gốc trước khi duyệt.
-Chỉ dùng thư viện chuẩn, không gọi model, không sửa input.
+Các lỗi được kiểm:
+- SCHEMA: thiếu trường, sai kiểu hoặc để trống.
+- STATUS: trạng thái phải là pending_review, model không được tự gán approved.
+- TIMELINE: số phút phải là số nguyên dương, bắt đầu từ phút 0, các hoạt động nối tiếp nhau
+  và tổng bằng thời lượng buổi học.
+- REF: mã nguồn phải nằm trong các đoạn đã gửi cho model.
+- UNSAFE: không được có thẻ HTML hoặc script trong nội dung.
+
+Lỗi ghi kèm vị trí, ví dụ segments[2].assessment.
+Code chỉ kiểm được cấu trúc, không biết nội dung đúng hay sai, nên giảng viên vẫn phải đối chiếu với slide.
 """
 import re
 
@@ -18,7 +19,7 @@ ROOT_FIELDS = ("lesson_title", "duration_minutes", "learning_objectives", "segme
 TEXT_FIELDS = ("title", "activity_type", "teacher_script", "teacher_actions", "student_activity",
                "expected_outcome", "assessment", "fallback_strategy")
 SEGMENT_FIELDS = ("title", "start_minute", "duration_minutes", "slide_refs") + TEXT_FIELDS[1:]
-LONG_SEGMENT = 30   # phút; hoạt động dài hơn thì cảnh báo nên chia nhỏ
+LONG_SEGMENT = 30   # hoạt động dài hơn 30 phút thì nhắc nên chia nhỏ
 
 _UNSAFE = re.compile(r"<\s*/?\s*[a-zA-Z][\w-]*(\s[^<>]*)?/?\s*>|javascript\s*:|\bon(load|error|click)\s*=", re.I)
 _APPROVED = re.compile(r"^\s*(approved|đã duyệt)\s*$", re.I)
@@ -47,7 +48,7 @@ def validate_script(script, context, sources) -> dict:
     context = context if isinstance(context, dict) else {}
     known = {s["code"]: s for s in sources or [] if isinstance(s, dict) and isinstance(s.get("code"), str)}
 
-    # ---- root
+    # Kiểm các trường chung của kịch bản
     for f in ROOT_FIELDS:
         if f not in script:
             err("SCHEMA", f, "thiếu trường bắt buộc.")
@@ -72,7 +73,7 @@ def validate_script(script, context, sources) -> dict:
         if _is_text(script.get(f)) and _UNSAFE.search(script[f]):
             err("UNSAFE", f, "chứa thẻ HTML/script.")
 
-    # ---- segments
+    # Kiểm từng hoạt động
     segments = script.get("segments")
     if "segments" in script and (not isinstance(segments, list) or not segments):
         err("SCHEMA", "segments", "phải là danh sách hoạt động không rỗng.")
@@ -121,7 +122,7 @@ def validate_script(script, context, sources) -> dict:
     if segments and type(duration) is int and expected_start != duration:
         err("TIMELINE", "segments", "tổng %d phút, cần đúng %d phút." % (expected_start, duration))
 
-    # ---- cảnh báo cho giảng viên (không làm fail)
+    # Cảnh báo cho giảng viên, không làm kịch bản bị loại
     review = sorted(r for r in used_refs if known[r].get("review_required"))
     if review:
         warnings.append("[SOURCE_REVIEW] Nguồn %s đánh dấu cần đối chiếu PDF gốc." % ", ".join(review[:15]))

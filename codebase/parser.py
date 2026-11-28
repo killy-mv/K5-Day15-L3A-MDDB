@@ -1,17 +1,18 @@
-"""Parser nguồn bài giảng (interface-contract §5, owner: Bảo). B3-01, B3-02.
+"""Parser: đọc tài liệu bài giảng và chia thành các đoạn có mã (B3-01, B3-02). Người làm: Bảo.
 
-parse_document(request) -> list[SourceSegment]
+Hàm chính là parse_document(request), làm theo mục 5 của interface contract.
 
-- lesson_id đã đăng ký: tra theo id trong data/lessons/*.json (id là khóa tra, KHÔNG dùng làm đường dẫn).
-- lesson_id == "custom" (cần permission=true), một trong hai:
-    sources:     list[{code, text, page?, title?}] đã chuẩn hóa sẵn
-    source_text: text / Markdown / text trích từ PDF (trang ngăn bởi \\f) → tự chia đoạn, mã U001, U002…
-- source_refs (tùy chọn): giới hạn đúng các mã đó, mã lạ → lỗi (không bịa mã).
-Mọi lỗi là ValueError có thông điệp tiếng Việt; agent đổi thành needs_clarification.
+Bài đã có sẵn trong data/lessons/ thì tìm theo lesson_id. lesson_id chỉ dùng để tra,
+không ghép thành đường dẫn file.
 
-Ngoài luồng agent (không nhận path từ request): pdf_to_segments(path) đọc PDF có lớp text
-bằng pypdf nếu đã cài, dùng ở dòng lệnh để giảng viên chuẩn bị nguồn custom. Không OCR.
-Chỉ dùng thư viện chuẩn (pypdf là tùy chọn).
+Tài liệu giảng viên tự nạp dùng lesson_id = "custom" và phải có permission = true.
+Có thể gửi danh sách đoạn đã chia sẵn (sources) hoặc dán nguyên văn bản (source_text).
+Văn bản sẽ được tự chia đoạn và đặt mã U001, U002...
+
+Nếu có source_refs thì chỉ lấy đúng các mã đó. Mã nào không có trong bài thì báo lỗi.
+Mọi lỗi đều là ValueError, agent sẽ chuyển thành câu hỏi lại cho giảng viên.
+
+Hàm pdf_to_segments chỉ dùng khi chạy từ dòng lệnh để chuẩn bị tài liệu, cần cài pypdf.
 """
 from copy import deepcopy
 import json
@@ -21,9 +22,9 @@ import re
 ROOT = Path(__file__).resolve().parents[1]
 LESSON_DIR = ROOT / "data" / "lessons"
 
-MAX_SEGMENTS = 300          # giới hạn số đoạn một bài custom
-MAX_SEGMENT_CHARS = 2500    # đoạn dài hơn thì cắt tiếp theo câu
-MAX_TOTAL_CHARS = 400_000   # ~ giới hạn body 2 MB của backend, chừa chỗ JSON
+MAX_SEGMENTS = 300          # số đoạn tối đa cho một tài liệu tự nạp
+MAX_SEGMENT_CHARS = 2500    # đoạn dài hơn mức này thì cắt nhỏ theo câu
+MAX_TOTAL_CHARS = 400_000   # backend nhận tối đa 2 MB, để dư chỗ cho phần JSON
 _CODE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.-]{0,39}$")
 _OPTIONAL_KEYS = ("page", "title", "section", "content_kind", "review_required")
 
@@ -39,7 +40,7 @@ def _registered_lessons() -> dict:
 
 
 def _normalize(seg, where: str) -> dict:
-    """Một SourceSegment hợp lệ: code (mã an toàn, duy nhất) + text không rỗng; giữ trường phụ đúng kiểu."""
+    """Kiểm một đoạn nguồn: phải có mã hợp lệ và nội dung không rỗng. Các trường phụ được giữ lại nếu đúng kiểu."""
     if not isinstance(seg, dict):
         raise ValueError("%s: đoạn nguồn phải là object {code, text}." % where)
     code, text = seg.get("code"), seg.get("text")
@@ -78,7 +79,7 @@ def _split_long(text: str, limit: int = MAX_SEGMENT_CHARS) -> list:
         if cur and len(cur) + len(sentence) + 1 > limit:
             parts.append(cur.strip())
             cur = ""
-        while len(sentence) > limit:   # câu quá dài: cắt cứng
+        while len(sentence) > limit:   # câu dài quá thì cắt thẳng theo số ký tự
             parts.append(sentence[:limit])
             sentence = sentence[limit:]
         cur += sentence + " "
@@ -88,19 +89,18 @@ def _split_long(text: str, limit: int = MAX_SEGMENT_CHARS) -> list:
 
 
 def chunk_text(text: str, prefix: str = "U") -> list:
-    """Chia text/Markdown/text-PDF thành đoạn có mã ổn định (B3-02).
+    """Chia văn bản thành các đoạn và đặt mã U001, U002... theo thứ tự.
 
-    - Có ký tự \\f (pdftotext, pypdf): mỗi trang một đoạn, giữ số trang.
-    - Có heading Markdown (#): mỗi mục một đoạn, title = heading.
-    - Còn lại: mỗi khối ngăn bởi dòng trống một đoạn.
-    Đoạn quá dài được cắt theo câu; mã U001, U002… theo thứ tự xuất hiện (không random).
+    Nếu có ký tự \\f (text trích từ PDF) thì mỗi trang là một đoạn.
+    Nếu có tiêu đề Markdown (#) thì mỗi mục là một đoạn, lấy tiêu đề làm title.
+    Các trường hợp khác thì tách theo dòng trống. Đoạn quá dài sẽ được cắt theo câu.
     """
     if not isinstance(text, str) or not text.strip():
         raise ValueError("source_text rỗng.")
     if len(text) > MAX_TOTAL_CHARS:
         raise ValueError("Tài liệu quá dài (> %d ký tự). Hãy chọn phần bài cần dạy." % MAX_TOTAL_CHARS)
     text = text.replace("\r\n", "\n").replace("\r", "\n")
-    blocks = []  # (page, title, body)
+    blocks = []  # mỗi phần tử là (trang, tiêu đề, nội dung)
     if "\f" in text:
         for i, page in enumerate(text.split("\f"), 1):
             if page.strip():
@@ -147,7 +147,7 @@ def _apply_refs(docs: list, refs) -> list:
 
 
 def parse_document(request: dict) -> list:
-    """LessonRequest -> list[SourceSegment] (bản sao, thứ tự như bài). Lỗi: ValueError."""
+    """Lấy danh sách đoạn nguồn cho một yêu cầu soạn bài. Gặp lỗi thì raise ValueError."""
     if not isinstance(request, dict):
         raise ValueError("Input phải là LessonRequest JSON object.")
     lesson_id = request.get("lesson_id")
@@ -180,11 +180,11 @@ def parse_document(request: dict) -> list:
 
 
 def pdf_to_segments(path, prefix: str = "P") -> list:
-    """(Dòng lệnh, ngoài luồng agent) PDF có lớp text -> một đoạn mỗi trang. Cần `pip install pypdf`.
-    Trang không có text (ảnh scan) bị bỏ qua và được liệt kê ở cảnh báo stderr; không OCR."""
+    """Đọc file PDF có chữ, mỗi trang thành một đoạn. Chỉ dùng khi chạy từ dòng lệnh, agent không gọi hàm này.
+    Cần cài pypdf. Trang chỉ có ảnh (scan) sẽ bị bỏ qua vì chưa làm OCR."""
     try:
         from pypdf import PdfReader
-    except ImportError as exc:  # thư viện tùy chọn
+    except ImportError as exc:  # pypdf không bắt buộc phải cài
         raise ValueError("Cần cài pypdf để đọc PDF: pip install pypdf") from exc
     reader = PdfReader(str(path))
     pages = [(p.extract_text() or "").strip() for p in reader.pages]
@@ -196,7 +196,7 @@ def pdf_to_segments(path, prefix: str = "P") -> list:
 
 
 if __name__ == "__main__":
-    # python codebase/parser.py bai.pdf|bai.md > nguon.json   → dán vào sources của request custom
+    # Cách dùng: python codebase/parser.py bai.pdf > nguon.json, rồi dán nội dung vào sources của yêu cầu custom
     import sys
     for _s in (sys.stdout, sys.stderr):
         try:

@@ -1,4 +1,4 @@
-"""B3-09: unit test parser / guardrails / validator (owner: Bảo). Không gọi API.
+"""Test cho parser, guardrails và validator (B3-09). Không gọi API.
 
 Chạy: python -m unittest tests/test_bao_modules.py -v
 """
@@ -219,7 +219,7 @@ class ValidatorTest(unittest.TestCase):
     def test_refs_must_be_provided_sources(self):
         r = self.mutate(lambda s: s["segments"][0].__setitem__("slide_refs", ["OOP-P999"]))
         self.assertIn("[REF] segments[0].slide_refs", self.codes(r))
-        # mã có thật trong bài nhưng KHÔNG nằm trong source_refs đã chọn → vẫn lỗi
+        # mã có trong bài nhưng không nằm trong source_refs đã chọn thì vẫn tính là sai
         r = self.mutate(lambda s: s["segments"][0].__setitem__("slide_refs", ["OOP-P001"]))
         self.assertFalse(r["ok"])
         r = self.mutate(lambda s: s["segments"][0].__setitem__("slide_refs", []))
@@ -233,7 +233,7 @@ class ValidatorTest(unittest.TestCase):
         for payload in ("<script>alert(1)</script>", "<img src=x onerror=alert(1)>", "Xem javascript:alert(1)"):
             r = self.mutate(lambda s: s["segments"][1].__setitem__("teacher_script", payload))
             self.assertIn("[UNSAFE] segments[1].teacher_script", self.codes(r), payload)
-        # so sánh toán học không phải thẻ HTML
+        # phép so sánh như id < 1 không được tính là thẻ HTML
         self.assertTrue(self.mutate(lambda s: s["segments"][1].__setitem__("assessment", "id < 1 hoặc 2 > 1?"))["ok"])
 
     def test_not_dict_and_empty_segments(self):
@@ -247,7 +247,7 @@ class ValidatorTest(unittest.TestCase):
 
 
 class AgentIntegrationTest(unittest.TestCase):
-    """Chạy agent.build_response (của Minh) với module thật của Bảo, các module chưa có dùng mock."""
+    """Chạy thử agent.build_response của Minh với ba module của Bảo. Các module chưa có thì dùng mock."""
 
     def deps(self, generate=None):
         return SimpleNamespace(parse_document=P.parse_document, check_request=G.check_request,
