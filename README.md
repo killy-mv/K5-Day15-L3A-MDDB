@@ -20,6 +20,28 @@ Bài của nhóm phải cân bằng hai nửa: **tư duy sản phẩm** (đúng 
 
 ---
 
+## TeachFlow AI — demo của nhóm MDDB
+
+Track A · Kịch bản giảng dạy từ nội dung có sẵn. Chạy studio local (Python backend; mặc định mock nếu chưa cấu hình model):
+
+```bash
+python run.py
+```
+
+Mở http://127.0.0.1:8765/ nếu trình duyệt không tự mở. Chọn bài mẫu, sinh kịch bản qua API, sửa và duyệt; mở cửa sổ riêng cho giảng viên (slide gốc vẫn chiếu cho học viên). Xuất Markdown/JSON. Prototype CP2 cũ vẫn giữ tại codebase/prototype.html. Xem [hướng dẫn](docs/prototype.md).
+
+**Bàn giao CP3:** [Interface contract](docs/interface-contract.md) · [Dataset OOP 131 trang](data/lessons/oop_annotations.json) · [Input mẫu](data/fixtures/lesson_request.json) · [Output mẫu](data/fixtures/script_response.json) · [Data Card](data/DATA_CARD.md). Chạy mock Python riêng bằng `python codebase/contract_mock.py`; không phải AI thật.
+
+**Trạng thái CP3:** local studio đã chạy end-to-end với mock; parser/guardrails/validator của Bảo đã bàn giao, đang chờ AI Core thật. Không dùng mock làm kết quả eval. Real mode không tự fallback mock khi cấu hình sai. Xem [bàn giao module](docs/parser-validator-guardrails.md) và [hồ sơ đánh giá](eval/README.md).
+
+Kiểm tra repo: `python run.py check`. Unit test: `python -m unittest discover -s tests -p "test_*.py"`; prototype CP2: `node tests/test_prototype.js`; browser smoke tùy chọn: `python tests/browser_studio_smoke.py` (Playwright + Edge). CLI nhập LessonRequest JSON: `python codebase/app.py --cli`. Chỉ chạy eval thật sau khi cấu hình và xác minh model thật.
+
+Hồ sơ: [Spec](spec.md) · [Canvas](canvas.md) · [Evidence](evidence/summary.md) · [Review giải pháp](docs/competitor-review.md) · [Chi phí](cost/cost-estimate.md).
+
+Dùng AI: ChatGPT hỗ trợ thiết kế, code studio/agent, test, tóm lược nguồn OOP và tổng hợp ghi chép phỏng vấn thật; hỗ trợ tính Impact và viết tài liệu. Claude Code hỗ trợ parser/guardrails/validator của Bảo theo PR #5. Chi tiết [AI usage](docs/ai-usage.md); không tạo bằng chứng hay kết quả đánh giá giả.
+
+---
+
 ## Đọc theo thứ tự này
 
 | # | File | Đọc khi nào | Trong đó có gì |

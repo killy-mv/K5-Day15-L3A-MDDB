@@ -1,0 +1,26 @@
+[
+  {
+    "id": "small",
+    "size": 40,
+    "level": "beginner",
+    "mode": "offline",
+    "equipment": "máy chiếu và laptop",
+    "duration_minutes": 60
+  },
+  {
+    "id": "large",
+    "size": 200,
+    "level": "beginner",
+    "mode": "offline",
+    "equipment": "máy chiếu, không thiết bị cá nhân",
+    "duration_minutes": 45
+  },
+  {
+    "id": "lab",
+    "size": 35,
+    "level": "beginner",
+    "mode": "offline",
+    "equipment": "laptop và Python",
+    "duration_minutes": 60
+  }
+]

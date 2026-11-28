@@ -6,8 +6,7 @@
 
 ## 1. Bối cảnh và quyết định sản phẩm
 
-- Nhóm chuyển từ Track B (Y tế) sang Track A (EdTech), hướng gần nhất là A3 — Sản xuất bài giảng bằng AI, có giao thoa với A4 — Lớp học kiểu mới.
-- Theo xác nhận của thành viên nhóm, lab coach đã được thông báo về việc đổi track. Ghi nhận thay đổi trong form CP2 theo luật hackathon.
+- TeachFlow AI thuộc Track A (EdTech), hướng gần nhất là A3 — Sản xuất bài giảng bằng AI, có giao thoa với A4 — Lớp học kiểu mới.
 - Tên sản phẩm sử dụng trong trao đổi: **TeachFlow AI**.
 - Người dùng chính: giảng viên AI20K chuẩn bị một buổi giảng trên lớp từ slide và tài liệu chuyên môn đã có.
 - Người hưởng lợi gián tiếp: học viên; có thể hỏi thêm lab coach trực tiếp tham gia chuẩn bị hoặc triển khai giảng dạy.
@@ -87,7 +86,7 @@ Ví dụ schema rút gọn:
 
 ## 5. Output hỗ trợ: màn hình phụ cho giảng viên (Teaching Mode)
 
-**Đã chốt:** khi đứng lớp, giảng viên sẽ có một **màn hình phụ riêng** (tách biệt với màn hình chính/màn chiếu của học viên) để đọc trực tiếp kịch bản đã duyệt và giảng theo đúng kịch bản đó.
+**Đã chốt:** khi đứng lớp, giảng viên sẽ có một **màn hình phụ riêng** (tách biệt với màn hình chính/màn chiếu của học viên) để đọc trực tiếp kịch bản đã duyệt và giảng theo đúng kịch bản đó. Giảng viên vẫn trình chiếu slide gốc cho học viên; TeachFlow không tạo giao diện trình chiếu thay slide. Kịch bản là output duy nhất về nội dung, có thể lưu dưới dạng HTML đọc riêng, Markdown, DOCX hoặc định dạng phù hợp; không bắt buộc sinh thêm HTML.
 
 Màn hình phụ đọc dữ liệu trực tiếp từ kịch bản đã được giảng viên duyệt, giữ nội dung hiển thị nhất quán, ổn định và không để AI tự sinh mã giao diện tùy ý mỗi lượt. Nếu giảng viên chỉnh sửa kịch bản, màn hình phụ phải cập nhật lại từ phiên bản đã duyệt mới nhất để tránh lệch nội dung.
 
@@ -158,7 +157,7 @@ Ngoài phạm vi: multi-agent phức tạp, fine-tune/training model, video gi�
 
 ## 9. Bằng chứng pain và impact
 
-Chưa có kết quả phỏng vấn/khảo sát được xác nhận trong trao đổi này. Kế hoạch: phỏng vấn ít nhất 3 người ngoài nhóm đúng vai trò giảng viên hoặc lab coach trực tiếp chuẩn bị và triển khai bài giảng AI20K, hỏi về hành vi thực tế trong tháng qua. Có thể bổ sung khảo sát học viên hoặc nguồn data phù hợp để kiểm tra chéo; log pre-class không tự chứng minh việc chuẩn bị kịch bản trên lớp tốn thời gian.
+Đã có ghi chép ban đầu của hai cuộc phỏng vấn: P1 (lab coach) muốn dùng kịch bản khi dạy và kỳ vọng cải thiện tiến độ làm lab; P2 (giảng viên) báo tốn thời gian chuẩn bị, tìm ví dụ gần gũi và tổ chức tương tác. Chưa có số phút hoặc tỷ lệ hoàn thành thực tế; xem evidence/summary.md. Kế hoạch tiếp theo: phỏng vấn ít nhất 3 người ngoài nhóm đúng vai trò giảng viên hoặc lab coach trực tiếp chuẩn bị và triển khai bài giảng AI20K, hỏi về hành vi thực tế trong tháng qua. Có thể bổ sung khảo sát học viên hoặc nguồn data phù hợp để kiểm tra chéo; log pre-class không tự chứng minh việc chuẩn bị kịch bản trên lớp tốn thời gian.
 
 - Thu thập thời gian chuẩn bị, tần suất dạy, khó khăn khi tổ chức tương tác, ví dụ và trích dẫn ẩn danh; tối thiểu 5 trích dẫn/ví dụ nguyên văn có nguồn cho CP3.
 - Nếu dùng khảo sát làm nguồn đạt ngưỡng: ít nhất 20 người đúng nhóm mục tiêu ngoài team. Dữ liệu giả lập dùng để chạy thử, không dùng làm bằng chứng pain.
@@ -187,8 +186,8 @@ Chạy hai lượt trên cùng benchmark, lưu run ID, token, kết quả từng
 
 | Mốc | Việc cần làm |
 |---|---|
-| CP1 | Canvas và TEAMS theo Track A; repo đã cập nhật trên main ở commit 3d1f5b9, lệnh check đã kiểm đúng format TEAMS. Không xác nhận đã nộp form nếu chưa có bằng chứng. |
-| CP2 · 27/11 19:30 | Cập nhật bằng chứng đầu, ghi đổi track; spec/sơ đồ, benchmark >=10, >=3 metric và ngưỡng khóa, data card, prototype mock đi hết luồng. |
+| CP1 | Canvas và TEAMS theo Track A; lệnh check đã kiểm đúng format TEAMS. Không xác nhận đã nộp form nếu chưa có bằng chứng. |
+| CP2 · 27/11 19:30 | Cập nhật Canvas theo bằng chứng đầu và các thay đổi thiết kế thực tế; spec/sơ đồ, benchmark >=10, >=3 metric và ngưỡng khóa, data card, prototype mock đi hết luồng. |
 | CP3 · 28/11 10:00 | Bằng chứng pain đạt ngưỡng, 20–30 câu, spec §0–7, AI thật, lượt eval 1 đã chấm/run ID, thử simulate 10 phiên, video 30 giây. |
 | CP4 · 28/11 14:30 | Cải tiến và lượt 2, mô phỏng chi phí, báo cáo, slide, video dự phòng, demo. |
 | Hạn cuối · 28/11 23:59 | Reflection từng người, changelog spec §10 cho các sửa đổi sau CP4, push bản cuối. |
@@ -196,3 +195,7 @@ Chạy hai lượt trên cùng benchmark, lưu run ID, token, kết quả từng
 Phân công dự kiến giữ theo TEAMS.md: Minh điều phối/kiến trúc/tích hợp AI; Bảo prototype/tools/guardrails; Đạt evidence/impact; Dũng benchmark/evaluation/chi phí. Cả nhóm cùng xác minh pain, review chéo và hiểu toàn bộ câu chuyện; chưa thay thế phân công thực tế nếu nhóm thống nhất khác.
 
 Tài liệu tham chiếu trong repo: README.md (bộ đề), 01-challenge-brief.md, 02-guide.md, 03-rubric.md, tracks/track-a-edtech.md, canvas.md, TEAMS.md, starter-repo/README.md. Khi có quyết định mới, cập nhật spec/canvas và tài liệu này tương ứng; không sửa chuẩn đạt sau CP2.
+
+## 12. Prototype hiện có và định hướng sau CP2
+
+Đã có codebase/prototype.html và launcher python run.py. Prototype trước đó xuất Markdown/JSON và HTML Teaching Mode offline. Theo quyết định mới, HTML nếu dùng chỉ là định dạng đọc kịch bản riêng cho giảng viên, không phải output trình chiếu độc lập; slide gốc vẫn dùng để giảng. Mock theo quy tắc, không gọi model thật; chưa nối Python answer/tools với luồng này. Xem docs/prototype.md. Giữ nguyên metric và chuẩn đạt đã khóa.

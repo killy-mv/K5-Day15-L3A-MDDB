@@ -1,0 +1,1201 @@
+{
+  "schema_version": "1.0",
+  "lessons": [
+    {
+      "id": "oop_annotations",
+      "title": "Using Annotation in Object Oriented Programming",
+      "source": {
+        "filename": "lect01a_b-oop-with-ano.pdf",
+        "author_as_printed": "Duc M. L.",
+        "pdf_sha256": "98f97841a2d666a2e4187277385262b5e213a899270c7c17f9ca3e11b53802ed",
+        "page_count": 131,
+        "rights_status": "unverified",
+        "distribution": "derived_notes_only_no_original_pdf",
+        "kind": "external_lecture_user_supplied",
+        "language": "en",
+        "notes_language": "vi"
+      },
+      "segments": [
+        {
+          "code": "OOP-P001",
+          "page": 1,
+          "title": "Chủ đề bài giảng",
+          "section": "intro",
+          "text": "Software Engineering: áp dụng annotation trong thiết kế hướng đối tượng.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P002",
+          "page": 2,
+          "title": "Phạm vi",
+          "section": "intro",
+          "text": "Phần A thiết kế lớp cơ bản; phần B thiết kế lớp collection. Validation/coding và type hierarchy thuộc nội dung khác trong outline.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P003",
+          "page": 3,
+          "title": "Kiến thức nền",
+          "section": "intro",
+          "text": "Cần hiểu class, object, encapsulation, inheritance, polymorphism, abstraction, interface, exception, I/O và Java 8 trở lên.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P004",
+          "page": 4,
+          "title": "Tài liệu tham khảo",
+          "section": "intro",
+          "text": "Slide dẫn các chương 4–6 của course book, Liskov và Guttag (2000) chương 2,3,5,9 và đặc tả annotation Java.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P005",
+          "page": 5,
+          "title": "Tổng quan phương pháp",
+          "section": "intro",
+          "text": "Sơ đồ nối class header với class, object representation với field/domain attribute, operation specification với method; annotation biểu đạt ràng buộc và kiểu hành vi.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P006",
+          "page": 6,
+          "title": "Phần A",
+          "section": "motivation_annotations",
+          "text": "Mục tiêu phần A: lý do cần thiết kế chi tiết và cách biểu đạt quy tắc thiết kế bằng annotation.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P007",
+          "page": 7,
+          "title": "Câu hỏi động lực",
+          "section": "motivation_annotations",
+          "text": "Nêu câu hỏi vì sao cần annotation trong OOP design; chưa đưa đáp án trên trang này.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P008",
+          "page": 8,
+          "title": "CustomerSimple UML",
+          "section": "motivation_annotations",
+          "text": "Lớp CustomerSimple có id kiểu int, name kiểu String, phương thức setName, getId, getName.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P009",
+          "page": 9,
+          "title": "Cài đặt cơ bản",
+          "section": "motivation_annotations",
+          "text": "CustomerSimple có hai field private, constructor gán trực tiếp id/name, getter và setter name.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P010",
+          "page": 10,
+          "title": "Thiếu chi tiết",
+          "section": "motivation_annotations",
+          "text": "Thiết kế đơn giản chưa trả lời giới hạn id, null của name, lựa chọn kiểu dữ liệu, cách tạo object và quyền đổi id.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P011",
+          "page": 11,
+          "title": "Quy tắc tường minh",
+          "section": "motivation_annotations",
+          "text": "So sánh validation method (quy tắc ngầm, cần thực thi) với annotation (metadata tường minh, có thể hỗ trợ kiểm tra thiết kế lúc biên dịch).",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P012",
+          "page": 12,
+          "title": "Validate id",
+          "section": "motivation_annotations",
+          "text": "Ví dụ constructor chỉ gán id nếu validateId kiểm tra id lớn hơn 0; nếu sai ném NotPossibleException.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P013",
+          "page": 13,
+          "title": "Annotation và validate",
+          "section": "motivation_annotations",
+          "text": "Ví dụ thêm DomainConstraint với min bằng 1 cho id; constructor vẫn gọi validation method.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P014",
+          "page": 14,
+          "title": "Ứng dụng annotation",
+          "section": "motivation_annotations",
+          "text": "Tài liệu nêu Java, JPA, Hibernate, Spring, OpenXava và Angular như ví dụ sử dụng annotation hoặc cơ chế tương tự.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P015",
+          "page": 15,
+          "title": "Java annotation",
+          "section": "motivation_annotations",
+          "text": "Ví dụ Override, SuppressWarnings và annotation Author do người dùng định nghĩa.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P016",
+          "page": 16,
+          "title": "Backend",
+          "section": "motivation_annotations",
+          "text": "Minh họa mapping CustomerEntity bằng Entity/Table/Id/Column và controller Spring bằng Controller/RequestMapping.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P017",
+          "page": 17,
+          "title": "Frontend",
+          "section": "motivation_annotations",
+          "text": "Slide dùng Component của Angular để minh họa khai báo thành phần giao diện.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P018",
+          "page": 18,
+          "title": "Bảo toàn ràng buộc",
+          "section": "motivation_annotations",
+          "text": "Domain constraint hạn chế giá trị thuộc tính; method phải bảo toàn các quy tắc ở precondition và postcondition, không nhất thiết mọi thời điểm trung gian.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P019",
+          "page": 19,
+          "title": "Thành phần thiết kế",
+          "section": "motivation_annotations",
+          "text": "Header specification, object representation và operation specification là ba thành phần chính của class design.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P020",
+          "page": 20,
+          "title": "Annotation thiết yếu",
+          "section": "motivation_annotations",
+          "text": "DOpt gắn với method và xác định OptType; AttrRef gắn method/parameter; DomainConstraint gắn field và mô tả type, mutable, optional, length, min, max.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P021",
+          "page": 21,
+          "title": "Customer annotated",
+          "section": "motivation_annotations",
+          "text": "id là Integer không mutable, không optional, min 1; name String mutable, không optional, length 50. Slide minh họa getter, setter, validation và repOK; dùng nhãn DAttr trong hình (đối chiếu AttrRef ở trang 98).",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P022",
+          "page": 22,
+          "title": "IntSet annotated",
+          "section": "motivation_annotations",
+          "text": "elements là Vector<Integer>, mutable và không optional; insert/remove/isIn/size tương ứng các loại thao tác collection; có getIndex, toString, repOK.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P023",
+          "page": 23,
+          "title": "Ngôn ngữ không hỗ trợ annotation",
+          "section": "motivation_annotations",
+          "text": "Có thể ánh xạ ràng buộc sang biểu diễn thay thế hoặc lưu annotation dưới dạng comment làm tài liệu.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P024",
+          "page": 24,
+          "title": "Các bước thiết kế",
+          "section": "header_abstract_properties",
+          "text": "Đặc tả header, chọn concrete attribute type, định nghĩa representation và operation.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P025",
+          "page": 25,
+          "title": "Header specification",
+          "section": "header_abstract_properties",
+          "text": "Mô tả concept, overview, attributes, object và abstract_properties.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P026",
+          "page": 26,
+          "title": "Header format",
+          "section": "header_abstract_properties",
+          "text": "Dùng comment kiểu Javadoc với bốn tag overview, attributes, object, abstract_properties.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P027",
+          "page": 27,
+          "title": "Concept name",
+          "section": "header_abstract_properties",
+          "text": "Chọn tên khái niệm muốn mô hình hóa thành class, ví dụ Customer và IntSet.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P028",
+          "page": 28,
+          "title": "Overview IntSet",
+          "section": "header_abstract_properties",
+          "text": "IntSet mô tả tập số nguyên có thể thay đổi và không bị giới hạn kích thước theo khái niệm trừu tượng.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P029",
+          "page": 29,
+          "title": "Overview Customer",
+          "section": "header_abstract_properties",
+          "text": "Customer biểu diễn cá nhân hoặc tổ chức có quan hệ với đơn vị.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P030",
+          "page": 30,
+          "title": "Overview Integer",
+          "section": "header_abstract_properties",
+          "text": "Integer mô tả số nguyên bất biến, kể cả số 0 và số âm.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P031",
+          "page": 31,
+          "title": "Attributes",
+          "section": "header_abstract_properties",
+          "text": "Mỗi thuộc tính có tên, formal type và concrete type (chọn sau); UML compartment thứ hai chứa thuộc tính.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P032",
+          "page": 32,
+          "title": "Formal types",
+          "section": "header_abstract_properties",
+          "text": "Integer, String, Real, Char, Boolean, sequence và set được dùng làm kiểu trừu tượng.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P033",
+          "page": 33,
+          "title": "IntSet attribute",
+          "section": "header_abstract_properties",
+          "text": "Formal type của elements trong IntSet là Set<Integer>.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P034",
+          "page": 34,
+          "title": "Customer attributes",
+          "section": "header_abstract_properties",
+          "text": "id có formal type Integer; name có formal type String.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P035",
+          "page": 35,
+          "title": "Abstract object",
+          "section": "header_abstract_properties",
+          "text": "Một thuộc tính có thể biểu diễn bằng giá trị điển hình; nhiều thuộc tính dùng tuple.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P036",
+          "page": 36,
+          "title": "Customer object",
+          "section": "header_abstract_properties",
+          "text": "Customer được mô tả trừu tượng bằng cặp id và name.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P037",
+          "page": 37,
+          "title": "IntSet object",
+          "section": "header_abstract_properties",
+          "text": "IntSet được biểu diễn như một tập các phần tử x1 đến xn.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P038",
+          "page": 38,
+          "title": "Integer object",
+          "section": "header_abstract_properties",
+          "text": "Trạng thái trừu tượng của Integer là một giá trị nguyên.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P039",
+          "page": 39,
+          "title": "Abstract properties",
+          "section": "header_abstract_properties",
+          "text": "Tag abstract_properties bao gồm domain constraints và các quy tắc khác.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P040",
+          "page": 40,
+          "title": "Domain constraint",
+          "section": "header_abstract_properties",
+          "text": "Các đặc trưng: formal type, mutable, optional, độ dài tối đa của String, giá trị min/max cho số.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P041",
+          "page": 41,
+          "title": "Customer constraints",
+          "section": "header_abstract_properties",
+          "text": "Bảng ràng buộc: id Integer, immutable, required, min 1; name String, mutable, required, length tối đa 50.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P042",
+          "page": 42,
+          "title": "Customer properties",
+          "section": "header_abstract_properties",
+          "text": "Biểu diễn các ràng buộc id/name bằng mệnh đề logic trong abstract_properties.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P043",
+          "page": 43,
+          "title": "IntSet constraints",
+          "section": "header_abstract_properties",
+          "text": "elements có formal type Set<Integer>, mutable, không optional; không có giới hạn length/min/max trong bảng.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P044",
+          "page": 44,
+          "title": "IntSet properties",
+          "section": "header_abstract_properties",
+          "text": "elements có thể thay đổi, không optional; nếu không rỗng thì các phần tử đều là integer.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P045",
+          "page": 45,
+          "title": "Ràng buộc khác",
+          "section": "header_abstract_properties",
+          "text": "Quy tắc đặc thù khái niệm ngoài domain constraints; set có phần tử phân biệt, array có thứ tự.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P046",
+          "page": 46,
+          "title": "IntSet uniqueness",
+          "section": "header_abstract_properties",
+          "text": "Bổ sung quy tắc phần tử phân biệt trong abstract_properties, cùng quy tắc kiểu integer.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P047",
+          "page": 47,
+          "title": "Concrete type",
+          "section": "concrete_types",
+          "text": "Kiểu cài đặt phải được ngôn ngữ đích hỗ trợ; một formal type có thể ánh xạ nhiều concrete type, ví dụ Set sang array hoặc Vector.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P048",
+          "page": 48,
+          "title": "Java types",
+          "section": "concrete_types",
+          "text": "Giới thiệu wrapper type và dynamic array để chọn kiểu cài đặt.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P049",
+          "page": 49,
+          "title": "Wrapper",
+          "section": "concrete_types",
+          "text": "Wrapper biểu diễn primitive dưới dạng object; auto-boxing chuyển primitive sang wrapper, auto-unboxing chuyển ngược.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P050",
+          "page": 50,
+          "title": "Ánh xạ wrapper",
+          "section": "concrete_types",
+          "text": "int/Integer, long/Long, float/Float, double/Double, char/Character.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P051",
+          "page": 51,
+          "title": "Wrapper example",
+          "section": "concrete_types",
+          "text": "Ví dụ Integer i nhận 5; gán i sang int k được 5; cộng i với 10 cho j bằng 15 qua unboxing.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P052",
+          "page": 52,
+          "title": "Vector",
+          "section": "concrete_types",
+          "text": "java.util.Vector là dynamic array chứa object, có generic Vector<T> để xác định kiểu phần tử, hỗ trợ thêm/xóa.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P053",
+          "page": 53,
+          "title": "Vector operations",
+          "section": "concrete_types",
+          "text": "add thêm cuối, set thay phần tử tại index, get đọc phần tử, remove xóa tại index, size đếm phần tử.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P054",
+          "page": 54,
+          "title": "Khởi tạo Vector",
+          "section": "concrete_types",
+          "text": "Minh họa Vector raw và Vector<Integer>; vector mới có size 0 nhưng có sức chứa nội bộ.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P055",
+          "page": 55,
+          "title": "Vector add",
+          "section": "concrete_types",
+          "text": "Minh họa thêm các số 1, 1, 2, 3, 5 vào Vector; cho phép trùng.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P056",
+          "page": 56,
+          "title": "Vector get",
+          "section": "concrete_types",
+          "text": "get(0) đọc phần tử đầu, gán sang int có auto-unboxing.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P057",
+          "page": 57,
+          "title": "Vector set",
+          "section": "concrete_types",
+          "text": "set(0,-1) thay phần tử đầu bằng -1.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P058",
+          "page": 58,
+          "title": "Vector remove",
+          "section": "concrete_types",
+          "text": "remove(0) bỏ phần tử đầu và dịch các phần tử còn lại.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P059",
+          "page": 59,
+          "title": "Vector size",
+          "section": "concrete_types",
+          "text": "Sau ví dụ xóa phần tử đầu, vector có bốn phần tử.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P060",
+          "page": 60,
+          "title": "Vector và Set",
+          "section": "concrete_types",
+          "text": "Vector hỗ trợ phần tử trùng và truy cập theo index; Set trong mô hình bài giảng có phần tử phân biệt.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P061",
+          "page": 61,
+          "title": "IntSet concrete type",
+          "section": "concrete_types",
+          "text": "elements có formal type Set<Integer>, concrete type Vector<Integer>.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P062",
+          "page": 62,
+          "title": "Customer concrete types",
+          "section": "concrete_types",
+          "text": "id Integer được cài đặt int; name dùng String.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P063",
+          "page": 63,
+          "title": "Chọn concrete type",
+          "section": "concrete_types",
+          "text": "Cân đối năng suất lập trình với hiệu quả chạy, đồng thời bảo đảm ngôn ngữ hỗ trợ.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P064",
+          "page": 64,
+          "title": "Customer tradeoff",
+          "section": "concrete_types",
+          "text": "Kiểu int và String dễ thao tác trực tiếp, ví dụ không cần chuyển kiểu.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P065",
+          "page": 65,
+          "title": "IntSet tradeoff",
+          "section": "concrete_types",
+          "text": "Slide so sánh array và Vector về thao tác thêm/xóa/truy xuất; nhận định hiệu năng là theo ví dụ, cần đối chiếu khi khái quát.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P066",
+          "page": 66,
+          "title": "Object representation",
+          "section": "representation",
+          "text": "Representation gồm thuộc tính và concrete type; tạo instance variable và gắn domain constraint nếu có.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P067",
+          "page": 67,
+          "title": "Representation examples",
+          "section": "representation",
+          "text": "Customer dùng id/name; IntSet dùng elements để biểu diễn trạng thái.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P068",
+          "page": 68,
+          "title": "Instance variable",
+          "section": "representation",
+          "text": "Tên field theo attribute, kiểu theo concrete type, private nhằm bảo vệ truy cập từ ngoài.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P069",
+          "page": 69,
+          "title": "Customer fields",
+          "section": "representation",
+          "text": "Customer khai báo id kiểu int và name kiểu String, cả hai private.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P070",
+          "page": 70,
+          "title": "IntSet fields",
+          "section": "representation",
+          "text": "IntSet khai báo elements kiểu Vector<Integer>, private.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P071",
+          "page": 71,
+          "title": "Annotate field",
+          "section": "representation",
+          "text": "Dùng DomainConstraint trong package utils trên instance variable; có giá trị mặc định nên có thể bỏ thuộc tính annotation không cần ghi.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P072",
+          "page": 72,
+          "title": "DomainConstraint defaults",
+          "section": "representation",
+          "text": "type mặc định chuỗi \"null\"; mutable/optional true; length -1; min/max Double.NaN.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P073",
+          "page": 73,
+          "title": "Customer constraints",
+          "section": "representation",
+          "text": "Annotation id biểu đạt min 1, immutable, required; name mutable, required, length 50.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P074",
+          "page": 74,
+          "title": "Customer Java",
+          "section": "representation",
+          "text": "Ánh xạ abstract_properties vào DomainConstraint trên private int id và private String name.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P075",
+          "page": 75,
+          "title": "IntSet constraints",
+          "section": "representation",
+          "text": "elements dùng DomainConstraint type Vector, mutable true, optional false.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P076",
+          "page": 76,
+          "title": "IntSet Java",
+          "section": "representation",
+          "text": "Minh họa annotation của field private Vector<Integer> elements kết hợp header specification.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P077",
+          "page": 77,
+          "title": "Operation",
+          "section": "operations",
+          "text": "Operation được gọi trên object, thường quan sát hoặc thay đổi trạng thái; cần chọn operation thiết yếu và đặc tả hành vi.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P078",
+          "page": 78,
+          "title": "Customer operations",
+          "section": "operations",
+          "text": "Customer có constructor, mutator setName, observer getId/getName, validateId/validateName, toString, equals và repOK.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P079",
+          "page": 79,
+          "title": "IntSet operations",
+          "section": "operations",
+          "text": "IntSet có constructor, insert, remove, isIn, choose, size, getIndex, toString, repOK; collection dùng OptType chuyên biệt.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P080",
+          "page": 80,
+          "title": "Essential operations",
+          "section": "operations",
+          "text": "Ưu tiên yêu cầu chức năng chính, constructor, observer, mutator cho thuộc tính mutable, kiểm tra domain constraint và helper cần thiết.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P081",
+          "page": 81,
+          "title": "Operation specification",
+          "section": "operations",
+          "text": "Spec rõ ràng; thường public; gắn DOpt/AttrRef khi cần; trong phương pháp này không dùng static; chú ý attributes và abstract properties, this và hậu tố _post.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P082",
+          "page": 82,
+          "title": "Well-defined spec",
+          "section": "operations",
+          "text": "Đặc tả gồm mô tả hành vi có cấu trúc và header operation; có mức logical độc lập ngôn ngữ và physical phụ thuộc ngôn ngữ; bài tập trung Java.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P083",
+          "page": 83,
+          "title": "Swap specification",
+          "section": "operations",
+          "text": "Ví dụ swap(int[] xy) yêu cầu xy khác null, length 2; thay đổi xy bằng cách đảo hai giá trị ban đầu.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P084",
+          "page": 84,
+          "title": "Javadoc",
+          "section": "operations",
+          "text": "Đặc tả dùng comment Javadoc, tag tài liệu bắt đầu @ và có thể dùng tag HTML để trình bày.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P085",
+          "page": 85,
+          "title": "Specification tags",
+          "section": "operations",
+          "text": "requires mô tả precondition cho partial procedure; modifies liệt kê side effect; effects mô tả postcondition; pseudocode tùy chọn.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P086",
+          "page": 86,
+          "title": "Swap structure",
+          "section": "operations",
+          "text": "Cùng ví dụ swap, tách mô tả hành vi và operation header; requires/modifies/effects biểu diễn ràng buộc và biến đổi.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P087",
+          "page": 87,
+          "title": "Specification language",
+          "section": "operations",
+          "text": "Ngôn ngữ giả mã gần Java, hỗ trợ ký hiệu logic và tag đặc tả.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P088",
+          "page": 88,
+          "title": "Java-like syntax",
+          "section": "operations",
+          "text": "Hỗ trợ comment, khai báo procedure, primitive/array/null; dùng indentation, không cần dấu chấm phẩy hoặc ngoặc nhọn.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P089",
+          "page": 89,
+          "title": "Statements",
+          "section": "operations",
+          "text": "Gồm khai báo, gán, điều kiện, vòng lặp, read/print/return, mô tả tự nhiên và toán tử so sánh.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P090",
+          "page": 90,
+          "title": "Array notation",
+          "section": "operations",
+          "text": "Trong giả mã của slide, add x vào a là thêm tại index tiếp theo; put là đặt tại một index; delete là đánh dấu phần tử khớp đầu tiên bằng giá trị loại bỏ quy ước.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P091",
+          "page": 91,
+          "title": "Logical notation",
+          "section": "operations",
+          "text": "Bảng ký hiệu: conjunction, disjunction, implication, equivalence, universal quantifier (for all) và existential quantifier (exist).",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P092",
+          "page": 92,
+          "title": "Good specification",
+          "section": "operations",
+          "text": "Cần restrictive để loại cài đặt sai, general để bao quát cài đặt đúng, clear với độ súc tích và ví dụ khi cần.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P093",
+          "page": 93,
+          "title": "Swap criteria",
+          "section": "operations",
+          "text": "Ví dụ swap dùng precondition hạn chế input, mô tả biến đổi kết quả độc lập cài đặt và súc tích.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P094",
+          "page": 94,
+          "title": "Swap example",
+          "section": "operations",
+          "text": "Bổ sung ví dụ xy ban đầu [1,2], sau swap [2,1] để làm rõ hành vi.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P095",
+          "page": 95,
+          "title": "Operation guidelines",
+          "section": "operations",
+          "text": "Nhắc lại spec rõ, scope, DOpt/AttrRef khi cần, không static trong thiết kế này, bảo toàn abstract properties.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P096",
+          "page": 96,
+          "title": "Operation types",
+          "section": "operations",
+          "text": "Creator tạo object; Producer tạo object cùng kiểu từ object; Mutator đổi trạng thái, Observer đọc trạng thái, Default và Helper bổ sung.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P097",
+          "page": 97,
+          "title": "DOpt",
+          "section": "operations",
+          "text": "DOpt đánh dấu mẫu hành vi của operation; type nhận giá trị enum OptType.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P098",
+          "page": 98,
+          "title": "AttrRef",
+          "section": "operations",
+          "text": "AttrRef chỉ tên attribute được thao tác; dùng trên operation không phải constructor hoặc parameter chủ yếu của constructor; value kiểu String.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P099",
+          "page": 99,
+          "title": "AttrRef syntax",
+          "section": "operations",
+          "text": "Gắn AttrRef(value=n) hoặc AttrRef(n) trước method header hoặc ngay trước parameter tương ứng.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P100",
+          "page": 100,
+          "title": "Annotation guidelines",
+          "section": "operations",
+          "text": "AttrRef thường đi cùng DOpt; DOpt thường không bắt buộc với constructor/helper; AttrRef thường không cần trên parameter ngoài constructor.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P101",
+          "page": 101,
+          "title": "Constructor",
+          "section": "operations",
+          "text": "Tạo object từ đối số, tên trùng class, không có return type; essential constructor đảm bảo trạng thái hợp lệ ngay lúc tạo.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P102",
+          "page": 102,
+          "title": "Essential constructor",
+          "section": "operations",
+          "text": "Parameter cho mỗi attribute bắt buộc không phải collection, dùng AttrRef và concrete type tương ứng; ném NotPossibleException khi vi phạm domain constraint.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P103",
+          "page": 103,
+          "title": "Customer constructor",
+          "section": "operations",
+          "text": "Ví dụ custID và name ánh xạ id/name bằng AttrRef; khởi tạo nếu hợp lệ, nếu không ném NotPossibleException.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P104",
+          "page": 104,
+          "title": "Mutator",
+          "section": "operations",
+          "text": "Cập nhật attribute mutable, không dành cho immutable; DOpt Mutator và AttrRef; setter setX nhận kiểu attribute, trả boolean false nếu lỗi.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P105",
+          "page": 105,
+          "title": "Customer setter",
+          "section": "operations",
+          "text": "setName cập nhật name và trả true nếu hợp lệ, nếu sai trả false; được đánh dấu Mutator và AttrRef name.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P106",
+          "page": 106,
+          "title": "Observer",
+          "section": "operations",
+          "text": "Đọc thông tin trạng thái; getter getX không có parameter, trả kiểu attribute; DOpt Observer và AttrRef.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P107",
+          "page": 107,
+          "title": "Customer getters",
+          "section": "operations",
+          "text": "getId trả int id; getName trả String name; cả hai được đánh dấu Observer.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P108",
+          "page": 108,
+          "title": "Default operations",
+          "section": "operations",
+          "text": "toString, equals, hashCode là các operation phổ biến từ java.lang.Object, override khi cần; spec có thể bổ sung.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P109",
+          "page": 109,
+          "title": "toString",
+          "section": "operations",
+          "text": "Không có argument; biểu diễn object dưới dạng String, gần mô tả abstract object.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P110",
+          "page": 110,
+          "title": "equals",
+          "section": "operations",
+          "text": "Nhận Object và trả boolean về sự bằng nhau; slide liên hệ sự tương đương hành vi.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P111",
+          "page": 111,
+          "title": "hashCode",
+          "section": "operations",
+          "text": "Tạo hash từ trạng thái cho collection dựa trên hash, như Hashtable/HashMap; slide không đi sâu.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P112",
+          "page": 112,
+          "title": "Helper",
+          "section": "operations",
+          "text": "Helper phục vụ operation khác; gồm repOK, data validation và utility.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P113",
+          "page": 113,
+          "title": "repOK",
+          "section": "operations",
+          "text": "Kiểm tra object state có thỏa abstract properties; trả boolean để kiểm thử object và implementation.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P114",
+          "page": 114,
+          "title": "Data validation",
+          "section": "operations",
+          "text": "Kiểm input theo domain constraints; dùng trong constructor, setter, repOK; validateX thường private, trả boolean.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P115",
+          "page": 115,
+          "title": "Customer validation",
+          "section": "operations",
+          "text": "Ví dụ validateId(int) và validateName(String) trả true nếu giá trị tương ứng hợp lệ, false nếu sai.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P116",
+          "page": 116,
+          "title": "Utility",
+          "section": "operations",
+          "text": "Helper dựa trên nhu cầu của operation khác; ví dụ IntSet.getIndex và Rat.reduce; thường private, có thể public nếu hữu ích.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P117",
+          "page": 117,
+          "title": "getIndex",
+          "section": "operations",
+          "text": "getIndex(int x) trả index nếu x có trong IntSet, nếu không trả -1.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P118",
+          "page": 118,
+          "title": "Phần B",
+          "section": "collection_design",
+          "text": "Giới thiệu collection class và thiết kế với annotation.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P119",
+          "page": 119,
+          "title": "Collection class",
+          "section": "collection_design",
+          "text": "Thay vì setter/getter toàn bộ, thao tác thường thêm, xóa hoặc quan sát từng phần tử; ví dụ Collection<E> add/remove/contains.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P120",
+          "page": 120,
+          "title": "Collection design",
+          "section": "collection_design",
+          "text": "Dùng marker interface, essential constructor không parameter, các mutator và observer thiết yếu cho collection.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P121",
+          "page": 121,
+          "title": "Collection marker",
+          "section": "collection_design",
+          "text": "Theo phương pháp của slide, implement utils.collections.Collection làm marker; interface này không bắt buộc operation cụ thể, khác Java Collection chuẩn.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P122",
+          "page": 122,
+          "title": "Collection DOpt",
+          "section": "collection_design",
+          "text": "Đánh dấu operation với DOpt; OptType chuyên biệt cho collection không cần AttrRef, các loại OptType khác vẫn dùng được.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P123",
+          "page": 123,
+          "title": "Collection OptTypes",
+          "section": "collection_design",
+          "text": "MutatorAdd, MutatorRemove, ObserverContains, ObserverSize, ObserverIterator (đề cập cho tương lai).",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P124",
+          "page": 124,
+          "title": "IntSet constructor",
+          "section": "collection_design",
+          "text": "Constructor không đối số khởi tạo IntSet rỗng.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P125",
+          "page": 125,
+          "title": "IntSet insert",
+          "section": "collection_design",
+          "text": "insert(int x) không đổi tập nếu x đã có; nếu chưa thì thêm x; OptType MutatorAdd.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P126",
+          "page": 126,
+          "title": "IntSet remove",
+          "section": "collection_design",
+          "text": "remove(int x) không đổi nếu x vắng mặt; nếu có thì bỏ x; OptType MutatorRemove.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P127",
+          "page": 127,
+          "title": "IntSet contains",
+          "section": "collection_design",
+          "text": "isIn(int x) trả true khi x thuộc tập, nếu không false; OptType ObserverContains.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P128",
+          "page": 128,
+          "title": "IntSet size",
+          "section": "collection_design",
+          "text": "size() trả cardinality của tập; OptType ObserverSize.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P129",
+          "page": 129,
+          "title": "IntSet getElements",
+          "section": "collection_design",
+          "text": "getElements trả Integer[] chứa phần tử khi tập không rỗng, nếu rỗng trả null theo đặc tả ví dụ.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P130",
+          "page": 130,
+          "title": "Tổng kết",
+          "section": "summary",
+          "text": "Annotation cung cấp metadata thiết kế; bài nhấn mạnh DOpt, AttrRef, DomainConstraint và marker interface cho collection.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        },
+        {
+          "code": "OOP-P131",
+          "page": 131,
+          "title": "Hỏi đáp",
+          "section": "summary",
+          "text": "Trang Q&A kết thúc bài; không bổ sung kiến thức chuyên môn.",
+          "review_required": true,
+          "content_kind": "page_summary"
+        }
+      ]
+    }
+  ]
+}

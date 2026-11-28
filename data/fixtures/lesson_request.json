@@ -1,0 +1,11 @@
+{
+  "lesson_id": "oop_annotations",
+  "duration_minutes": 60,
+  "level": "intermediate",
+  "class_size": 40,
+  "mode": "offline",
+  "equipment": "Máy chiếu và laptop",
+  "objectives": ["Giải thích domain constraint", "Phân biệt Mutator và Observer"],
+  "request": "Soạn kịch bản cho phần thiết kế lớp Customer.",
+  "source_refs": ["OOP-P040", "OOP-P041", "OOP-P104", "OOP-P106"]
+}

@@ -26,7 +26,7 @@ def _where(e):
     base = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     return os.path.relpath(p, base).replace(os.sep, "/") if p.startswith(base) else path
 
-def main() -> int:
+def cli_main() -> int:
     try:
         import tracing
         from agent import answer
@@ -65,5 +65,31 @@ def main() -> int:
               % (", ".join(s["models"]) or "—", s["model_calls"], s["tool_calls"], s["tokens_in"], s["tokens_out"]))
 
 
+def main() -> int:
+    """Run the local TeachFlow studio; Ctrl+C stops it."""
+    import webbrowser
+    import threading
+    from backend import make_server
+    from agent import active_mode
+
+    port = int(os.environ.get("TEACHFLOW_PORT", "8765"))
+    try:
+        server = make_server(port)
+    except OSError:
+        print("Port đang bận. Đổi TEACHFLOW_PORT hoặc tắt server cũ.")
+        return 1
+    url = "http://127.0.0.1:%d/" % server.server_port
+    print("TeachFlow AI — %s mode — %s" % (active_mode().upper(), url), flush=True)
+    if os.environ.get("TEACHFLOW_NO_BROWSER") != "1":
+        threading.Timer(0.3, lambda: webbrowser.open(url)).start()
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        pass
+    finally:
+        server.server_close()
+    return 0
+
+
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(cli_main() if "--cli" in sys.argv else main())
