@@ -1,6 +1,6 @@
 # Tổng hợp bằng chứng pain — TeachFlow AI
 
-> Cập nhật CP3 ngày 28/11/2026, giữ ghi chép CP2. Nguồn: ba cuộc phỏng vấn do TV1 cung cấp. Đã có 3 hồ sơ và trải nghiệm tháng qua; có 5 đoạn ghi chép được giữ nguyên chữ (2 đoạn được TV1 xác nhận nguyên văn, 3 đoạn P2 chưa xác nhận); TV1 xác nhận cả 3 người ngoài nhóm và mỗi cuộc kéo dài 10–15 phút; không suy rộng toàn khóa.
+> Cập nhật CP3 ngày 28/11/2026, giữ ghi chép CP2. Nguồn: ba cuộc phỏng vấn do TV1 cung cấp. Đã có 3 hồ sơ và trải nghiệm tháng qua; có đủ 5 trích dẫn nguyên văn được TV1 xác nhận; TV1 xác nhận cả 3 người ngoài nhóm và mỗi cuộc kéo dài 10–15 phút; không suy rộng toàn khóa.
 
 ## 1. Nguồn đã dùng
 
@@ -22,17 +22,17 @@
 
 Hai vai được đếm riêng: 2/2 lab coach (P1, P3) có nhu cầu dùng kịch bản; 1/1 giảng viên (P2) báo khó khăn chuẩn bị. Không kết luận cả ba gặp cùng pain. Chưa có baseline tỷ lệ hoàn thành lab, thời gian làm lab, thời gian chuẩn bị hoặc dữ liệu trước/sau sản phẩm.
 
-## 3. Năm đoạn ghi chép có nguồn
+## 3. Năm trích dẫn nguyên văn có nguồn
 
 | ID | Nguồn | Nội dung giữ nguyên chữ | Trạng thái |
 |---|---|---|---|
 | E01 | [P1](interviews/P1.md) | “cũng có nhu cầu dùng kịch bản, thường mình hay tạo 1 file note trước rồi ghi chép ấy” | Nguyên văn do TV1 cung cấp 28/11 |
-| E02 | [P2](interviews/P2.md) | “Thường xem các slide có sẵn, nếu có mới thì nhờ Ai ren ra…” | Ghi chép gốc, chưa xác nhận nguyên văn |
-| E03 | [P2](interviews/P2.md) | “Mất nhiều tgian chuẩn bị, làm sao để học sinh hết hết dc bài, nghĩ thêm các ví dụ thực tế gần gũi nhất” | Ghi chép gốc, chưa xác nhận nguyên văn |
-| E04 | [P2](interviews/P2.md) | “Thường xây dựng theo kiểu giới thiệu kịch bản, trình bày kiến thức, ví dụ và câu hỏi tương tác.” | Ghi chép gốc, chưa xác nhận nguyên văn |
+| E02 | [P2](interviews/P2.md) | “Thường xem các slide có sẵn, nếu có mới thì nhờ Ai ren ra…” | Nguyên văn do TV1 xác nhận 28/11 |
+| E03 | [P2](interviews/P2.md) | “Mất nhiều tgian chuẩn bị, làm sao để học sinh hết hết dc bài, nghĩ thêm các ví dụ thực tế gần gũi nhất” | Nguyên văn do TV1 xác nhận 28/11 |
+| E04 | [P2](interviews/P2.md) | “Thường xây dựng theo kiểu giới thiệu kịch bản, trình bày kiến thức, ví dụ và câu hỏi tương tác.” | Nguyên văn do TV1 xác nhận 28/11 |
 | E05 | [P3](interviews/P3.md) | “học sinh thường lười ko xem trước slide, nếu tạo slide mới hay html mới chưa chắc đã được xem” | Nguyên văn do TV1 cung cấp 28/11 |
 
-Tổng 5 đoạn có nguồn và ẩn danh; 2/5 xác nhận là nguyên văn người trả lời, 3/5 là ghi chép nguyên chữ của người phỏng vấn. Không gán ba đoạn P2 thành lời nói nguyên văn nếu chưa có xác nhận. P1 xác nhận thói quen chuẩn bị bằng note; P3 nhận xét học sinh ít xem trước slide và lo rằng tạo thêm tài liệu cũng chưa chắc được đọc (không phải số liệu đo hành vi).
+Tổng 5/5 trích dẫn nguyên văn có nguồn và ẩn danh: P1 (1), P2 (3), P3 (1). TV1 xác nhận toàn bộ ngày 28/11/2026. P1 xác nhận thói quen chuẩn bị bằng note; P3 nhận xét học sinh ít xem trước slide và lo rằng tạo thêm tài liệu cũng chưa chắc được đọc (không phải số liệu đo hành vi).
 
 ## 4. Liên hệ với thiết kế
 
@@ -43,7 +43,7 @@ Tổng 5 đoạn có nguồn và ẩn danh; 2/5 xác nhận là nguyên văn ng�
 
 ## 5. Kết luận và việc còn thiếu
 
-Giả thuyết về công sức chuẩn bị được P2 ủng hộ định tính. P1 và P3 củng cố nhu cầu sử dụng kịch bản khi dạy/lab; P3 giúp loại bỏ hướng tạo lại tài liệu trình chiếu, đồng thời nêu lo ngại về khả năng học sinh đọc thêm tài liệu. Chưa có căn cứ định lượng về thời gian tiết kiệm, chất lượng hay mức độ phổ biến. Đã có 3 hồ sơ và ghi chép hành vi tháng qua: 3/3 chưa từng soạn kịch bản đầy đủ. TV1 xác nhận ngày 28/11/2026 cả ba người được phỏng vấn đều ngoài nhóm, đúng các vai đã ghi và thời lượng mỗi cuộc đạt 10–15 phút. M3-07 hoàn thành. Đã tập hợp 5 đoạn có nguồn, trong đó 2 đoạn xác nhận nguyên văn (P1/P3), 3 đoạn ghi chép P2 giữ nguyên chữ nhưng chưa xác nhận nguyên văn. Kết luận: bằng chứng định tính ủng hộ hướng kịch bản đầy đủ từ tài liệu có sẵn; chưa chứng minh mức tiết kiệm thời gian. Chưa đánh dấu đạt toàn bộ evidence CP3.
+Giả thuyết về công sức chuẩn bị được P2 ủng hộ định tính. P1 và P3 củng cố nhu cầu sử dụng kịch bản khi dạy/lab; P3 giúp loại bỏ hướng tạo lại tài liệu trình chiếu, đồng thời nêu lo ngại về khả năng học sinh đọc thêm tài liệu. Chưa có căn cứ định lượng về thời gian tiết kiệm, chất lượng hay mức độ phổ biến. Đã có 3 hồ sơ và ghi chép hành vi tháng qua: 3/3 chưa từng soạn kịch bản đầy đủ. TV1 xác nhận ngày 28/11/2026 cả ba người được phỏng vấn đều ngoài nhóm, đúng các vai đã ghi và thời lượng mỗi cuộc đạt 10–15 phút. M3-07 hoàn thành. Đã đủ 5 trích dẫn nguyên văn có nguồn, ẩn danh, TV1 xác nhận ngày 28/11/2026. M3-08 hoàn thành. Kết luận: bằng chứng định tính ủng hộ hướng kịch bản đầy đủ từ tài liệu có sẵn; chưa chứng minh mức tiết kiệm thời gian. Đạt ngưỡng nguồn phỏng vấn và số trích dẫn theo thông tin TV1 xác nhận; chưa có số liệu định lượng hiệu quả sản phẩm.
 
 ## Lịch thu thập CP2–CP3
 
