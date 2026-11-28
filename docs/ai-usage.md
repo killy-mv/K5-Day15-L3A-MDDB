@@ -20,6 +20,6 @@ README của nhóm có mục "Dùng AI vào việc gì" (2–3 dòng, bắt bu�
 | Grader tự động, rubric & cấu hình chi phí (T3/T4) | Coding Agent (Antigravity) | Viết `eval/auto_grader.py`, `tests/test_auto_grader.py`, `eval/human_rubric.md`, `eval/grading_sheet_template.csv`, `eval/calibration_kit.md`, `cost/personas.yaml`, `cost/cost-estimate.md` §1 | Kiểm 23 unit test kết hợp `interface-contract.md` v1.0, `oop_annotations.json` và `parser/guardrails/validator`; tách rõ phần code kiểm cấu trúc với phần người chấm ngữ nghĩa | Tạ Tiến Dũng |
 | Sinh data `synthetic` (nếu có) | | | Seed __ · kiểm tay __ dòng | |
 | Chấm cột `pass` bằng LLM (nếu có) | | | Kiểm tra thủ công __ câu thử, khớp __/__ | |
-| Slide, văn bản | | | | |
+| Slide demo và reflection (M4-03/F-05) | ChatGPT | Soạn HTML 8 trang và bản nháp reflection từ spec, evidence, Run 1, smoke thực tế | Đối chiếu số liệu repo, Edge kiểm 8 trang ở 3 độ phân giải; Run 2/chi phí chưa có thì ghi chờ; Minh cần đọc lại reflection và bổ sung số liệu thật trước demo | Nguyễn Văn Minh |
 
 **Không dùng AI để:** tạo người được phỏng vấn, trích dẫn, câu trả lời khảo sát; sửa kết quả các lượt đã chạy (`eval/run-*.csv`, `cost/simulate-*.csv`, `traces/`).
