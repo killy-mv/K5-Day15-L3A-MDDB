@@ -1,17 +1,13 @@
 # Reflection — Hoàng Văn Bảo
 
-<!-- Bảo đọc lại, sửa theo ý mình và viết câu 3 sau khi có Run 1. Xóa dòng này trước khi nộp. -->
+1. **Vai trò và phần tôi phụ trách**
 
-1. **Vai trò và phần mình làm:** Trong nhóm mình lo phần kiểm tra an toàn, gồm parser, guardrails và validator (B3-01 đến B3-10, B4-02).
-   - Parser (`codebase/parser.py`) đọc tài liệu bài giảng và chia thành các đoạn có mã.
-   - Guardrails (`codebase/guardrails.py`) chạy trước khi gọi model. Thiếu thông tin lớp thì hỏi lại. Nếu bị yêu cầu chấm điểm, tự duyệt, đọc file bí mật, đăng lên LMS hay làm theo chỉ dẫn trong slide thì từ chối.
-   - Validator (`codebase/validator.py`) kiểm lại kịch bản model trả về: đủ trường chưa, thời gian có khớp không, mã nguồn có thật không, có chèn HTML không.
-   - Mình viết test trong `tests/test_bao_modules.py`, tài liệu bàn giao `docs/parser-validator-guardrails.md` và phần §9 trong spec. Code nằm trong PR #5.
+   Tôi phụ trách lớp kiểm tra an toàn của TeachFlow AI, gồm parser, guardrails và validator (B3-01 đến B3-10, B4-01, B4-02). `codebase/parser.py` chuẩn hóa tài liệu bài giảng thành các đoạn nguồn có mã. `codebase/guardrails.py` kiểm tra yêu cầu trước khi gọi model: hỏi lại khi thiếu thông tin lớp, từ chối các yêu cầu ngoài phạm vi như chấm điểm, tự duyệt, đọc dữ liệu bí mật hay làm theo chỉ dẫn nằm trong slide. `codebase/validator.py` kiểm tra kịch bản do model sinh ra về cấu trúc, thời lượng, mã nguồn và nội dung HTML. Tôi viết bộ kiểm thử `tests/test_bao_modules.py`, công cụ `tests/guardrails_report.py`, tài liệu bàn giao `docs/parser-validator-guardrails.md`, báo cáo `docs/guardrails-results.md` và mục §9 của spec. Phần code CP3 đã được merge qua PR #5.
 
-2. **AI hỗ trợ mình thế nào:** Mình dùng Claude Code để đọc interface contract, viết ba module và 32 test, rồi chạy thử với 24 câu benchmark.
-   - Lần đầu AI sửa lấn sang `tools.py`, `agent.py` và `app.py` của các bạn khác. Khi nhóm chốt contract, mình phải cất bản đó đi và làm lại cho đúng phần của mình.
-   - Mẫu chặn bí mật lúc đầu bắt nhầm cả câu bình thường "không dán API key vào code", nên phải sửa cho hẹp lại.
-   - Mình cũng kiểm tra để chắc 131 đoạn của bài OOP không bị bắt nhầm là tấn công.
-   - *(Thêm chỗ mình tự sửa hoặc tự quyết định.)*
+2. **AI hỗ trợ tôi như thế nào**
 
-3. **Một câu thử trượt của nhóm và mình học được gì:** *(Viết sau Run 1. Ghi mã câu trượt thật, output sai ra sao, lỗi nằm ở guardrail, generator hay validator, và đã sửa gì hoặc vì sao chưa sửa.)*
+   Tôi dùng Claude Code để đọc interface contract, viết ba module cùng 32 unit test, chạy đối chiếu với 24 câu benchmark và với AI thật (Gemini). Tôi cũng dùng nó để viết công cụ báo cáo guardrails và một bộ 15 câu tự đặt nhằm thử lách bộ lọc; kết quả đúng 9/15 được ghi lại đầy đủ thay vì sửa để che lỗi. Mẫu chặn dữ liệu bí mật ban đầu chặn nhầm câu hợp lệ "không dán API key vào code", nên phải thu hẹp lại. Khi AI đề xuất dùng các agent đóng vai người dùng, tôi chỉ giữ kết quả đó như một bản rà soát giao diện có ghi rõ nguồn, không tính là người dùng thử thật.
+
+3. **Một câu thử trượt của nhóm và bài học**
+
+   Ở Run 1, câu B18 trượt dù logic xử lý không sai: Gemini trả lỗi HTTP 429 do hết hạn mức gọi miễn phí, output rỗng nên câu bị tính trượt. Cùng lượt, sáu câu khác (B01, B02, B05, B06, B11, B12) trượt vì lỗi HTTP 503 khi Gemini quá tải. Tôi đã gặp lỗi 503 khi tự chạy thử guardrails với AI thật trước đó, nhưng `ai.py` vẫn chưa có cơ chế tự thử lại khi nhóm chạy lượt chính thức. Bài học của tôi là khi phát hiện rủi ro, cần chuyển nó thành việc cụ thể cho người phụ trách và theo dõi đến khi được xử lý, không chỉ ghi nhận trong tài liệu. Run 1 cũng cho thấy lợi ích của việc chặn sớm bằng code: bốn câu cần từ chối (B08, B09, B10, B24) bị guardrails chặn trước khi gọi model, nên không tốn lượt gọi và không bị ảnh hưởng bởi lỗi 503/429.
