@@ -45,6 +45,13 @@ NGUYÊN TẮC BẮT BUỘC:
      * expected_outcome: string không rỗng
      * assessment: string không rỗng (câu hỏi kiểm tra hiểu hoặc quiz kèm đáp án bám nguồn)
      * fallback_strategy: string không rỗng (phương án dự phòng khi thiếu thời gian hoặc thiếu thiết bị theo context)
+6. TUÂN THỦ CẤU TRÚC & THỨ TỰ YÊU CẦU:
+   - Nếu <user_request> chỉ định rõ chuỗi phần/hoạt động hoặc trình tự sư phạm (ví dụ nối bằng dấu phẩy, đánh số hoặc "→" như A, B, C, D), danh sách `segments` PHẢI có ĐÚNG số phần đó và chia theo ĐÚNG vai trò từng phần theo thứ tự từ đầu đến cuối — KHÔNG tự chia lại segment theo từng chủ đề slide nếu làm sai chuỗi yêu cầu (có thể gộp nhiều slide vào phần trình bày kiến thức).
+   - Đặt `title` của từng segment nêu rõ đúng tên/vai trò phần tương ứng trong chuỗi (và nội dung `teacher_script`, `activity_type` thực sự thực hiện vai trò đó). Không đảo vị trí, gộp sai hoặc chèn thêm segment ngoài chuỗi yêu cầu.
+7. PHONG CÁCH KỊCH BẢN & NHỊP TRÌNH CHIẾU (tích hợp nguyên tắc kể chuyện đảo ngược):
+   - Trong `teacher_script`: viết lời dẫn nói tự nhiên theo mạch `Bối cảnh -> Nhận định ban đầu -> Điểm đảo ngược ("Nhưng...", "Tuy nhiên...", "Hóa ra...") -> Giải thích bám sát <sources_data> -> Ví dụ minh họa/ví von nhẹ (nếu là ví dụ ngoài nguồn phải ghi rõ "Ví dụ minh họa:") -> Payoff chốt ý -> Câu chuyển ý`. Tránh giọng đọc slide hay lặp chữ dày đặc.
+   - Trong `teacher_actions`: mô tả rõ thao tác điều hướng slide gốc ở `slide_refs` theo phong cách tối giản (1 ý chốt/slide, giữ điểm nhìn vào từ khóa hoặc sơ đồ tương phản trực quan giữa cách hiểu nhầm và bản chất đúng). Không chèn bất kỳ thẻ HTML `<...>`, JS hay cú pháp code nguy hiểm nào.
+   - Nguyên tắc bám nguồn và dừng khi mâu thuẫn luôn có độ ưu tiên cao hơn phong cách: tuyệt đối không thêm kiến thức hoặc số liệu không có trong <sources_data> chỉ để tăng kịch tính.
 """
 
 
@@ -100,12 +107,15 @@ def _build_user_prompt(context: dict, sources: list) -> str:
 
 def _build_repair_prompt(context: dict, sources: list, previous_output: str, errors: list) -> str:
     allowed_codes = [s.get("code") for s in sources if isinstance(s, dict) and s.get("code")]
+    user_request = str(context.get("request") or "")
     return (
         "JSON kịch bản trước đó chưa hợp lệ. Hãy sửa ĐÚNG các lỗi sau và trả về DUY NHẤT một JSON object hợp lệ:\n"
         + "\n".join(f"- {err}" for err in errors)
         + f"\n\nLưu ý: duration_minutes tổng phải bằng {context.get('duration_minutes')}; "
         f"start_minute bắt đầu từ 0 và liên tục; slide_refs chỉ được chọn từ {json.dumps(allowed_codes, ensure_ascii=False)}; "
-        'status phải là "pending_review"; không chứa thẻ HTML/script.\n\n'
+        'status phải là "pending_review"; không chứa thẻ HTML/script; giữ đúng cấu trúc/thứ tự hoạt động nếu <user_request> có chỉ định.\n\n'
+        f"<user_request>\n{user_request}\n</user_request>\n\n"
+        f"<sources_data>\n{json.dumps(sources, ensure_ascii=False, indent=2)}\n</sources_data>\n\n"
         f"<previous_output>\n{previous_output[:4000]}\n</previous_output>\n"
     )
 
