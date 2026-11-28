@@ -192,16 +192,18 @@ Ghi chú: phần 15 câu và trạng thái chưa chạy ở trên là mốc lị
 
 ## §8. Chi phí khi dùng thật *(guide 4.2)*
 
-**Phân tích M4-02 sơ bộ — chưa phải kết quả chính thức CP4.** Persona/giá: cost/personas.yaml; báo cáo thử 10 phiên simulate-try@20261128-100812, seed 42, gemini-3.1-flash-lite; 29.267 input / 18.251 output token, 10/10 phiên không lỗi (cost/cost-estimate.md §2.1). Chưa có CSV/trace thử trên repo. Tạm dùng tỷ lệ đạt Run 1 16/24 (66,7%, gemini-3.8-flash); không đồng nhất không lỗi với đạt rubric.
+**Kết quả chính thức CP4 (`T4-05`, `T4-06`, `M4-02`).** Persona/giá: [cost/personas.yaml](cost/personas.yaml); mô phỏng chính thức 50 phiên [cost/simulate-1.csv](cost/simulate-1.csv), tóm tắt [cost/simulate-1-summary.md](cost/simulate-1-summary.md), trace [traces/simulate-1.jsonl](traces/simulate-1.jsonl) (`Run ID: simulate-1@20261128-140657`, `seed: 42`, model đo token: `gemini-3.1-flash-lite`, `--wait 6`, `50/50` phiên thành công, `0` phiên lỗi; phủ đủ 3 persona `19 + 25 + 6 = 50` phiên; tổng `85` model calls, `170` tool calls, `187.421` input tokens / `99.924` output tokens). Tỷ lệ đạt dùng để tính: **22/24 (92% / 91,7%)** từ Lượt 2 [eval/run-2.csv](eval/run-2.csv) (`run-2@20261128-135219` trên cùng model `gemini-3.1-flash-lite`). Chi tiết đầy đủ tại [cost/cost-estimate.md](cost/cost-estimate.md) §2.2 & §3.
 
-| Model | Chi phí/task thành công (sơ bộ) | Thấp 22 người USD/tháng | Cơ sở 84 người USD/tháng | Cao 168 người USD/tháng | USD/người/tháng |
-|---|---:|---:|---:|---:|---:|
-| Gemini 3.1 Flash Lite | 0,0052 | 0,4116 | 1,57 | 3,14 | 0,0187 |
-| Gemini 3.8 Flash (quy đổi) | 0,0271 | 2,14 | 8,19 | 16,38 | 0,0975 |
+| Model | Chi phí / phiên | Chi phí / task thành công (tỷ lệ đạt 92%) | Thấp 22 người USD/tháng | Cơ sở 84 người USD/tháng | Cao 168 người USD/tháng | USD/người/tháng (cơ sở) |
+|---|---:|---:|---:|---:|---:|---:|
+| `gemini-3.1-flash-lite` (đo thật) | $0,0039 | **$0,0043** | **$0,5114** | **$1,95** | **$3,91** | **$0,0232** |
+| `gemini-3.8-flash` (quy đổi) | $0,0206 | **$0,0225** | $2,68 | $10,23 | $20,46 | $0,1218 |
+| `gpt-6.1-terra` (quy đổi) | $0,0137 | **$0,0150** | $1,79 | $6,82 | $13,64 | $0,0812 |
+| `gemini-4-hydrogen` (quy đổi) | $0,0206 | **$0,0225** | $2,68 | $10,23 | $20,46 | $0,1218 |
 
-**So với impact §2:** 5,4 phiên/người/tháng × 20 phút công việc tiềm năng = 108 phút/người/tháng; 84 người = 151,2 giờ/tháng. Nếu thực tế tiết kiệm ròng 10 phút/phiên (giả định, chưa đo), còn 0,9 giờ/người/tháng; hòa vốn riêng token khi giá trị giờ công >= 0,0208 USD/giờ (Lite) hoặc 0,1083 USD/giờ (Flash). Chi tiết cách quy đổi và độ nhạy tại cost/cost-estimate.md §3. Chưa tính hosting/vận hành, chi phí phát triển; cần đo giờ công chuẩn bị trước/sau cùng chất lượng, gồm thời gian nạp nguồn, chờ, sửa và duyệt.
+**So với impact §2:** 5,4 phiên/người/tháng × 20 phút công việc tiềm năng = 108 phút/người/tháng; 84 người = 151,2 giờ/tháng. Nếu thực tế tiết kiệm ròng `S = 10` phút/phiên (giả định, chưa đo), còn `0,9` giờ/người/tháng; hòa vốn riêng token khi giá trị giờ công `W >= 0,0258 USD/giờ` (Lite) hoặc `0,1353 USD/giờ` (Flash). Ngay cả khi `S = 5` phút/phiên (`0,45` giờ/tháng), ngưỡng hòa vốn token cũng chỉ là `0,0516 USD/giờ` (Lite) và `0,2707 USD/giờ` (Flash). Chi tiết cách quy đổi và độ nhạy tại [cost/cost-estimate.md](cost/cost-estimate.md) §3. Chưa tính hosting/vận hành, chi phí phát triển; cần đo giờ công chuẩn bị trước/sau cùng chất lượng, gồm thời gian nạp nguồn, chờ, sửa và duyệt.
 
-**Quyết định tạm thời: ITERATE.** Chi phí model sơ bộ thấp nhưng Run 1 chưa đạt chuẩn CP2 (16/24, 3 metric chưa đạt), chưa có lợi ích ròng đo được. Cần Run 2 đạt chuẩn và mô phỏng >=50 phiên thật trước khi quyết định mở rộng. Bảng chính thức chờ T4-06; khi có, thay số sơ bộ bằng kết quả có run ID, CSV/trace, model và tỷ lệ đạt Run 2. Không mặc định đạt 100%.
+**Quyết định: GO CHO PILOT CÓ KIỂM SOÁT (kèm ITERATE đo thời gian tiết kiệm thực tế).** Lượt 2 đã đạt chuẩn CP2 (`22/24 = 92%`, đạt cả 5/5 ngưỡng metric) và 50 phiên mô phỏng thật đạt `50/50` không lỗi với chi phí chỉ `$1,95/tháng` cho 84 giảng viên & lab coach (`$0,0043`/task thành công trên `gemini-3.1-flash-lite`); bước kế tiếp là đo thực nghiệm thời gian tiết kiệm ròng `S` với giảng viên thật và khắc phục nốt 2 case ngữ nghĩa `B01, B06`.
 
 ## §9. Rủi ro & an toàn
 - **Dữ liệu:**
@@ -258,6 +260,7 @@ Ghi chú: phần 15 câu và trạng thái chưa chạy ở trên là mốc lị
 | 28/11/2026, 13:18 (trước CP4) | Tích hợp PR #15–#17; retry/backoff, giữ thứ tự yêu cầu, repair có nguồn; giữ nguyên guardrails; smoke B11/B05 và browser thật bằng Flash Lite | Nhóm lỗi chính 7/8 câu trượt Run 1 là lỗi API; 94 Python test pass, smoke CLI 2/2 và browser pass (4 hoạt động/60 phút). Xem docs/cp4-integration.md. Không đổi benchmark, chuẩn đạt hay kết quả Run 1; Run 2 chưa có. |
 | 28/11/2026, trước CP4 | M4-02: thêm so sánh impact/chi phí sơ bộ và ngưỡng hòa vốn token vào §8, cost/cost-estimate.md §3 | Dựa trên impact §2, PR #17 (10 phiên), Run 1 16/24; ITERATE, chưa có 50 phiên/Run 2 hoặc thời gian tiết kiệm đo được. Không đổi số lịch sử. |
 | 28/11/2026, 14:05 (trước CP4) | T4-02 & T4-03: chạy Eval Run 2 (`run-2@20261128-135219`, `gemini-3.1-flash-lite`, `--wait 10`) trên đúng 24 câu benchmark; chấm đầy đủ 5 metric (`eval/run-2.csv`, `eval/run-2-grading-sheet.csv`, `traces/run-2.jsonl`), cập nhật `eval/report.md`, `eval/README.md`, `spec.md` §7 và kịch bản demo `docs/demo-eval-cost.md` | Lượt 2 đạt **22/24 (92%)** (`thuong` 9/9, `kho` 9/11, `tu_choi` 4/4) và đạt cả 5/5 metric khóa CP2 (`grounding` 86/86=100%, `duration` 12/12=100%, `completeness` 12/12=100%, `adaptation` 11/12=91,7%, `safety` 4/4=100%). Nhóm lỗi HTTP 503/429 giảm từ 7 xuống 0 và `B15` đã đúng 4 phần; còn `B01` và `B06` trượt ngữ nghĩa. Ghi rõ thay đổi model từ `gemini-3.8-flash` sang `gemini-3.1-flash-lite`. |
+| 28/11/2026, 14:39 | T4-05 & T4-06: chạy mô phỏng chi phí chính thức 50 phiên (`python run.py simulate --wait 6 --rate-from eval/run-2.csv`) -> `cost/simulate-1.csv`, `cost/simulate-1-summary.md`, `traces/simulate-1.jsonl` (`simulate-1@20261128-140657`, seed 42, `gemini-3.1-flash-lite`, 50/50 phiên thành công); cập nhật `cost/cost-estimate.md` §2.2/§3 và `spec.md` §8 | Chốt chi phí chính thức dựa trên 50 phiên thật (85 model calls, 170 tool calls, 187.421 token vào / 99.924 token ra) và tỷ lệ đạt Lượt 2 (22/24 = 92%): `gemini-3.1-flash-lite` $0,0039/phiên · $0,0043/task thành công · $0,5114 / $1,95 / $3,91 mỗi tháng cho 22 / 84 / 168 người ($0,0232/người/tháng). |
 
 **Sau CP4 (đến 23:59 Thứ Bảy 28/11)** (sửa theo góp ý — không sửa chuẩn "đạt", câu thử, số bằng chứng, kết quả các lượt đã chạy)
 

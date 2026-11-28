@@ -40,8 +40,10 @@
 - **Trung thực về 2 câu còn trượt ở Lượt 2 (`B01` và `B06`):**
   - `B01` (mục tiêu `backpropagation` không có trong `A01–A06`): model không bịa kiến thức `backpropagation` và ghi cảnh báo rõ trong `warnings`, nhưng lại tự chuyển sang soạn kịch bản `Agent/Workflow` (`pending_review`) thay vì dừng ở `needs_clarification`.
   - `B06` (5 mục tiêu trong 15 phút): timeline đúng 15 phút (`4+4+7`) và có cảnh báo/fallback cắt ví dụ, nhưng vẫn để 4 mục tiêu trong `learning_objectives` thay vì tách rõ phần hoãn sang buổi sau.
-- **Chi phí thực tế (`cost/cost-estimate.md`, `cost/personas.yaml`):**
-  - Tính trên đúng vai người dùng (`22` thấp · `84` cơ sở = 22 GV + 62 lab coach · `168` cao), chia cho tỷ lệ đạt thật của Lượt 2 (`91,7%`), không giả định đạt 100%.
+- **Chi phí thực tế (`cost/cost-estimate.md`, `cost/personas.yaml`, `cost/simulate-1.csv`):**
+  - Chạy mô phỏng chính thức **50/50 phiên không lỗi** (`Run ID: simulate-1@20261128-140657`, `seed: 42`, `gemini-3.1-flash-lite`, `85` model calls, `170` tool calls, `187.421` token vào / `99.924` token ra), chia cho tỷ lệ đạt thật của Lượt 2 (`22/24 = 92%`), không giả định đạt 100%:
+  - Trên **`gemini-3.1-flash-lite`**: **`$0.0039`/phiên** → **`$0.0043`/task thành công** → **`$0.5114`/tháng** (thấp 22 người) · **`$1.95`/tháng** (cơ sở 84 GV & lab coach = **`$0.0232`/người/tháng**) · **`$3.91`/tháng** (cao 168 người).
+  - Trên **`gemini-3.8-flash`** (quy đổi cùng số token): **`$0.0206`/phiên** → **`$0.0225`/task thành công** → **`$2.68` / `$10.23` / `$20.46` mỗi tháng** (`$0.1218`/người/tháng).
 
 ---
 
