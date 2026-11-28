@@ -102,7 +102,7 @@ Deadline 14:30 ngày 28/11. Run 2 phải dùng đúng benchmark đã chạy Run 
 |---|---|---|---|:---:|---|
 | T4-01 | Phân tích lỗi Run 1 | Tạ Tiến Dũng | Nhóm lỗi có số case và >=3 ví dụ input/output/vì sao sai trong eval/report.md; cả nhóm chọn nhóm lỗi đau nhất | ❌ | BLOCKER: chờ T3-07 và T3-08 |
 | D4-01 | Cải tiến AI Core | Nguyễn Đức Đạt | Cải tiến prompt/retrieval/generator nhắm nhóm lỗi đã chọn; ghi cấu hình và lý do; không sửa benchmark/metric | ❌ | Chờ T4-01 |
-| B4-01 | Cải tiến kiểm tra an toàn | Hoàng Văn Bảo | Sửa parser/validator/guardrail nếu liên quan nhóm lỗi đã chọn; regression test và ghi rõ phạm vi | ❌ | Chờ T4-01 |
+| B4-01 | Cải tiến kiểm tra an toàn | Hoàng Văn Bảo | Sửa parser/validator/guardrail nếu liên quan nhóm lỗi đã chọn; regression test và ghi rõ phạm vi | ❌ | Đã chuẩn bị: python tests/guardrails_report.py eval/run-1.csv cho biết mỗi câu dừng ở guardrails, validator hay ra kịch bản. Có sẵn danh sách lỗi đã biết R01 đến R05, R11 trong docs/guardrails-results.md. Chờ T4-01 chọn nhóm lỗi |
 | M4-01 | Tích hợp bản cải tiến | Nguyễn Văn Minh | Merge thay đổi có chọn lọc, demo case thường/khó, test luồng thật; changelog mô tả một nhóm lỗi mục tiêu | ❌ | |
 | T4-02 | Chạy Eval Run 2 | Tạ Tiến Dũng | Toàn bộ cùng benchmark, eval/run-2.csv và traces/run-2.jsonl, run ID/model/token thật | ❌ | BLOCKER: chờ M4-01 |
 | T4-03 | Chấm và so sánh Run 2 | Tạ Tiến Dũng | Điền pass, ghi chú, chạy score; report và README có số lượt 1/2, đủ metric, nhóm lỗi cải thiện và lỗi còn lại/tệ đi | ❌ | BLOCKER: chờ T4-02 |
@@ -110,8 +110,8 @@ Deadline 14:30 ngày 28/11. Run 2 phải dùng đúng benchmark đã chạy Run 
 | T4-05 | Mô phỏng >=50 phiên thật | Tạ Tiến Dũng | Seed cố định; qua answer thật; CSV và trace có token in/out, lượt gọi, latency, model; không tính mock | ❌ | BLOCKER: chờ M3-04/M4-01 và T4-03; đã kiểm plan_sessions 50 phiên seed=42 |
 | T4-06 | Chi phí và quy mô | Tạ Tiến Dũng | cost-estimate.md có thấp/cơ sở/cao, >=2 mức model, chi phí/task thành công = trung bình phiên chia tỷ lệ đạt lượt 2; ghi giới hạn nếu giá ước tính | ❌ | Đã hoàn thiện §1 đầu vào; BLOCKER: chờ T4-05 và tỷ lệ đạt Run 2 (T4-03) để điền §2–§3 |
 | M4-02 | Impact so với chi phí | Nguyễn Văn Minh | Spec §8 và cost-estimate có so sánh chi phí/người/tháng với impact cùng đơn vị hoặc giải thích quy đổi, kết luận go/iterate/stop có căn cứ | ❌ | Chờ T4-06 |
-| B4-02 | Hồ sơ an toàn | Hoàng Văn Bảo | §9 mô tả ẩn danh, quyền, rủi ro, giới hạn; test guardrails có kết quả thật | ❌ | 28/11: đã viết spec §9 (ẩn danh, quyền dùng dữ liệu, việc AI không được làm, ai bị ảnh hưởng, giới hạn). Test guardrails mới chạy với model giả lập, còn chờ Run 1 để có kết quả thật |
-| B4-03 | Người dùng thử (bonus) | Hoàng Văn Bảo | 2–3 người ngoài nhóm đúng vai, khoảng 10 phút/người, log hành vi và trích dẫn thật, tổng hợp 4 ý | ❌ | Không thay thế evidence pain |
+| B4-02 | Hồ sơ an toàn | Hoàng Văn Bảo | §9 mô tả ẩn danh, quyền, rủi ro, giới hạn; test guardrails có kết quả thật | ✅ | 28/11: spec §9 đã có trên main. Kết quả thật ở docs/guardrails-results.md: 24 câu benchmark chặn đúng bằng code; 15 câu tự viết để thử lách đúng 9/15; chạy với AI thật (Gemini gemini-3.8-flash, code main có AI Core): B08, B09, B10, B24 bị từ chối, không gọi model; 4 kịch bản thật qua validator. Đây là lần thử riêng, không thay Run 1 |
+| B4-03 | Người dùng thử (bonus) | Hoàng Văn Bảo | 2–3 người ngoài nhóm đúng vai, khoảng 10 phút/người, log hành vi và trích dẫn thật, tổng hợp 4 ý | ❌ | Đã có kịch bản phiên ở validation/kich-ban-phien-thu.md. Cần tìm 2 đến 3 người thật ngoài nhóm |
 | D4-02 | Chuẩn bị demo AI Core | Nguyễn Đức Đạt | Case thường và khó chạy thật; giải thích quyết định, dữ liệu, tool, trace và giới hạn | ❌ | |
 | M4-03 | Slide demo | Nguyễn Văn Minh | 8 phần theo guide §5.1, mỗi trang có số/trích dẫn có nguồn/kết quả; cả nhóm bổ sung nội dung phụ trách; file hoặc link mở được | ❌ | |
 | M4-04 | Video dự phòng và phòng demo | Nguyễn Văn Minh | Video thật mở ẩn danh được; xác nhận phòng/zone; kịch bản demo có case thường và khó, phân vai phát biểu | ❌ | |
@@ -123,7 +123,7 @@ Deadline 14:30 ngày 28/11. Run 2 phải dùng đúng benchmark đã chạy Run 
 |---|---|---|---|:---:|---|
 | F-01 | Demo và giải thích tích hợp | Nguyễn Văn Minh | Demo live theo lịch, giải thích lát cắt và kết quả; mỗi thành viên nói ít nhất một phần | ❌ | |
 | F-02 | Demo và giải thích RAG | Nguyễn Đức Đạt | Giải thích quyết định LLM, nguồn, lỗi và giới hạn; sẵn sàng chạy câu lạ | ❌ | |
-| F-03 | Demo và giải thích guardrails | Hoàng Văn Bảo | Giải thích parser, validator, HITL và cách chặn lỗi thực tế | ❌ | |
+| F-03 | Demo và giải thích guardrails | Hoàng Văn Bảo | Giải thích parser, validator, HITL và cách chặn lỗi thực tế | ❌ | Đã có ghi chú nói và câu hỏi dự kiến ở docs/demo-guardrails.md |
 | F-04 | Demo và giải thích số liệu | Tạ Tiến Dũng | Giải thích grader, câu trượt, trace, tỷ lệ đạt, chi phí/task thành công | ❌ | Sự kiện demo trực tiếp 28/11 (chờ thêm số liệu Run 1/Run 2/simulate thật) |
 | F-05 | Reflection cá nhân | Nguyễn Văn Minh | reflection/nguyen-van-minh.md có vai trò, phần làm, AI hỗ trợ, bài học từ lỗi thật | ❌ | |
 | F-06 | Reflection cá nhân | Nguyễn Đức Đạt | reflection/nguyen-duc-dat.md có đủ nội dung theo guide | ❌ | |

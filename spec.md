@@ -213,7 +213,7 @@ Case đặc thù: lớp đông thiếu thiết bị, nội dung quá tải, mixe
   - Bộ lọc bắt theo mẫu câu, người dùng viết lách đi vẫn có thể lọt.
   - Code không kiểm được nội dung đúng hay sai về mặt kiến thức, ví dụ nguồn mâu thuẫn hay đáp án sai (câu B01, B02, B07, B20). Phần này dựa vào model và người duyệt.
   - Bản tóm tắt bài OOP chưa có chuyên gia đọc lại.
-  - 32 test guardrails (`tests/test_bao_modules.py`) đang pass với model giả lập. Kết quả với model thật sẽ bổ sung sau Run 1. Chi tiết xem `docs/parser-validator-guardrails.md`.
+  - 32 test guardrails (`tests/test_bao_modules.py`) pass. Khi chạy thử với AI thật (Gemini `gemini-3.8-flash`), B08, B09, B10, B24 bị từ chối trước khi gọi model và 4 kịch bản sinh ra đều qua validator. Bộ 15 câu tự viết để thử lách bộ lọc đúng 9/15. Chi tiết xem `docs/guardrails-results.md`; điểm chính thức lấy từ Run 1.
 
 ## §10. Phân công & changelog
 - Phân công: Minh — điều phối, tích hợp, evidence/impact và hồ sơ; Đạt — AI Core; Bảo — parser/guardrails/validator và an toàn; Dũng — benchmark, eval và chi phí. Cặp tích hợp: Minh–Đạt/Bảo; cặp đánh giá: Dũng cùng thành viên chấm độc lập. Chi tiết backlog.md.
@@ -229,6 +229,7 @@ Case đặc thù: lớp đông thiếu thiết bị, nội dung quá tải, mixe
 
 | 28/11/2026, sau CP2 | Bàn giao dataset tóm lược 131 trang OOP ngoài AI20K, interface contract và fixture/mock Python | Giảm phụ thuộc giữa các module; chưa đánh giá AI thật; quyền phân phối PDF gốc chưa xác minh; giữ nguyên chuẩn đạt. |
 | 28/11/2026, trước CP3 | Thêm `codebase/parser.py`, `guardrails.py`, `validator.py` theo mục 5 của contract (B3-01 đến B3-09), 32 unit test, tài liệu bàn giao; viết §9 | Code chặn trước khi gọi model: B03, B04, B22, B23 được hỏi lại; B08, B09, B10, B24 bị từ chối. Validator bắt lỗi timeline, mã nguồn, HTML và tự duyệt. Mới test với model giả lập, chưa phải kết quả eval. Không sửa benchmark, metric hay chuẩn đạt. |
+| 28/11/2026, sau CP3 | Thêm `tests/guardrails_report.py`, kết quả guardrails (`docs/guardrails-results.md`), ghi chú demo, kịch bản phiên người dùng thử và bản AI rà soát giao diện (`validation/ai-walkthrough.md`, không tính là người dùng thử) | B4-02 cần kết quả thật: đã chạy 24 câu benchmark, 15 câu thử lách và 10 câu với AI thật. Không sửa guardrails, benchmark, metric hay chuẩn đạt; việc sửa chờ Run 1 (B4-01). |
 | 28/11/2026, trước CP3 | PR #4: backend, agent mock, studio, reader riêng; PR #5: module Bảo; benchmark 24 câu và personas từ nhánh Dũng | Kiểm thử tích hợp 77 Python + 15 prototype, browser smoke PASS; giữ chuẩn đạt; chưa eval thật. |
 | 28/11/2026, trước CP3 | Bổ sung P3, hành vi tháng qua P1–P3, impact 3 phương án, workflow AS-IS, review 3 sản phẩm công khai và đồng bộ hồ sơ | 3/3 chưa có kịch bản đầy đủ; ưu tiên chất lượng lời dẫn, không tạo slide/video mới; impact là giả định. |
 | 28/11/2026, trước CP3 | Bổ sung nguyên văn P1/P3 và xác nhận điều kiện phỏng vấn của cả ba | TV1 xác nhận 3/3 ngoài nhóm, 10–15 phút/người; M3-07 hoàn thành. Có 5 đoạn ghi chép có nguồn, 2 nguyên văn và 3 đoạn P2 chưa xác nhận nguyên văn. Không đổi benchmark hay chuẩn đạt. |
