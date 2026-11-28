@@ -190,10 +190,17 @@ Case đặc thù: lớp đông thiếu thiết bị, nội dung quá tải, mixe
 Ghi chú: phần 15 câu và trạng thái chưa chạy ở trên là mốc lịch sử CP2, không phải trạng thái hiện tại. Kết quả chấm do Dũng cung cấp; hiệu chuẩn người chấm thứ hai chưa hoàn tất.
 
 ## §8. Chi phí khi dùng thật *(guide 4.2)*
-- Persona + giá: `cost/personas.yaml` · lượt mô phỏng: `cost/simulate-__.csv` (__ phiên)
-- Chi phí / task thành công: __ (model __) · __ (model __)
-- Chi phí / tháng ở quy mô thật: thấp __ · cơ sở __ · cao __ → chi tiết `cost/cost-estimate.md`
-- So với impact / người / tháng (§2): đáng làm không, vì sao:
+
+**Phân tích M4-02 sơ bộ — chưa phải kết quả chính thức CP4.** Persona/giá: cost/personas.yaml; báo cáo thử 10 phiên simulate-try@20261128-100812, seed 42, gemini-3.1-flash-lite; 29.267 input / 18.251 output token, 10/10 phiên không lỗi (cost/cost-estimate.md §2.1). Chưa có CSV/trace thử trên repo. Tạm dùng tỷ lệ đạt Run 1 16/24 (66,7%, gemini-3.8-flash); không đồng nhất không lỗi với đạt rubric.
+
+| Model | Chi phí/task thành công (sơ bộ) | Thấp 22 người USD/tháng | Cơ sở 84 người USD/tháng | Cao 168 người USD/tháng | USD/người/tháng |
+|---|---:|---:|---:|---:|---:|
+| Gemini 3.1 Flash Lite | 0,0052 | 0,4116 | 1,57 | 3,14 | 0,0187 |
+| Gemini 3.8 Flash (quy đổi) | 0,0271 | 2,14 | 8,19 | 16,38 | 0,0975 |
+
+**So với impact §2:** 5,4 phiên/người/tháng × 20 phút công việc tiềm năng = 108 phút/người/tháng; 84 người = 151,2 giờ/tháng. Nếu thực tế tiết kiệm ròng 10 phút/phiên (giả định, chưa đo), còn 0,9 giờ/người/tháng; hòa vốn riêng token khi giá trị giờ công >= 0,0208 USD/giờ (Lite) hoặc 0,1083 USD/giờ (Flash). Chi tiết cách quy đổi và độ nhạy tại cost/cost-estimate.md §3. Chưa tính hosting/vận hành, chi phí phát triển; cần đo giờ công chuẩn bị trước/sau cùng chất lượng, gồm thời gian nạp nguồn, chờ, sửa và duyệt.
+
+**Quyết định tạm thời: ITERATE.** Chi phí model sơ bộ thấp nhưng Run 1 chưa đạt chuẩn CP2 (16/24, 3 metric chưa đạt), chưa có lợi ích ròng đo được. Cần Run 2 đạt chuẩn và mô phỏng >=50 phiên thật trước khi quyết định mở rộng. Bảng chính thức chờ T4-06; khi có, thay số sơ bộ bằng kết quả có run ID, CSV/trace, model và tỷ lệ đạt Run 2. Không mặc định đạt 100%.
 
 ## §9. Rủi ro & an toàn
 - **Dữ liệu:**
@@ -248,6 +255,7 @@ Ghi chú: phần 15 câu và trạng thái chưa chạy ở trên là mốc lị
 | 28/11/2026, trước CP3 | Mở rộng `eval/benchmark.csv` lên 24 câu (giữ nguyên B01–B15, thêm B16–B24); khóa danh sách 12 case kịch bản hoàn chỉnh trong `eval/README.md`; thêm `eval/preclass_stats.py`, `eval/auto_grader.py` (tương thích Interface Contract v1.0 & `oop_annotations`), `eval/human_rubric.md`, `eval/grading_sheet_template.csv`, `eval/calibration_kit.md`; chuẩn hóa `cost/personas.yaml` (3 persona đúng vai GV/lab coach, quy mô 22/84/168, 3 tầng giá model) | Phủ các lỗ hổng online/intermediate/mixed/thiếu nguồn/thiếu mục tiêu/ngoài phạm vi và 4 tình huống lỗi pre-class thật (`B16–B18, B21`); đảm bảo >=1/3 nguồn thật (11/24=45.8%); không sửa `eval/metric_spec.yaml` hay chuẩn đạt CP2. |
 | 28/11/2026, trước CP3 | Chạy `eval --try` (T3-06) và Eval Run 1 (`run-1@20261128-092011`, T3-07) trên 24 câu với `gemini-3.8-flash`; chấm điểm 5 metric (T3-08), cập nhật `eval/README.md`, `eval/report.md`, `spec.md` §7 (T3-09) và phân tích nhóm lỗi (T4-01) | Kết quả thật Run 1: 16/24 (67%), `content_grounding` 100%, `safety` 100%, `duration_compliance` 7/12 (58,3%), `script_completeness` 7/12 (58,3%), `context_adaptation` 6/12 (50,0%). Phát hiện 7 câu lỗi `HTTP 503/429` do thiếu retry trong `ai.py` và 1 câu `B15` lệch thứ tự 4 phần. Giữ nguyên chuẩn đạt CP2. |
 | 28/11/2026, 13:18 (trước CP4) | Tích hợp PR #15–#17; retry/backoff, giữ thứ tự yêu cầu, repair có nguồn; giữ nguyên guardrails; smoke B11/B05 và browser thật bằng Flash Lite | Nhóm lỗi chính 7/8 câu trượt Run 1 là lỗi API; 94 Python test pass, smoke CLI 2/2 và browser pass (4 hoạt động/60 phút). Xem docs/cp4-integration.md. Không đổi benchmark, chuẩn đạt hay kết quả Run 1; Run 2 chưa có. |
+| 28/11/2026, trước CP4 | M4-02: thêm so sánh impact/chi phí sơ bộ và ngưỡng hòa vốn token vào §8, cost/cost-estimate.md §3 | Dựa trên impact §2, PR #17 (10 phiên), Run 1 16/24; ITERATE, chưa có 50 phiên/Run 2 hoặc thời gian tiết kiệm đo được. Không đổi số lịch sử. |
 
 **Sau CP4 (đến 23:59 Thứ Bảy 28/11)** (sửa theo góp ý — không sửa chuẩn "đạt", câu thử, số bằng chứng, kết quả các lượt đã chạy)
 
