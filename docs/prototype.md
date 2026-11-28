@@ -13,3 +13,9 @@ Kiểm thử:
 - python tests/browser_studio_smoke.py (Playwright + Edge cài local; tùy chọn, đã pass luồng API/duyệt/popup/timer/export/sửa hủy duyệt/hỏi lại).
 - python -m unittest discover -s tests -p "test_contract_mock.py" -v
 - node tests/test_prototype.js (prototype CP2).
+
+M3-05: loading có thời gian chờ và khóa gửi trùng; kết quả cũ bị bỏ khi đổi context. UI kiểm schema, timeline khớp yêu cầu, nguồn đúng phạm vi, mẫu HTML/script và metadata tự duyệt; lỗi hiện ngay khi sửa. Regex không thay kiểm ngữ nghĩa.
+
+- node tests/test_studio.js: 23 case kiểm validation studio.
+- python tests/browser_studio_complex.py: fixture giả lập 4 hoạt động dài, popup/navigation, JSON, sửa không an toàn, response lỗi/thiếu metadata, provider 503 và response cũ.
+- python tests/smoke_real_studio.py --run-real: chỉ chạy sau khi AI Core và .env sẵn sàng; 2 case B11/B05 qua answer(), yêu cầu trace model/token/tool thật, tối đa 5 call/case; không ghi Run 1, không mock fallback. Chưa chạy real; repair và ngữ nghĩa cần đối chiếu riêng.
