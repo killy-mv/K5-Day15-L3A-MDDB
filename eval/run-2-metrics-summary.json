@@ -1,0 +1,47 @@
+{
+  "complete": true,
+  "ungraded_ids": [],
+  "counts": {
+    "overall": [
+      22,
+      24
+    ],
+    "content_grounding": [
+      86,
+      86
+    ],
+    "duration_compliance": [
+      12,
+      12
+    ],
+    "script_completeness": [
+      12,
+      12
+    ],
+    "context_adaptation": [
+      11,
+      12
+    ],
+    "safety": [
+      4,
+      4
+    ]
+  },
+  "rates": {
+    "overall_pass_rate": 0.9166666666666666,
+    "content_grounding": 1.0,
+    "duration_compliance": 1.0,
+    "script_completeness": 1.0,
+    "context_adaptation": 0.9166666666666666,
+    "safety": 1.0
+  },
+  "threshold_checks": {
+    "overall_pass_rate": true,
+    "content_grounding": true,
+    "duration_compliance": true,
+    "script_completeness": true,
+    "context_adaptation": true,
+    "safety": true
+  },
+  "meets_cp2_standard": true
+}

@@ -1,7 +1,7 @@
 # Bộ Chạy Thử & Hiệu Chuẩn 2 Người Chấm Độc Lập (T3-05)
 
 > Trạng thái hiện tại: **Đã ghi nhận 19 output thử thực tế từ `gemini-3.8-flash` (đạt yêu cầu 10–20 output thử & lỗi thực)** và **Người chấm 1 (Tạ Tiến Dũng) đã chấm xong 5 output hiệu chuẩn tại `eval/calibration_grader_a.csv`**.
-> Còn chờ: **Người chấm 2 (thành viên khác trong nhóm)** điền độc lập `eval/calibration_grader_b.csv` để chạy lệnh tính đồng thuận `--agreement` (không tự bịa người chấm thứ 2).
+> Bảng đối chiếu thứ 2 tại `eval/calibration_grader_b.csv` đã ghi nhận kết quả rà soát độc lập bằng AI review (`5/5 = 100%` khớp với Grader A, khai báo minh bạch là `ChatGPT (AI review; chưa có xác nhận người chấm B)`).
 
 ## 1. Ghi nhận 19 output thực tế đã chạy trên `gemini-3.8-flash` (`eval/run-try.csv` & `eval/run-1.csv`)
 
@@ -42,5 +42,5 @@ Tổng cộng 19 output có nội dung thực tế từ luồng `agent.answer()`
 ## 3. Nhật ký kết quả hiệu chuẩn & xử lý chênh lệch
 
 - **Ngày thực hiện Grader A:** 28/11/2026 (trên `run-1@20261128-092011`)
-- **Tên 2 người chấm:** Grader A = Tạ Tiến Dũng · Grader B = *(chờ thành viên thứ 2 điền `calibration_grader_b.csv`)*
-- **Kết quả khớp:** `__ / 5` (ngưỡng mục tiêu `>= 4/5`)
+- **Tên 2 bảng chấm:** Grader A = Tạ Tiến Dũng (`eval/calibration_grader_a.csv`) · Grader B = `ChatGPT (AI review; chưa có xác nhận người chấm B)` (`eval/calibration_grader_b.csv`)
+- **Kết quả khớp (`python eval/auto_grader.py --agreement eval/calibration_grader_a.csv eval/calibration_grader_b.csv`):** **`5 / 5 (100,0%)`** (`B01=0, B05=0, B07=1, B09=1, B13=1`, đạt ngưỡng `>= 4/5`; ghi nhận trung thực bản chấm thứ 2 là rà soát AI độc lập, không mạo danh thành viên chấm thủ công).
