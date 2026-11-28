@@ -25,22 +25,32 @@
 
 ## 2. Kết quả mô phỏng
 
-- **Kết quả chạy thử 10 phiên trước CP3 (`T3-11` — `python run.py simulate --try --wait 3`, Run ID `simulate-error@20261128-093722`, seed `42`):**
-  - Đã chạy thật 10 phiên (`S001–S010`, tổng 20 lượt hỏi) qua `agent.answer()` ở chế độ `real` với `gemini-3.8-flash` ngay sau khi hoàn tất `eval --try` và `eval` Run 1 (`run-1@20261128-092011`).
-  - **Phát hiện quan trọng về quota & latency:** Sau khi tiêu thụ đủ 20 lượt gọi LLM ở `eval --try` và `eval` Run 1, toàn bộ 10 phiên `simulate --try` chạm trần quota ngày của gói Google AI Studio Free Tier cho `gemini-3.8-flash` (`HTTP 429: Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3-flash`), và 3 lượt (`S001-T1`, `S004-T1`, `S008-T2`) bị timeout ở mốc 90 giây (`RuntimeError: Hết thời gian chờ phản hồi từ API model.`).
-  - **Tham chiếu token thực tế đo được từ Lượt 1 (`eval/run-1.csv`, `run-1@20261128-092011`, model `gemini-3.8-flash`):** Trên 9 câu gọi LLM thành công (`B07, B13–B17, B19–B21`), trung bình mỗi lượt gọi model tiêu thụ **`1.702` token vào** và **`3.193` token ra** (tổng trên 17 câu không lỗi gồm cả 8 câu guardrail chặn sớm 0 token là trung bình **`901` token vào** và **`1.691` token ra** mỗi câu).
-  - **Hành động cho CP4 (`T4-05` — 50 phiên chính thức):** Cần nạp API key có quota trả phí / key mới (hoặc chuyển sang model có hạn mức RPD cao hơn như `gemini-3.1-flash-lite`) trước khi chạy `python run.py simulate --rate-from eval/run-2.csv`.
+### 2.1 Kết quả chạy thử 10 phiên (`T3-11` — `python run.py simulate --try --wait 12 --rate-from eval/run-1.csv`)
 
-*(Bảng chính thức 50 phiên CP4 dưới đây sẽ được dán nguyên văn từ `cost/simulate-1-summary.md` sau khi chạy `python run.py simulate --rate-from eval/run-2.csv`.)*
+- **Run ID:** `simulate-try@20261128-100812` · **Số phiên:** `10/10` phiên thành công (`0/10` phiên lỗi) · **Seed:** `42` · **Rate limit:** `--wait 12` (nghỉ 12 giây giữa 2 lượt gọi).
+- **Model đo token thực tế:** `gemini-3.1-flash-lite` (do `gemini-3.8-flash` trong cùng Google Cloud Project đã chạm trần `GenerateRequestsPerDayPerProjectPerModel-FreeTier = 20 requests/ngày` sau khi chạy `eval --try` và `eval` Run 1; lần thử trước `simulate-error@20261128-093722` trên `gemini-3.8-flash` đã ghi nhận rõ lỗi `HTTP 429` này).
+- **Tổng hợp 10 phiên (`S001–S010`, 20 lượt hỏi qua `agent.answer()` thật):** tổng `17` lần gọi model, `34` lần gọi công cụ (`get_slide_content`, `get_teaching_strategy`), tổng `29.267` token vào (`TB 2.926,7 token/phiên`) và `18.251` token ra (`TB 1.825,1 token/phiên`), độ trễ trung bình `15,6 giây/phiên` (9/10 phiên từ `5,0–9,8 giây`, riêng `S005` `89,95 giây`).
 
-Lượt mô phỏng: `cost/simulate-__.csv` · run ID __ · 50 phiên · seed 42
+| Persona | Số phiên mô phỏng | Lượt hỏi / phiên | Token vào / phiên | Token ra / phiên | Gọi model / phiên | Gọi công cụ / phiên |
+|---|---:|---:|---:|---:|---:|---:|
+| `giang_vien_thinh_giang` | 3 | 2 | 2314 | 1509 | 1.3 | 2.7 |
+| `lab_coach_chinh` | 7 | 2 | 3189 | 1960 | 1.9 | 3.7 |
+| `giang_vien_chu_chot` | 0 | 3 | — | — | — | — |
 
-| Model | Chi phí / phiên | Chi phí / task thành công | / tháng — thấp (22 người) | / tháng — cơ sở (84 người) | / tháng — cao (168 người) | / người / tháng (cơ sở) |
-|---|---|---|---|---|---|---|
-| `gemini-3.1-flash-lite` | *(chờ simulate 50 phiên CP4)* | | | | | |
-| `gemini-3.8-flash` | *(chờ simulate 50 phiên CP4)* | | | | | |
-| `gpt-6.1-terra` | *(chờ simulate 50 phiên CP4)* | | | | | |
-| `gemini-4-hydrogen` | *(chờ simulate 50 phiên CP4)* | | | | | |
+**Bảng ước tính sơ bộ từ 10 phiên thử `simulate-try@20261128-100812` (dùng tạm tỷ lệ đạt Lượt 1 `16/24 = 67%` của `run-1@20261128-092011`; bản chính thức CP4 sẽ chạy đủ 50 phiên và dùng tỷ lệ đạt Lượt 2 cùng model):**
+
+| Model (giá) | Chi phí / phiên | Chi phí / task thành công | Chi phí / câu hỏi đạt | Chi phí / tháng — thấp (22 người) | Chi phí / tháng — cơ sở (84 người) | Chi phí / tháng — cao (168 người) | Chi phí / người / tháng (cơ sở) |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| `gemini-3.1-flash-lite` (vào 0.25 · ra 1.5 $/1M) | $0.0035 | $0.0052 | $0.0026 | $0.4116 | $1.57 | $3.14 | $0.0187 |
+| `gemini-3.8-flash` (vào 1.5 · ra 7.5 $/1M) | $0.0181 | $0.0271 | $0.0136 | $2.14 | $8.19 | $16.38 | $0.0975 |
+| `gpt-6.1-terra` (vào 1.0 · ra 5.0 $/1M) | $0.0121 | $0.0181 | $0.0090 | $1.43 | $5.46 | $10.92 | $0.0650 |
+| `gemini-4-hydrogen` (vào 1.5 · ra 7.5 $/1M) | $0.0181 | $0.0271 | $0.0136 | $2.14 | $8.19 | $16.38 | $0.0975 |
+
+- *Lưu ý minh bạch:* Token trong bảng thử 10 phiên trên được **đo thật trên `gemini-3.1-flash-lite`**, sau đó nhân với đơn giá của `gemini-3.1-flash-lite`, `gemini-3.8-flash`, `gpt-6.1-terra`, `gemini-4-hydrogen`. Tỷ lệ đạt `16/24 (67%)` tạm lấy từ `eval/run-1.csv` (`gemini-3.8-flash`). Đây là lượt chạy thử `T3-11` (`--try 10`), **không tính là lượt 50 phiên CP4 (`T4-05`)**.
+
+### 2.2 Kết quả mô phỏng chính thức ≥50 phiên cho CP4 (`T4-05`)
+
+*(Chờ hoàn tất cải tiến `D4-01`/`M4-01` và chấm xong Lượt 2 `eval/run-2.csv` để chạy `python run.py simulate --rate-from eval/run-2.csv` đủ 50 phiên và dán bảng từ `cost/simulate-1-summary.md` vào đây.)*
 
 Chi phí / task thành công = chi phí trung bình mỗi phiên ÷ tỉ lệ đạt thật của Run 2 — **không coi như đạt 100%**.
 
