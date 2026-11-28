@@ -5,6 +5,7 @@ from pathlib import Path
 import sys
 import unittest
 from unittest.mock import patch
+import urllib.error
 
 ROOT = Path(__file__).resolve().parents[1]
 CODEBASE = ROOT / "codebase"
@@ -187,6 +188,76 @@ class TestGeneratorAndRealAgent(unittest.TestCase):
         self.assertEqual(out["generation_mode"], "real")
         self.assertGreaterEqual(summary["tool_calls"], 2)
         self.assertTrue(any(e["kind"] == "note" for e in events))
+
+    def test_post_json_retries_on_503_and_429_then_succeeds(self):
+        err_503 = urllib.error.HTTPError(
+            url="https://example.com", code=503, msg="Unavailable", hdrs=None, fp=io.BytesIO(b"overload")
+        )
+        err_429 = urllib.error.HTTPError(
+            url="https://example.com", code=429, msg="Too Many Requests", hdrs={"Retry-After": "1"}, fp=io.BytesIO(b"quota")
+        )
+        calls = [err_503, err_429, _FakeHTTPResponse({"ok": True})]
+
+        with patch("urllib.request.urlopen", side_effect=calls) as mock_open, \
+             patch("time.sleep") as mock_sleep:
+            try:
+                out = ai.post_json("https://example.com", {}, {"ping": 1}, max_retries=3, backoff_base=0.5)
+            finally:
+                err_503.close()
+                err_429.close()
+
+        self.assertEqual(out, {"ok": True})
+        self.assertEqual(mock_open.call_count, 3)
+        self.assertEqual(mock_sleep.call_count, 2)
+
+    def test_post_json_does_not_retry_on_400(self):
+        err_400 = urllib.error.HTTPError(
+            url="https://example.com", code=400, msg="Bad Request", hdrs=None, fp=io.BytesIO(b"bad payload")
+        )
+        with patch("urllib.request.urlopen", side_effect=[err_400]) as mock_open, \
+             patch("time.sleep") as mock_sleep:
+            try:
+                with self.assertRaises(RuntimeError) as ctx:
+                    ai.post_json("https://example.com", {}, {"ping": 1}, max_retries=3, backoff_base=0.5)
+            finally:
+                err_400.close()
+
+        self.assertIn("HTTP 400", str(ctx.exception))
+        self.assertEqual(mock_open.call_count, 1)
+        self.assertEqual(mock_sleep.call_count, 0)
+
+    def test_post_json_exhausts_max_retries(self):
+        errors = [
+            urllib.error.HTTPError(
+                url="https://example.com", code=503, msg="Unavailable", hdrs=None, fp=io.BytesIO(b"overload")
+            )
+            for _ in range(3)
+        ]
+        with patch("urllib.request.urlopen", side_effect=errors) as mock_open, \
+             patch("time.sleep") as mock_sleep:
+            try:
+                with self.assertRaises(RuntimeError) as ctx:
+                    ai.post_json("https://example.com", {}, {"ping": 1}, max_retries=2, backoff_base=0.1)
+            finally:
+                for err in errors:
+                    err.close()
+
+        self.assertIn("HTTP 503", str(ctx.exception))
+        self.assertEqual(mock_open.call_count, 3)
+        self.assertEqual(mock_sleep.call_count, 2)
+
+    def test_repair_prompt_includes_sources_and_user_request(self):
+        req = _load_fixture("lesson_request.json")
+        sources = [d for d in _load_oop_segments() if d["code"] in req["source_refs"]]
+        prompt = generator._build_repair_prompt(req, sources, '{"bad": true}', ["duration mismatch"])
+        self.assertIn("<sources_data>", prompt)
+        self.assertIn("<user_request>", prompt)
+        self.assertIn(sources[0]["code"], prompt)
+
+    def test_system_prompt_enforces_sequence_and_storytelling(self):
+        self.assertIn("TUÂN THỦ CẤU TRÚC & THỨ TỰ", generator.SYSTEM_PROMPT)
+        self.assertIn("kể chuyện đảo ngược", generator.SYSTEM_PROMPT)
+        self.assertIn("theo thứ tự từ đầu đến cuối", generator.SYSTEM_PROMPT)
 
 
 if __name__ == "__main__":

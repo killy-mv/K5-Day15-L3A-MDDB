@@ -16,11 +16,13 @@ Chế độ giả (mặc định khi .env chưa có MODEL_PROVIDER, hoặc MODEL
 """
 import json
 import os
+import random
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
 
-from tracing import model_call
+from tracing import model_call, note
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -28,6 +30,11 @@ URL_OPENAI = "https://api.openai.com/v1/chat/completions"
 URL_CLAUDE = "https://api.anthropic.com/v1/messages"
 URL_OLLAMA = "http://localhost:11434/api/chat"
 URL_GEMINI_TMPL = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
+
+TRANSIENT_HTTP_CODES = frozenset({429, 500, 502, 503, 504})
+MAX_HTTP_RETRIES = 3
+RETRY_BASE_SECONDS = 1.5
+RETRY_MAX_SECONDS = 15.0
 
 
 def load_env(path=os.path.join(ROOT, ".env")):
@@ -50,24 +57,57 @@ API_KEY = (os.environ.get("API_KEY") or "").strip()
 API_BASE_URL = (os.environ.get("API_BASE_URL") or "").strip()
 
 
-def post_json(url: str, headers: dict, body: dict, timeout: int = 90) -> dict:
-    """Gửi POST JSON bằng thư viện chuẩn urllib và trả về dict JSON."""
-    req = urllib.request.Request(
-        url,
-        data=json.dumps(body, ensure_ascii=False).encode("utf-8"),
-        method="POST",
-        headers=dict({"Content-Type": "application/json"}, **headers),
-    )
-    try:
-        with urllib.request.urlopen(req, timeout=timeout) as resp:
-            raw = resp.read().decode("utf-8")
-    except urllib.error.HTTPError as e:
-        detail = e.read().decode("utf-8", "replace")[:400]
-        raise RuntimeError(f"HTTP {e.code} từ API model: {detail}") from e
-    except urllib.error.URLError as e:
-        raise RuntimeError(f"Lỗi kết nối API model: {e.reason}") from e
-    except TimeoutError as e:
-        raise RuntimeError("Hết thời gian chờ phản hồi từ API model.") from e
+def _backoff_seconds(attempt: int, base: float, retry_after: str | None = None) -> float:
+    delay = min(RETRY_MAX_SECONDS, base * (2 ** attempt) + random.uniform(0.1, 0.6))
+    if retry_after:
+        try:
+            delay = max(delay, min(float(retry_after), RETRY_MAX_SECONDS))
+        except ValueError:
+            pass
+    return delay
+
+
+def post_json(
+    url: str,
+    headers: dict,
+    body: dict,
+    timeout: int = 90,
+    max_retries: int = MAX_HTTP_RETRIES,
+    backoff_base: float = RETRY_BASE_SECONDS,
+) -> dict:
+    """Gửi POST JSON bằng thư viện chuẩn urllib, có retry + exponential backoff cho lỗi tạm thời (503/429/timeout)."""
+    payload = json.dumps(body, ensure_ascii=False).encode("utf-8")
+    req_headers = dict({"Content-Type": "application/json"}, **headers)
+    raw = ""
+    for attempt in range(max_retries + 1):
+        req = urllib.request.Request(url, data=payload, method="POST", headers=req_headers)
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                raw = resp.read().decode("utf-8")
+            break
+        except urllib.error.HTTPError as e:
+            detail = e.read().decode("utf-8", "replace")[:400]
+            if e.code in TRANSIENT_HTTP_CODES and attempt < max_retries:
+                retry_after = e.headers.get("Retry-After") if e.headers else None
+                wait_s = _backoff_seconds(attempt, backoff_base, retry_after)
+                note(f"ai: HTTP {e.code}, retry {attempt + 1}/{max_retries} sau {wait_s:.1f}s")
+                time.sleep(wait_s)
+                continue
+            raise RuntimeError(f"HTTP {e.code} từ API model: {detail}") from e
+        except urllib.error.URLError as e:
+            if attempt < max_retries:
+                wait_s = _backoff_seconds(attempt, backoff_base)
+                note(f"ai: URLError ({e.reason}), retry {attempt + 1}/{max_retries} sau {wait_s:.1f}s")
+                time.sleep(wait_s)
+                continue
+            raise RuntimeError(f"Lỗi kết nối API model: {e.reason}") from e
+        except TimeoutError as e:
+            if attempt < max_retries:
+                wait_s = _backoff_seconds(attempt, backoff_base)
+                note(f"ai: TimeoutError, retry {attempt + 1}/{max_retries} sau {wait_s:.1f}s")
+                time.sleep(wait_s)
+                continue
+            raise RuntimeError("Hết thời gian chờ phản hồi từ API model.") from e
 
     try:
         data = json.loads(raw)
