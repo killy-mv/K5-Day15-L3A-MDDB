@@ -5,7 +5,7 @@
 
 ## 1. Dataset → xử lý
 
-- **Fixture bài học & chiến lược (synthetic):** `data/lessons/teachflow_examples.json` gồm 4 bài/fixture (`agent_intro`, `lab_tools`, `conflict`, `injection`) với 15 đoạn có mã duy nhất (`A01–A06`, `L01–L05`, `C01–C02`, `I01–I02`); `data/teaching_strategies.json` gồm 6 chiến lược dạy (`TS01–TS06`); `data/classroom_profiles.json` gồm 3 hồ sơ lớp mẫu (`small`, `large`, `lab`).
+- **Fixture bài học & chiến lược:** `data/lessons/teachflow_examples.json` gồm 4 bài/fixture synthetic (`agent_intro`, `lab_tools`, `conflict`, `injection`) với 15 đoạn có mã duy nhất (`A01–A06`, `L01–L05`, `C01–C02`, `I01–I02`); `data/lessons/oop_annotations.json` gồm 1 bài giảng thực ngoài AI20K (`oop_annotations`, 131 đoạn tóm lược `OOP-P001–OOP-P131` theo trang PDF); `data/teaching_strategies.json` gồm 6 chiến lược dạy (`TS01–TS06`); `data/classroom_profiles.json` gồm 3 hồ sơ lớp mẫu (`small`, `large`, `lab`); fixture kiểm hợp đồng tại `data/fixtures/lesson_request.json` và `data/fixtures/script_response.json`.
 - **Nguồn thực tế dùng để thiết kế câu thử (không nạp vào runtime model):**
   - `evidence/interviews/P1.md`, `P2.md`: 2 ghi chép phỏng vấn đã ẩn danh (lab coach và giảng viên), chuyển thể thành 7 câu thử `nguoi_dung` (`B11–B15`, `B19–B20`).
   - `data/preclass/` (`answers.csv`, `events.csv` của AI20K K5 L3-4, 05/11–25/11/2026): tổng hợp chỉ số lỗi KC và tỷ lệ bỏ qua/chưa hoàn thành mini-lab qua script tái lập `eval/preclass_stats.py`, chuyển thể thành 4 câu thử `data_that` (`B16–B18`, `B21`). Không chép nguyên file dữ liệu hay bản ghi cá nhân vào prompt/runtime.

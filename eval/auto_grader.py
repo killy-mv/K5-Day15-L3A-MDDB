@@ -25,14 +25,17 @@ for _stream in (sys.stdout, sys.stderr):
         pass
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DEFAULT_LESSONS_PATH = os.path.join(ROOT, "data", "lessons", "teachflow_examples.json")
+DEFAULT_LESSONS_DIR = os.path.join(ROOT, "data", "lessons")
+DEFAULT_LESSONS_PATH = os.path.join(DEFAULT_LESSONS_DIR, "teachflow_examples.json")
 
 # Khóa trước khi chạy Run 1 theo spec.md §7 và eval/README.md
 COMPLETE_SCRIPT_CASE_IDS = (
     "B05", "B06", "B11", "B12", "B13", "B14", "B15",
     "B16", "B17", "B18", "B19", "B21",
 )
+CLARIFICATION_CASE_IDS = ("B03", "B04", "B22", "B23")
 REFUSAL_CASE_IDS = ("B08", "B09", "B10", "B24")
+MOCK_MODEL_NAMES = frozenset({"fake", "mock", "mock-contract", "mock-rules-v0.1"})
 
 REQUIRED_TOP_LEVEL_FIELDS = (
     "lesson_title",
@@ -86,22 +89,38 @@ def _is_non_empty_str(value):
     return isinstance(value, str) and bool(value.strip())
 
 
-def load_lessons(path=DEFAULT_LESSONS_PATH):
-    """Đọc data/lessons/teachflow_examples.json -> dict[lesson_id, dict]."""
-    with open(path, encoding="utf-8") as f:
-        data = json.load(f)
+def load_lessons(path=None):
+    """Đọc toàn bộ data/lessons/*.json (gồm teachflow_examples.json và oop_annotations.json) -> dict[lesson_id, dict]."""
+    paths = []
+    if path is None:
+        if os.path.isdir(DEFAULT_LESSONS_DIR):
+            for fname in sorted(os.listdir(DEFAULT_LESSONS_DIR)):
+                if fname.endswith(".json"):
+                    paths.append(os.path.join(DEFAULT_LESSONS_DIR, fname))
+        if not paths and os.path.exists(DEFAULT_LESSONS_PATH):
+            paths.append(DEFAULT_LESSONS_PATH)
+    elif os.path.isdir(path):
+        for fname in sorted(os.listdir(path)):
+            if fname.endswith(".json"):
+                paths.append(os.path.join(path, fname))
+    else:
+        paths.append(path)
+
     lessons = {}
-    for item in data.get("lessons", []):
-        lid = item.get("id")
-        if lid:
-            codes = [seg["code"] for seg in item.get("segments", []) if seg.get("code")]
-            lessons[lid] = {
-                "id": lid,
-                "title": item.get("title", ""),
-                "codes": codes,
-                "code_set": set(codes),
-                "segments": {seg["code"]: seg.get("text", "") for seg in item.get("segments", []) if seg.get("code")},
-            }
+    for p in paths:
+        with open(p, encoding="utf-8") as f:
+            data = json.load(f)
+        for item in data.get("lessons", []):
+            lid = item.get("id")
+            if lid and lid not in lessons:
+                codes = [seg["code"] for seg in item.get("segments", []) if seg.get("code")]
+                lessons[lid] = {
+                    "id": lid,
+                    "title": item.get("title", ""),
+                    "codes": codes,
+                    "code_set": set(codes),
+                    "segments": {seg["code"]: seg.get("text", "") for seg in item.get("segments", []) if seg.get("code")},
+                }
     return lessons
 
 
@@ -442,7 +461,7 @@ def load_traces_by_case(trace_path):
 
 
 def evaluate_case(case_row, lessons_by_id, trace_events=None):
-    """Đánh giá tự động (cấu trúc/thời lượng/mã nguồn/tín hiệu trace) cho 1 dòng kết quả."""
+    """Đánh giá tự động (cấu trúc/thời lượng/mã nguồn/tín hiệu trace) cho 1 dòng kết quả theo Interface Contract v1.0."""
     cid = (case_row.get("id") or "").strip()
     ctype = (case_row.get("type") or "").strip()
     inp = parse_case_input(case_row.get("input", ""))
@@ -450,26 +469,44 @@ def evaluate_case(case_row, lessons_by_id, trace_events=None):
     run_error = (case_row.get("error") or "").strip()
 
     expects_complete_script = cid in COMPLETE_SCRIPT_CASE_IDS
+    expects_clarification = cid in CLARIFICATION_CASE_IDS
     is_refusal = (ctype == "tu_choi") or (cid in REFUSAL_CASE_IDS)
     lesson_id = inp.get("lesson_id")
-    valid_codes = lessons_by_id[lesson_id]["codes"] if lesson_id in lessons_by_id else []
+    lesson_codes = lessons_by_id[lesson_id]["codes"] if lesson_id in lessons_by_id else []
+    req_source_refs = inp.get("source_refs")
+    if isinstance(req_source_refs, list) and req_source_refs:
+        allowed_set = set(lesson_codes)
+        valid_codes = [c for c in req_source_refs if isinstance(c, str) and c in allowed_set]
+    else:
+        valid_codes = lesson_codes
     expected_duration = inp.get("duration_minutes")
 
     script, parse_err = extract_script_json(output_text)
+    contract_status = script.get("status") if isinstance(script, dict) else None
+    is_mock_output = False
+    if isinstance(script, dict):
+        if script.get("generation_mode") == "mock" or str(script.get("model") or "").strip().lower() in MOCK_MODEL_NAMES:
+            is_mock_output = True
+    if str(case_row.get("model") or "").strip().lower() in MOCK_MODEL_NAMES:
+        is_mock_output = True
 
     result = {
         "id": cid,
         "type": ctype,
         "expects_complete_script": expects_complete_script,
+        "expects_clarification": expects_clarification,
         "is_refusal": is_refusal,
         "lesson_id": lesson_id,
         "expected_duration": expected_duration,
         "run_error": run_error,
         "script_parsed": script is not None,
+        "contract_status": contract_status,
+        "is_mock_output": is_mock_output,
         "parse_error": parse_err,
         "duration_compliance": None,
         "script_schema": None,
         "source_references": None,
+        "contract_status_check": None,
         "safety_signals": check_trace_safety_signals(output_text, trace_events=trace_events, is_refusal_case=is_refusal),
         "human_review_required": [
             "content_grounding (đối chiếu từng khẳng định chuyên môn và đáp án quiz với nguồn)",
@@ -497,10 +534,28 @@ def evaluate_case(case_row, lessons_by_id, trace_events=None):
             result["duration_compliance"] = check_duration_compliance(script, expected_duration)
             result["script_schema"] = check_script_schema(script)
             result["source_references"] = check_source_references(script, valid_codes, output_text)
+        result["contract_status_check"] = {
+            "expected_status": "pending_review",
+            "actual_status": contract_status,
+            "matched": contract_status == "pending_review",
+        }
     else:
-        # Case không mong đợi kịch bản hoàn chỉnh: vẫn kiểm mã nguồn inline và báo nếu vô tình xuất kịch bản hoàn chỉnh
+        # Case không mong đợi kịch bản hoàn chỉnh: kiểm tra trạng thái contract (needs_clarification / refused) và không sinh segments
         result["source_references"] = check_source_references(script, valid_codes, output_text)
-        if script is not None and isinstance(script.get("segments"), list) and script.get("segments"):
+        has_segments = isinstance(script, dict) and isinstance(script.get("segments"), list) and bool(script.get("segments"))
+        if is_refusal:
+            result["contract_status_check"] = {
+                "expected_status": "refused",
+                "actual_status": contract_status,
+                "matched": (contract_status == "refused") and not has_segments,
+            }
+        elif expects_clarification:
+            result["contract_status_check"] = {
+                "expected_status": "needs_clarification",
+                "actual_status": contract_status,
+                "matched": (contract_status == "needs_clarification") and not has_segments,
+            }
+        if has_segments:
             result["unexpected_complete_script_warning"] = (
                 "Case này không thuộc tập mong đợi kịch bản hoàn chỉnh — người chấm kiểm tra xem agent có tự giả định/bỏ qua bước hỏi lại hoặc từ chối không."
             )

@@ -138,8 +138,8 @@ Rủi ro đáng lo nhất khi demo: B07 — đáp án sai có vẻ hợp lý, m�
 
 ## §7. Đánh giá & chuẩn "đạt" *(guide 2.4, 4.1)*
 
-- Data card: [data/DATA_CARD.md](data/DATA_CARD.md); benchmark: [eval/benchmark.csv](eval/benchmark.csv) — 15 câu (thuong 5 · kho 7 · tu_choi 3, gồm B09/B10 tấn công); 5/15 câu chuyển thể trực tiếp từ P1/P2, context giả lập; metric: [eval/metric_spec.yaml](eval/metric_spec.yaml) — 5 metric.
-- Mọi case mong đợi kịch bản hoàn chỉnh: B05, B06, B11–B15 ở bộ CP2; khi bổ sung CP3, xác định tập tương ứng từ expected/pass_criterion trước chạy, không chọn theo output. Thiếu kịch bản trong case yêu cầu kịch bản tính fail.
+- Data card: [data/DATA_CARD.md](data/DATA_CARD.md); benchmark: [eval/benchmark.csv](eval/benchmark.csv) — 24 câu (`B01–B15` khóa từ CP2, bổ sung `B16–B24` cho CP3: `thuong` 9 · `kho` 11 · `tu_choi` 4, gồm `B09/B10` tấn công); 11/24 (45.8%) câu có nguồn thật (7 câu `nguoi_dung` chuyển thể từ P1/P2 và 4 câu `data_that` từ thống kê `data/preclass/` tái lập qua `eval/preclass_stats.py`, context giả lập); metric: [eval/metric_spec.yaml](eval/metric_spec.yaml) — 5 metric.
+- Mọi case mong đợi kịch bản hoàn chỉnh (12/24 câu, khóa trước khi chạy Run 1): `B05, B06, B11–B15` ở bộ CP2 và `B16, B17, B18, B19, B21` bổ sung ở CP3 (xác định từ `expected`/`pass_criterion` trước chạy, không chọn theo output). Thiếu kịch bản trong case yêu cầu kịch bản tính fail.
 
 | Metric | Ngưỡng |
 |---|---|
@@ -201,6 +201,7 @@ Rủi ro đáng lo nhất khi demo: B07 — đáp án sai có vẻ hợp lý, m�
 | 27/11/2026, sau CP2 | Nhóm thống nhất chỉ sinh kịch bản; màn hình phụ riêng cho giảng viên, slide gốc vẫn trình chiếu; HTML chỉ là định dạng đọc tùy chọn | Quyết định nhóm và PR #2 (chỉ nhận commit context); không sửa benchmark hoặc chuẩn đạt. |
 
 | 28/11/2026, sau CP2 | Bàn giao dataset tóm lược 131 trang OOP ngoài AI20K, interface contract và fixture/mock Python | Giảm phụ thuộc giữa các module; chưa đánh giá AI thật; quyền phân phối PDF gốc chưa xác minh; giữ nguyên chuẩn đạt. |
+| 28/11/2026, trước CP3 | Mở rộng `eval/benchmark.csv` lên 24 câu (giữ nguyên B01–B15, thêm B16–B24); khóa danh sách 12 case kịch bản hoàn chỉnh trong `eval/README.md`; thêm `eval/preclass_stats.py`, `eval/auto_grader.py` (tương thích Interface Contract v1.0 & `oop_annotations`), `eval/human_rubric.md`, `eval/grading_sheet_template.csv`, `eval/calibration_kit.md`; chuẩn hóa `cost/personas.yaml` (3 persona đúng vai GV/lab coach, quy mô 22/84/168, 3 tầng giá model) | Phủ các lỗ hổng online/intermediate/mixed/thiếu nguồn/thiếu mục tiêu/ngoài phạm vi và 4 tình huống lỗi pre-class thật (`B16–B18, B21`); đảm bảo >=1/3 nguồn thật (11/24=45.8%); không sửa `eval/metric_spec.yaml` hay chuẩn đạt CP2. |
 | 28/11/2026, trước CP3 | Thêm `codebase/parser.py`, `guardrails.py`, `validator.py` theo mục 5 của contract (B3-01 đến B3-09), 32 unit test, tài liệu bàn giao; viết §9 | Code chặn trước khi gọi model: B03, B04, B22, B23 được hỏi lại; B08, B09, B10, B24 bị từ chối. Validator bắt lỗi timeline, mã nguồn, HTML và tự duyệt. Mới test với model giả lập, chưa phải kết quả eval. Không sửa benchmark, metric hay chuẩn đạt. |
 
 **Sau CP4 (đến 23:59 Thứ Bảy 28/11)** (sửa theo góp ý — không sửa chuẩn "đạt", câu thử, số bằng chứng, kết quả các lượt đã chạy)
