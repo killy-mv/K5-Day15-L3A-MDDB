@@ -12,7 +12,7 @@ README của nhóm có mục "Dùng AI vào việc gì" (2–3 dòng, bắt bu�
 | Dataset OOP và contract | ChatGPT | Tóm lược theo trang, mã nguồn, schema và fixture | Test cấu trúc; tóm lược chưa review chuyên môn; không phân phối PDF gốc | Nguyễn Văn Minh |
 | Evidence / impact / hồ sơ | ChatGPT | Tổng hợp thông tin P1–P3 do Minh cung cấp, mô hình ước tính, workflow và soạn spec/canvas | Phân biệt ghi chép với nguyên văn; không suy rộng, không bịa số đo; impact ghi rõ giả định | Nguyễn Văn Minh |
 | Review sản phẩm tương tự | ChatGPT | Tổng hợp tài liệu và mẫu công khai, bảng so sánh | Không coi review tài liệu là kết quả thử sinh mới | Nguyễn Văn Minh |
-| Củng cố studio và smoke tích hợp | ChatGPT | Validation frontend, loading, fixture dài, test JS/browser và smoke real opt-in | Test fixture không phải LLM thật; không đổi metric/benchmark | Nguyễn Văn Minh |
+| Củng cố studio và smoke tích hợp | ChatGPT | Validation frontend, loading, fixture dài, test JS/browser và smoke real opt-in | Fixture không phải LLM thật; browser smoke thật riêng 28/11 pass với Gemini 3.8 Flash, 4.662 token; không đổi metric/benchmark | Nguyễn Văn Minh |
 | Prompt / thiết kế lời gọi mô hình | | | | |
 | Đào data (viết script đếm, gợi ý nhãn) | | | Kiểm tay __ dòng, khớp __ | |
 | Rà câu hỏi phỏng vấn / khảo sát | | Chỉ rà câu dẫn dắt | | |

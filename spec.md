@@ -127,7 +127,7 @@ flowchart TD
 
 **HAX:** G1 thông báo phạm vi và chế độ mock/real; G10 hỏi lại hoặc dừng khi thiếu nguồn/context; G9 cho sửa, hủy duyệt và xác nhận lại; G11 hiện mã nguồn, nội dung nguồn và cảnh báo để người dạy đối chiếu. Không coi trace là giải thích ngữ nghĩa đầy đủ của quyết định model.
 
-**Trạng thái:** backend/UI/agent mock đã chạy; module Bảo PR #5 và AI Core Đạt PR #8 đã merge. Minh chạy smoke thật B11/B05 qua answer() ngày 28/11: 2 model calls, 4 tool calls, 9.077 token, 82,5 giây, exit 0. Chưa có kiểm ngữ nghĩa, UI thật hoặc Run 1/2. Xem docs/real-smoke-20261128.md. Prototype CP2 giữ riêng. Xem docs/prototype.md và docs/parser-validator-guardrails.md.
+**Trạng thái:** backend/UI/agent mock đã chạy; module Bảo PR #5 và AI Core Đạt PR #8 đã merge. Minh chạy smoke thật B11/B05 qua answer() ngày 28/11: 2 model calls, 4 tool calls, 9.077 token, 82,5 giây, exit 0. Browser smoke thật 28/11 cũng pass, 5 hoạt động/60 phút, 5 nguồn, 4 cảnh báo, 4.662 token. Chưa có kiểm ngữ nghĩa hoặc Run 1/2. Xem docs/real-smoke-20261128.md. Prototype CP2 giữ riêng. Xem docs/prototype.md và docs/parser-validator-guardrails.md.
 
 ## §5. Chỗ khó — 4 lớp + kịch bản + tấn công *(guide 2.3)*
 
@@ -159,9 +159,9 @@ Rủi ro đáng lo nhất khi demo: B07 — đáp án sai có vẻ hợp lý, m�
 | Suôn sẻ | Planning Mode chọn nguồn, context và quyền sử dụng → POST /api/generate → nháp pending_review kèm nguồn/cảnh báo → giảng viên đối chiếu, chỉnh sửa và duyệt → mở màn hình riêng đọc kịch bản; slide gốc vẫn chiếu. Có timer, tiến độ, điều hướng, đáp án, nguồn và xuất Markdown/JSON. |
 | Không chắc / thiếu dữ liệu | Hỏi lại thông tin cụ thể, không cấp bản duyệt. UI hiển thị thông báo và cho bổ sung rồi gửi lại. |
 | Ngoài phạm vi / không có căn cứ | Từ chối tác động ngoài phạm vi hoặc yêu cầu injection bị phát hiện; nếu thiếu nguồn thì hỏi lại. Không tự xuất, tự chấm điểm hoặc thêm nguồn bịa. |
-| Người dùng sửa / phát hiện sai | Sửa lời dẫn, hoạt động hoặc phút; kiểm lại trường, timeline, mã nguồn ở UI. Sửa hoặc đổi context hủy duyệt, đóng reader; phải xác nhận lại mới mở/xuất. Giảng viên chịu trách nhiệm đối chiếu ngữ nghĩa. |
+| Người dùng sửa / phát hiện sai | Sửa lời dẫn, hoạt động hoặc phút; kiểm lại trường, timeline, mã nguồn và mẫu HTML/script ở UI. Sửa hoặc đổi context hủy duyệt, đóng reader; phải xác nhận lại mới mở/xuất. Giảng viên chịu trách nhiệm đối chiếu ngữ nghĩa. |
 
-Case đặc thù: lớp đông thiếu thiết bị, nội dung quá tải, mixed level, lab checkpoint; generator được kỳ vọng chọn hoạt động khả thi và fallback. Nếu lỗi provider/API, backend trả lỗi rõ, không giả kết quả mock; UI cho gửi lại. Chưa kiểm các hành vi ngữ nghĩa qua LLM thật. HTML chỉ là định dạng đọc trong cửa sổ riêng, không tạo slide hay file HTML trình chiếu mới.
+Case đặc thù: lớp đông thiếu thiết bị, nội dung quá tải, mixed level, lab checkpoint; generator được kỳ vọng chọn hoạt động khả thi và fallback. Nếu lỗi provider/API, backend trả lỗi rõ, không giả kết quả mock; UI cho gửi lại. Browser smoke thật đã kiểm suôn sẻ, duyệt, reader, JSON, sửa hủy duyệt và hỏi lại khi thiếu thời lượng (0 model call). Chưa chấm các hành vi ngữ nghĩa qua LLM thật. HTML chỉ là định dạng đọc trong cửa sổ riêng, không tạo slide hay file HTML trình chiếu mới.
 
 ## §7. Đánh giá & chuẩn "đạt" *(guide 2.4, 4.1)*
 
@@ -235,6 +235,7 @@ Case đặc thù: lớp đông thiếu thiết bị, nội dung quá tải, mixe
 | 28/11/2026, trước CP3 | Củng cố validation studio, hiển thị thời gian chờ, chặn response cũ/sai kiểu; bổ sung JS/browser test và smoke real opt-in | Kiểm bản nháp 4 hoạt động dài, duyệt/xuất, HTML/script trong nội dung sửa, response không hợp lệ. Chưa gọi AI thật, không đổi chuẩn đạt. |
 | 28/11/2026, trước CP3 | TV1 xác nhận nguyên văn P2 và trực tiếp sử dụng các giải pháp tương tự | Đủ 5 trích dẫn có nguồn; hoàn thành M3-08 và ghi nhận M3-11. Không thêm log trải nghiệm giả, không đổi benchmark hoặc chuẩn đạt. |
 | 28/11/2026, trước CP3 | Merge AI Core PR #8, chốt Gemini 3.8 Flash, smoke tích hợp thật B11/B05 | 2 model calls, 4 tool calls, 9.077 token, 82,5 giây; kiểm cấu trúc pass, chưa phải Run 1. Mỗi thành viên dùng key local riêng. Không đổi benchmark/chuẩn đạt. |
+| 28/11/2026, trước CP3 | Nhóm xác nhận contract v1.0; browser smoke thật M3-05 | Gemini 3.8 Flash sinh 5 hoạt động/60 phút, 5 nguồn, 4 cảnh báo; 1 model/2 tool, 4.662 token, 28,6 giây; duyệt/reader/JSON/sửa hủy duyệt/hỏi lại pass. Không phải Run 1; giữ chuẩn đạt. |
 
 **Sau CP4 (đến 23:59 Thứ Bảy 28/11)** (sửa theo góp ý — không sửa chuẩn "đạt", câu thử, số bằng chứng, kết quả các lượt đã chạy)
 
