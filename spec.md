@@ -14,7 +14,7 @@ Quy trình AS-IS (tổng hợp từ ghi chép P1–P3, không phải log quan s�
 |---|---|---|
 | 1. Chuẩn bị tài liệu | Sử dụng slide/tài liệu giảng dạy đã có. | P2 xem slide có sẵn; P3 cho biết tài liệu được chuẩn bị từ trước. |
 | 2. Xây dựng nội dung | Đọc nguồn, lựa chọn cách giới thiệu, giải thích kiến thức, nghĩ ví dụ và câu hỏi tương tác; P2 nhờ AI tạo nội dung mới khi cần. | P2; chưa biết tên công cụ AI, thời gian và mức độ sử dụng. |
-| 3. Chuẩn bị lời dẫn | Không soạn kịch bản hoặc chỉ ghi chú một phần qua ứng dụng note; chưa có bản kịch bản đầy đủ để sử dụng khi giảng. | 3/3 người (P1–P3), ghi chép trải nghiệm tháng qua; chưa phân biệt từng người thuộc cách nào. |
+| 3. Chuẩn bị lời dẫn | Không soạn kịch bản hoặc chỉ ghi chú một phần qua ứng dụng note; chưa có bản kịch bản đầy đủ để sử dụng khi giảng. | 3/3 người (P1–P3), ghi chép trải nghiệm tháng qua; P1 xác nhận thường tạo file note rồi ghi chép, chưa tách riêng P2/P3. |
 | 4. Giảng bài/hướng dẫn lab | Dùng tài liệu và phần chuẩn bị hiện có để triển khai buổi học; nếu cần lời dẫn hoặc hoạt động, giảng viên vẫn phải tự tổ chức. | Tổng hợp suy luận từ P1–P3; chưa quan sát trực tiếp từng thao tác trên lớp. |
 
 **Công cụ hiện tại:** slide/tài liệu có sẵn (P2, P3); ứng dụng ghi chú (note) hoặc không có kịch bản (ghi chép chung P1–P3); công cụ AI hỗ trợ nội dung mới (P2). Tên ứng dụng, phiên bản và quy trình thao tác cụ thể chưa kiểm. Chưa có ảnh tài khoản thực tế được cung cấp; không dựng ảnh minh chứng giả. Nguồn: [P1](evidence/interviews/P1.md), [P2](evidence/interviews/P2.md), [P3](evidence/interviews/P3.md), [tổng hợp](evidence/summary.md).
@@ -25,8 +25,8 @@ Quy trình AS-IS (tổng hợp từ ghi chép P1–P3, không phải log quan s�
 - **Việc cần hoàn thành (JTBD):** chuẩn bị và triển khai một buổi giảng/hướng dẫn lab từ tài liệu sẵn có, truyền đạt đủ kiến thức, đưa ví dụ và hoạt động tương tác phù hợp với lớp.
 - **Cách đang làm và chỗ vướng:** theo §0, P2 mất công chuẩn bị cách giải thích và nghĩ ví dụ gần gũi; 3/3 người chưa từng soạn kịch bản đầy đủ, hiện không có kịch bản hoặc chỉ ghi chú một phần. Chỗ vướng tập trung ở khâu tổ chức nội dung và lời dẫn (bước 2–3), không phải tạo thêm slide. Tài liệu đã có là lý do P3 không cần tạo lại slide/video/HTML trình chiếu; lý do cụ thể từng người vẫn chọn cách ghi chú hoặc không viết kịch bản chưa được hỏi, chưa kiểm.
 - **Pain một câu:** Giảng viên có tài liệu chuyên môn nhưng phải tự chuẩn bị cách diễn đạt, ví dụ và hoạt động tương tác; thiếu một kịch bản hoàn chỉnh để hỗ trợ khi đứng lớp. Hậu quả về công sức được P2 báo định tính; ảnh hưởng đến chất lượng học tập chưa đo.
-- **Bằng chứng:** 3/3 (P1, P2, P3) chưa từng soạn kịch bản đầy đủ; 1/1 giảng viên (P2) báo mất nhiều thời gian chuẩn bị; 2/2 lab coach (P1, P3) muốn dùng kịch bản. P1 kỳ vọng cải thiện tiến độ lab; P3 ưu tiên kịch bản hay, không cần tạo video/slide/HTML trình chiếu, HTML chỉ là cách đọc trên màn hình phụ. Đây là nhu cầu và ghi chép hành vi, không phải kết quả thử sản phẩm. [Tổng hợp](evidence/summary.md).
-- **Kết luận giả thuyết:** được ủng hộ định tính về khó khăn chuẩn bị của P2 và khoảng trống kịch bản của P1–P3. Chọn hướng sinh kịch bản thực thi trên lớp thay vì sản xuất tài liệu trình chiếu mới; phân tích ba phương án ở §2. Chưa có số phút thực tế hoặc hiệu quả học tập, không suy rộng mẫu nhỏ. Đã có 3 hồ sơ và trải nghiệm tháng qua; theo quyết định TV1 không xác minh thêm thời lượng và ngoài nhóm, hai điều kiện này vẫn chưa được chứng minh. Chưa đủ 5 trích dẫn/ví dụ nguyên văn.
+- **Bằng chứng:** 3/3 (P1, P2, P3) chưa từng soạn kịch bản đầy đủ; 1/1 giảng viên (P2) báo mất nhiều thời gian chuẩn bị; 2/2 lab coach (P1, P3) muốn dùng kịch bản. P1 xác nhận thường tạo file note rồi ghi chép, kỳ vọng cải thiện tiến độ lab; P3 nhận xét học sinh thường không xem trước slide và lo ngại tạo thêm tài liệu chưa chắc được đọc, ưu tiên kịch bản hay, không cần tạo video/slide/HTML trình chiếu, HTML chỉ là cách đọc trên màn hình phụ. Đây là nhu cầu và ghi chép hành vi, không phải kết quả thử sản phẩm. [Tổng hợp](evidence/summary.md).
+- **Kết luận giả thuyết:** được ủng hộ định tính về khó khăn chuẩn bị của P2 và khoảng trống kịch bản của P1–P3. Chọn hướng sinh kịch bản thực thi trên lớp thay vì sản xuất tài liệu trình chiếu mới; phân tích ba phương án ở §2. Chưa có số phút thực tế hoặc hiệu quả học tập, không suy rộng mẫu nhỏ. Đã có 3 hồ sơ và trải nghiệm tháng qua; TV1 xác nhận cả ba đều ngoài nhóm và thời lượng mỗi cuộc 10–15 phút (28/11/2026). Đã có đủ 5 trích dẫn nguyên văn có nguồn, ẩn danh (P1: 1, P2: 3, P3: 1), TV1 xác nhận toàn bộ ngày 28/11/2026. M3-07 và M3-08 hoàn thành.
 
 ## §2. Impact & quyết định chọn *(guide 1.3)*
 
@@ -61,7 +61,7 @@ Nguồn: cost/personas.yaml; không thay đổi cấu hình của Dũng khi chư
 
 ## §3. Giải pháp tương tự *(guide 2.1)*
 
-Review ngày 28/11/2026 từ trang chức năng, FAQ và mẫu đầu ra công khai; chi tiết quan sát, liên kết và phạm vi kiểm tra tại [docs/competitor-review.md](docs/competitor-review.md).
+Review ngày 28/11/2026: TV1 xác nhận đã trực tiếp sử dụng các sản phẩm tương tự; nhận xét dưới đây dựa trên trang chức năng, FAQ và mẫu đầu ra công khai; chi tiết quan sát, liên kết và phạm vi kiểm tra tại [docs/competitor-review.md](docs/competitor-review.md).
 
 | Giải pháp | Quan sát và điều đáng học | Điều cần tránh trong TeachFlow |
 |---|---|---|
@@ -69,7 +69,7 @@ Review ngày 28/11/2026 từ trang chức năng, FAQ và mẫu đầu ra công k
 | [Eduaide — 5E Lesson Plan](https://www.eduaide.ai/tools/5e-lesson-plan-generator) | Mẫu Sink or Float có 5 pha, thời lượng, teacher moves, nhiệm vụ và kiểm tra hiểu. Học cấu trúc hoạt động cụ thể. | Không áp cứng kế hoạch nhiều buổi/mô hình 5E cho mọi context. |
 | [Diffit — FAQ](https://web.diffit.me/faq) | Nhập nguồn sẵn có, điều chỉnh trình độ; mẫu Inference and Sentence Structure có gợi ý hỗ trợ nhóm gặp khó và exit ticket. Học cách phân hóa hoạt động. | Không chuyển trọng tâm sang worksheet hoặc slide mới. |
 
-**Khác biệt:** từ pain P1–P3, TeachFlow ưu tiên một kịch bản thực thi cho giảng viên/lab coach AI20K (lời dẫn cụ thể, mã nguồn, timeline, hoạt động, fallback), duyệt trước khi đọc trên màn hình riêng và trình chiếu slide gốc. HTML chỉ là định dạng đọc. Đây là định vị, không phải kết luận hơn đối thủ. Review dựa trên tài liệu/mẫu công khai; chưa sinh mới cùng input trên ba dịch vụ, không có kết quả so sánh chất lượng thực nghiệm.
+**Khác biệt:** từ pain P1–P3, TeachFlow ưu tiên một kịch bản thực thi cho giảng viên/lab coach AI20K (lời dẫn cụ thể, mã nguồn, timeline, hoạt động, fallback), duyệt trước khi đọc trên màn hình riêng và trình chiếu slide gốc. HTML chỉ là định dạng đọc. Đây là định vị, không phải kết luận hơn đối thủ. TV1 xác nhận đã trực tiếp sử dụng; chưa có log thao tác chi tiết hoặc kết quả so sánh chất lượng thực nghiệm cùng input.
 
 ## §4. Thiết kế *(guide 2.2, 3.2)*
 
@@ -123,7 +123,7 @@ flowchart TD
 | Retrieval | Mã nguồn bịa hoặc ngoài phạm vi | Đối chiếu danh sách nguồn hợp lệ và nguồn trả về; lỗi thì dừng |
 | Validator | Sai schema, thời lượng, refs, HTML hoặc tự approved | Kiểm cấu trúc và mã nguồn; module real chặn HTML và tự duyệt; ngữ nghĩa phải đối chiếu |
 | Review | Nội dung sai, chỉnh sửa sau duyệt | UI hiện nguồn/cảnh báo, xác nhận đối chiếu; sửa thì hủy duyệt, đóng cửa sổ đọc, kiểm timeline/refs/trường bắt buộc lại |
-| Output | Thực thi HTML/JS từ model, xuất chưa duyệt | Template cố định và escape/textContent; chỉ mở reader/xuất khi đã duyệt; UI chưa kiểm mọi thẻ HTML trong nội dung sửa tay, không thực thi chúng |
+| Output | Thực thi HTML/JS từ model, xuất chưa duyệt | Template cố định và escape/textContent; chỉ mở reader/xuất khi đã duyệt; UI kiểm mẫu HTML/script trong nội dung sửa tay, không thực thi chúng; regex có giới hạn |
 
 **HAX:** G1 thông báo phạm vi và chế độ mock/real; G10 hỏi lại hoặc dừng khi thiếu nguồn/context; G9 cho sửa, hủy duyệt và xác nhận lại; G11 hiện mã nguồn, nội dung nguồn và cảnh báo để người dạy đối chiếu. Không khẳng định có lý giải quyết định model nếu chưa sinh thật.
 
@@ -231,6 +231,9 @@ Case đặc thù: lớp đông thiếu thiết bị, nội dung quá tải, mixe
 | 28/11/2026, trước CP3 | Thêm `codebase/parser.py`, `guardrails.py`, `validator.py` theo mục 5 của contract (B3-01 đến B3-09), 32 unit test, tài liệu bàn giao; viết §9 | Code chặn trước khi gọi model: B03, B04, B22, B23 được hỏi lại; B08, B09, B10, B24 bị từ chối. Validator bắt lỗi timeline, mã nguồn, HTML và tự duyệt. Mới test với model giả lập, chưa phải kết quả eval. Không sửa benchmark, metric hay chuẩn đạt. |
 | 28/11/2026, trước CP3 | PR #4: backend, agent mock, studio, reader riêng; PR #5: module Bảo; benchmark 24 câu và personas từ nhánh Dũng | Kiểm thử tích hợp 77 Python + 15 prototype, browser smoke PASS; giữ chuẩn đạt; chưa eval thật. |
 | 28/11/2026, trước CP3 | Bổ sung P3, hành vi tháng qua P1–P3, impact 3 phương án, workflow AS-IS, review 3 sản phẩm công khai và đồng bộ hồ sơ | 3/3 chưa có kịch bản đầy đủ; ưu tiên chất lượng lời dẫn, không tạo slide/video mới; impact là giả định. |
+| 28/11/2026, trước CP3 | Bổ sung nguyên văn P1/P3 và xác nhận điều kiện phỏng vấn của cả ba | TV1 xác nhận 3/3 ngoài nhóm, 10–15 phút/người; M3-07 hoàn thành. Có 5 đoạn ghi chép có nguồn, 2 nguyên văn và 3 đoạn P2 chưa xác nhận nguyên văn. Không đổi benchmark hay chuẩn đạt. |
+| 28/11/2026, trước CP3 | Củng cố validation studio, hiển thị thời gian chờ, chặn response cũ/sai kiểu; bổ sung JS/browser test và smoke real opt-in | Kiểm bản nháp 4 hoạt động dài, duyệt/xuất, HTML/script trong nội dung sửa, response không hợp lệ. Chưa gọi AI thật, không đổi chuẩn đạt. |
+| 28/11/2026, trước CP3 | TV1 xác nhận nguyên văn P2 và trực tiếp sử dụng các giải pháp tương tự | Đủ 5 trích dẫn có nguồn; hoàn thành M3-08 và ghi nhận M3-11. Không thêm log trải nghiệm giả, không đổi benchmark hoặc chuẩn đạt. |
 
 **Sau CP4 (đến 23:59 Thứ Bảy 28/11)** (sửa theo góp ý — không sửa chuẩn "đạt", câu thử, số bằng chứng, kết quả các lượt đã chạy)
 
