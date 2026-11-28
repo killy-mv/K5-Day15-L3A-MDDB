@@ -18,6 +18,8 @@ M3-05: loading có thời gian chờ và khóa gửi trùng; kết quả cũ b�
 
 - node tests/test_studio.js: 23 case kiểm validation studio.
 - python tests/browser_studio_complex.py: fixture giả lập 4 hoạt động dài, popup/navigation, JSON, sửa không an toàn, response lỗi/thiếu metadata, provider 503 và response cũ.
-- python tests/smoke_real_studio.py --run-real: chỉ chạy sau khi AI Core và .env sẵn sàng; 2 case B11/B05 qua answer(), yêu cầu trace model/token/tool thật, tối đa 5 call/case; không ghi Run 1, không mock fallback. Đã chạy real ngày 28/11, B11/B05 đều pass kiểm cấu trúc, xem docs/real-smoke-20261128.md; repair, ngữ nghĩa và UI nhận output thật cần đối chiếu riêng.
+- python tests/smoke_real_studio.py --run-real: chỉ chạy sau khi AI Core và .env sẵn sàng; 2 case B11/B05 qua answer(), yêu cầu trace model/token/tool thật, tối đa 5 call/case; không ghi Run 1, không mock fallback. Đã chạy real ngày 28/11, B11/B05 đều pass kiểm cấu trúc, xem docs/real-smoke-20261128.md; repair thật và ngữ nghĩa cần đối chiếu riêng; UI nhận output thật đã pass browser smoke riêng.
 
 Nhóm chốt Gemini 3.8 Flash theo TV1 ngày 28/11/2026. Mỗi thành viên tạo .env ở gốc repo từ .env.example, đặt MODEL_PROVIDER=gemini, MODEL_NAME theo mã API chính xác của model đã chọn, API_KEY riêng, để trống API_BASE_URL nếu dùng endpoint Gemini mặc định. Không commit .env. Mã gemini-3.8-flash đã chạy thành công với cấu hình local của Minh; quota từng tài khoản vẫn cần kiểm chứng; không chờ key chung. Run 1 chính thức thống nhất cấu hình, ghi model thực tế và run ID.
+
+- `python tests/browser_studio_real.py --run-real`: 28/11 browser Edge, API thật, 5 hoạt động/60 phút, 5 nguồn, 4 cảnh báo; duyệt, reader, JSON, sửa hủy duyệt, thiếu thời lượng (0 model call) đều pass; 1 model call/2 tool, 4.662 token, 28,6 giây. Không ghi Run 1 hoặc chấm ngữ nghĩa.

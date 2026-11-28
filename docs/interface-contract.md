@@ -1,6 +1,6 @@
 # TeachFlow AI — Interface contract v1.0 (M3-01)
 
-Bản chuẩn kỹ thuật bàn giao để triển khai song song CP3. Thành viên xác nhận bằng ghi chú backlog/PR; chưa giả định cả nhóm đã review. Không thay đổi chuẩn đạt CP2 hoặc B01–B15. Phạm vi: sinh kịch bản, giảng viên dùng slide gốc và màn hình riêng đọc kịch bản.
+Bản chuẩn kỹ thuật bàn giao để triển khai song song CP3. TV1 xác nhận ngày 28/11/2026 cả nhóm đã thống nhất Interface Contract v1.0; PR #5/#8, smoke thật B11/B05 và kiểm thử browser thật xác nhận tích hợp kỹ thuật. Không thay đổi chuẩn đạt CP2 hoặc B01–B15. Phạm vi: sinh kịch bản, giảng viên dùng slide gốc và màn hình riêng đọc kịch bản.
 
 ## 1. Files và cách dùng
 
@@ -33,7 +33,7 @@ Dạng phẳng tương thích nguyên ô input của benchmark; không bọc tro
 |---|---|---|
 | lesson_id | str | ID bài có trong dataset được phép; không dùng làm đường dẫn file |
 | duration_minutes | int | Số phút nguyên dương; null/thiếu -> hỏi lại, không đoán |
-| level | str | beginner/intermediate/advanced; null/thiếu -> hỏi lại |
+| level | str | beginner/intermediate/advanced/mixed (đã hỗ trợ trong parser/guardrails/UI); null/thiếu -> hỏi lại |
 | class_size | int | Số học viên nguyên dương |
 | mode | str | offline/online/hybrid |
 | equipment | str | Điều kiện thực tế; mô tả không có thiết bị nếu không có |

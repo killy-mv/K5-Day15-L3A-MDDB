@@ -377,6 +377,70 @@ class TestBenchmarkIntegrity(unittest.TestCase):
             [(sid, p["name"], inps) for sid, p, inps in plan2],
         )
 
+    def test_contract_v1_fixtures_and_oop_dataset_compatibility(self):
+        lessons = ag.load_lessons()
+        self.assertIn("oop_annotations", lessons)
+        self.assertEqual(len(lessons["oop_annotations"]["codes"]), 131)
+
+        with open(os.path.join(ROOT, "data", "fixtures", "lesson_request.json"), encoding="utf-8") as f:
+            req = json.load(f)
+        with open(os.path.join(ROOT, "data", "fixtures", "script_response.json"), encoding="utf-8") as f:
+            resp = json.load(f)
+
+        dur = ag.check_duration_compliance(resp, req["duration_minutes"])
+        self.assertTrue(dur["passed"], dur["errors"])
+        sch = ag.check_script_schema(resp)
+        self.assertTrue(sch["passed_schema"], sch["errors"])
+        refs = ag.check_source_references(resp, req["source_refs"], json.dumps(resp, ensure_ascii=False))
+        self.assertTrue(refs["all_refs_exist"], refs["errors"])
+
+        # Out-of-scope page (in oop_annotations, but not in req["source_refs"]) must fail when evaluated via evaluate_case
+        bad_resp = json.loads(json.dumps(resp))
+        bad_resp["segments"][0]["slide_refs"] = ["OOP-P001"]
+        case_row = {
+            "id": "B05",
+            "type": "kho",
+            "input": json.dumps(req, ensure_ascii=False),
+            "output": json.dumps(bad_resp, ensure_ascii=False),
+            "error": "",
+        }
+        ev_res = ag.evaluate_case(case_row, lessons)
+        self.assertFalse(ev_res["source_references"]["all_refs_exist"])
+        self.assertIn("OOP-P001", ev_res["source_references"]["invalid_refs"])
+
+    def test_auto_grader_matches_agent_guardrails_on_clarification_and_refusal_cases(self):
+        from types import SimpleNamespace
+        sys.path.insert(0, os.path.join(ROOT, "codebase"))
+        import agent as ag_mod
+        import contract_mock as mock_mod
+        import guardrails as g_mod
+        import parser as p_mod
+        import validator as v_mod
+
+        deps = SimpleNamespace(
+            parse_document=p_mod.parse_document,
+            check_request=g_mod.check_request,
+            validate_script=v_mod.validate_script,
+            retrieve=mock_mod.retrieve,
+            get_slide_content=mock_mod.get_slide_content,
+            get_teaching_strategy=mock_mod.get_teaching_strategy,
+            generate_script=mock_mod.generate_script,
+        )
+        lessons = ag.load_lessons()
+        items = {r["id"]: r for r in ev.load_items()}
+        for cid in ag.CLARIFICATION_CASE_IDS:
+            resp = ag_mod.build_response(json.loads(items[cid]["input"]), deps=deps, mode="real")
+            out_str = json.dumps(resp, ensure_ascii=False)
+            res = ag.evaluate_case({**items[cid], "output": out_str, "error": ""}, lessons)
+            self.assertEqual(res["contract_status"], "needs_clarification", cid)
+            self.assertTrue(res["contract_status_check"]["matched"], cid)
+        for cid in ag.REFUSAL_CASE_IDS:
+            resp = ag_mod.build_response(json.loads(items[cid]["input"]), deps=deps, mode="real")
+            out_str = json.dumps(resp, ensure_ascii=False)
+            res = ag.evaluate_case({**items[cid], "output": out_str, "error": ""}, lessons)
+            self.assertEqual(res["contract_status"], "refused", cid)
+            self.assertTrue(res["contract_status_check"]["matched"], cid)
+
 
 if __name__ == "__main__":
     unittest.main()

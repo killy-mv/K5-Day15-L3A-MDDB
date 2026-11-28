@@ -38,6 +38,10 @@ prices:             # USD / 1 triệu token (giá gói trả phí chuẩn), lấ
     input: 0.25
     output: 1.50
     source: "further-reading/model-prices.md · https://ai.google.dev/gemini-api/docs/pricing · xem 25/11/2026 (tầng Nhỏ)"
+  - model: gemini-3.8-flash
+    input: 1.50
+    output: 7.50
+    source: "further-reading/model-prices.md · https://ai.google.dev/gemini-api/docs/pricing · xem 25/11/2026 (tầng Vừa, dùng giá sau lịch tăng 01/01/2027 theo quy định bảng giá)"
   - model: gpt-6.1-terra
     input: 1.00
     output: 5.00
