@@ -32,7 +32,7 @@ Mở http://127.0.0.1:8765/ nếu trình duyệt không tự mở. Chọn bài m
 
 **Bàn giao CP3:** [Interface contract](docs/interface-contract.md) · [Dataset OOP 131 trang](data/lessons/oop_annotations.json) · [Input mẫu](data/fixtures/lesson_request.json) · [Output mẫu](data/fixtures/script_response.json) · [Data Card](data/DATA_CARD.md). Chạy mock Python riêng bằng `python codebase/contract_mock.py`; không phải AI thật.
 
-**Trạng thái CP3:** local studio đã chạy end-to-end với mock; parser/guardrails/validator của Bảo đã bàn giao, đang chờ AI Core thật. Không dùng mock làm kết quả eval. Real mode không tự fallback mock khi cấu hình sai. Xem [bàn giao module](docs/parser-validator-guardrails.md) và [hồ sơ đánh giá](eval/README.md).
+**Trạng thái CP3:** local studio đã chạy end-to-end với mock; parser/guardrails/validator của Bảo và AI Core của Đạt đã merge; nhóm chốt Gemini 3.8 Flash, mỗi thành viên tự cấu hình .env với key riêng. Smoke LLM thật B11/B05 đã pass ngày 28/11 qua agent.answer(), tổng 9.077 token; chưa kiểm ngữ nghĩa hoặc chấm Run 1. Xem [kết quả smoke](docs/real-smoke-20261128.md). Không dùng mock làm kết quả eval. Real mode không tự fallback mock khi cấu hình sai. Xem [bàn giao module](docs/parser-validator-guardrails.md) và [hồ sơ đánh giá](eval/README.md).
 
 Kiểm tra repo: `python run.py check`. Unit test: `python -m unittest discover -s tests -p "test_*.py"`; prototype CP2: `node tests/test_prototype.js`; browser smoke tùy chọn: `python tests/browser_studio_smoke.py` (Playwright + Edge). CLI nhập LessonRequest JSON: `python codebase/app.py --cli`. Chỉ chạy eval thật sau khi cấu hình và xác minh model thật.
 
