@@ -87,7 +87,7 @@ flowchart TD
     C --> D["Parser + context + guardrails"]
     D -->|Thiếu / vi phạm| Q["needs_clarification / refused"]
     D -->|Hợp lệ| R["Retrieval giới hạn phạm vi + tools chỉ đọc"]
-    R --> M["Generator: mock hiện tại; LLM thật chờ tích hợp"]
+    R --> M["Generator: Gemini thật hoặc mock rõ ràng"]
     M --> V["Validator: schema / timeline / mã nguồn"]
     V -->|Không hợp lệ| Q
     V -->|Hợp lệ| F["pending_review + nguồn + cảnh báo"]
@@ -98,7 +98,7 @@ flowchart TD
     I --> J["Màn hình đọc riêng / Markdown / JSON"]
 ```
 
-**Hình dạng:** một agent trong workflow kiểm soát cố định. Agent hiện gọi generator một lần, chưa có vòng repair ở orchestration; mục tiêu tối đa 5 quyết định model và 2 repair vẫn giữ nguyên, sẽ kiểm bằng trace khi nối LLM. Không mô tả vòng lặp chưa triển khai là đã chạy. Mock dùng contract_mock, real mode nạp parser/guardrails/validator của Bảo cùng các module retrieval/tools/generator của Đạt khi có; lỗi real mode không tự fallback mock.
+**Hình dạng:** một agent trong workflow kiểm soát cố định. Agent gọi generator một lần; generator tích hợp validator, tối đa 2 repair (tối đa 3 lần gọi model, trong ngân sách 5 quyết định). Mock dùng contract_mock, real mode nạp parser/guardrails/validator của Bảo cùng retrieval/tools/generator của Đạt; lỗi real mode không tự fallback mock. Smoke thật B11/B05 mỗi case 1 lần gọi model và 2 tool, không repair; test repair dùng phản hồi giả lập. Repair prompt hiện chưa gửi lại toàn bộ nguồn.
 
 | Thành phần / hợp đồng | Input | Output / phạm vi |
 |---|---|---|
@@ -108,7 +108,7 @@ flowchart TD
 | guardrails.check_request | context, nguồn | ok/errors/status; chặn trước generator, mẫu regex có thể bỏ lọt/chặn nhầm |
 | retrieve + get_slide_content | mục tiêu, yêu cầu, đoạn nguồn đã chọn | Bài ngắn dùng nguồn sẵn; bài dài không chọn refs thì giới hạn 12 đoạn; không mở rộng ngoài nguồn |
 | get_teaching_strategy | context lớp | Danh mục chiến lược đọc-only, không phải nguồn kiến thức |
-| generate_script | context sạch và nguồn được phép | Kịch bản chờ duyệt hoặc hỏi lại/từ chối; mock đã chạy, real chờ Đạt |
+| generate_script | context sạch và nguồn được phép | Kịch bản chờ duyệt hoặc hỏi lại/từ chối; mock và real smoke đã chạy |
 | validate_script | kịch bản, context, nguồn | Lỗi schema/timeline/ref, cảnh báo; không chứng minh đúng ngữ nghĩa |
 | studio.html | bản nháp / bản duyệt | Chỉnh sửa, xác nhận, cửa sổ riêng, xuất Markdown/JSON; không sinh HTML trình chiếu |
 
@@ -125,9 +125,9 @@ flowchart TD
 | Review | Nội dung sai, chỉnh sửa sau duyệt | UI hiện nguồn/cảnh báo, xác nhận đối chiếu; sửa thì hủy duyệt, đóng cửa sổ đọc, kiểm timeline/refs/trường bắt buộc lại |
 | Output | Thực thi HTML/JS từ model, xuất chưa duyệt | Template cố định và escape/textContent; chỉ mở reader/xuất khi đã duyệt; UI kiểm mẫu HTML/script trong nội dung sửa tay, không thực thi chúng; regex có giới hạn |
 
-**HAX:** G1 thông báo phạm vi và chế độ mock/real; G10 hỏi lại hoặc dừng khi thiếu nguồn/context; G9 cho sửa, hủy duyệt và xác nhận lại; G11 hiện mã nguồn, nội dung nguồn và cảnh báo để người dạy đối chiếu. Không khẳng định có lý giải quyết định model nếu chưa sinh thật.
+**HAX:** G1 thông báo phạm vi và chế độ mock/real; G10 hỏi lại hoặc dừng khi thiếu nguồn/context; G9 cho sửa, hủy duyệt và xác nhận lại; G11 hiện mã nguồn, nội dung nguồn và cảnh báo để người dạy đối chiếu. Không coi trace là giải thích ngữ nghĩa đầy đủ của quyết định model.
 
-**Trạng thái:** backend/UI/agent mock đã chạy; parser/guardrails/validator thực của Bảo đã merge PR #5, kiểm thử với generator giả lập. Chưa có LLM thật và trace token thật; chưa có Run 1/2. Prototype CP2 giữ riêng. Xem docs/prototype.md và docs/parser-validator-guardrails.md.
+**Trạng thái:** backend/UI/agent mock đã chạy; module Bảo PR #5 và AI Core Đạt PR #8 đã merge. Minh chạy smoke thật B11/B05 qua answer() ngày 28/11: 2 model calls, 4 tool calls, 9.077 token, 82,5 giây, exit 0. Chưa có kiểm ngữ nghĩa, UI thật hoặc Run 1/2. Xem docs/real-smoke-20261128.md. Prototype CP2 giữ riêng. Xem docs/prototype.md và docs/parser-validator-guardrails.md.
 
 ## §5. Chỗ khó — 4 lớp + kịch bản + tấn công *(guide 2.3)*
 
@@ -234,6 +234,7 @@ Case đặc thù: lớp đông thiếu thiết bị, nội dung quá tải, mixe
 | 28/11/2026, trước CP3 | Bổ sung nguyên văn P1/P3 và xác nhận điều kiện phỏng vấn của cả ba | TV1 xác nhận 3/3 ngoài nhóm, 10–15 phút/người; M3-07 hoàn thành. Có 5 đoạn ghi chép có nguồn, 2 nguyên văn và 3 đoạn P2 chưa xác nhận nguyên văn. Không đổi benchmark hay chuẩn đạt. |
 | 28/11/2026, trước CP3 | Củng cố validation studio, hiển thị thời gian chờ, chặn response cũ/sai kiểu; bổ sung JS/browser test và smoke real opt-in | Kiểm bản nháp 4 hoạt động dài, duyệt/xuất, HTML/script trong nội dung sửa, response không hợp lệ. Chưa gọi AI thật, không đổi chuẩn đạt. |
 | 28/11/2026, trước CP3 | TV1 xác nhận nguyên văn P2 và trực tiếp sử dụng các giải pháp tương tự | Đủ 5 trích dẫn có nguồn; hoàn thành M3-08 và ghi nhận M3-11. Không thêm log trải nghiệm giả, không đổi benchmark hoặc chuẩn đạt. |
+| 28/11/2026, trước CP3 | Merge AI Core PR #8, chốt Gemini 3.8 Flash, smoke tích hợp thật B11/B05 | 2 model calls, 4 tool calls, 9.077 token, 82,5 giây; kiểm cấu trúc pass, chưa phải Run 1. Mỗi thành viên dùng key local riêng. Không đổi benchmark/chuẩn đạt. |
 
 **Sau CP4 (đến 23:59 Thứ Bảy 28/11)** (sửa theo góp ý — không sửa chuẩn "đạt", câu thử, số bằng chứng, kết quả các lượt đã chạy)
 
