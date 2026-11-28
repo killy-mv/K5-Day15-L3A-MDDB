@@ -46,21 +46,45 @@ const lines=s=>String(s||"").split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
 const clone=x=>JSON.parse(JSON.stringify(x));
 const parseSource=s=>lines(s).map((text,i)=>{const m=text.match(/^\[([A-Za-z0-9_-]+)\]\s*(.+)$/);return {code:m?m[1]:"S"+String(i+1).padStart(2,"0"),text:m?m[2]:text}});
 const hostile=s=>/bỏ qua hướng dẫn|ignore (all |previous |system )?instructions|đọc file\s*\.env|<script\b|javascript:/i.test(s);
-function validate(p){
- if(!p||!p.segments.length)return ["Thiếu phân đoạn"];
- let t=0;const errs=[],codes=new Set(p.sources.map(s=>s.code));
- for(const s of p.segments){
- if(!Number.isInteger(s.duration_minutes)||s.duration_minutes<=0||s.start_minute!==t)errs.push("Timeline không hợp lệ: "+s.title);
- t+=s.duration_minutes;
- if(!s.slide_refs.length||s.slide_refs.some(r=>!codes.has(r)))errs.push("Mã nguồn không hợp lệ: "+s.title);
- for(const k of ["title","activity_type","teacher_script","teacher_actions","student_activity","expected_outcome","assessment","fallback_strategy"])if(!String(s[k]??"").trim())errs.push("Thiếu "+k);
+// Keep editable output aligned with the Python validator; semantic review remains human.
+const isText=v=>typeof v==="string"&&v.trim().length>0;
+const textList=(v,nonempty=false)=>Array.isArray(v)&&(!nonempty||v.length>0)&&v.every(x=>nonempty?isText(x):typeof x==="string");
+const unsafeText=v=>/<\s*\/?\s*[a-zA-Z][\w-]*(\s[^<>]*)?\/?\s*>|javascript\s*:|\bon(load|error|click)\s*=/i.test(v);
+function validate(p,expectedDuration=null,allowedCodes=null){
+ const errs=[];
+ if(!p||typeof p!=="object"||Array.isArray(p))return ["[SCHEMA] Kịch bản phải là object."];
+ if(!isText(p.lesson_title))errs.push("[SCHEMA] Thiếu tiêu đề bài.");
+ if(!Number.isInteger(p.duration_minutes)||p.duration_minutes<=0||(expectedDuration!==null&&p.duration_minutes!==expectedDuration))errs.push("[TIMELINE] Thời lượng không khớp yêu cầu.");
+ if(!textList(p.learning_objectives,true))errs.push("[SCHEMA] Mục tiêu phải là danh sách chuỗi không rỗng.");
+ if(!textList(p.warnings)||!textList(p.assumptions))errs.push("[SCHEMA] Cảnh báo/giả định phải là danh sách chuỗi.");
+ if(p.status!=="pending_review")errs.push("[STATUS] Bản nháp phải ở trạng thái chờ duyệt.");
+ if(p.approved||p.approved_by||p.approved_at)errs.push("[STATUS] Không chấp nhận metadata tự duyệt.");
+ if(isText(p.lesson_title)&&unsafeText(p.lesson_title))errs.push("[UNSAFE] Tiêu đề chứa HTML/script.");
+ const codes=new Set();
+ if(!Array.isArray(p.sources)||!p.sources.length)errs.push("[REF] Thiếu nguồn.");
+ else for(const src of p.sources){
+   if(!src||!isText(src.code)||!isText(src.text)||codes.has(src.code)||(allowedCodes&&!allowedCodes.has(src.code)))errs.push("[REF] Đoạn nguồn sai, trùng hoặc ngoài phạm vi.");
+   else codes.add(src.code);
  }
- if(t!==p.duration_minutes)errs.push("Tổng "+t+" phút, cần "+p.duration_minutes+" phút.");
+ if(!Array.isArray(p.segments)||!p.segments.length)return [...errs,"[SCHEMA] Thiếu phân đoạn."];
+ let t=0;
+ for(const [i,s] of p.segments.entries()){
+   const at="Hoạt động "+(i+1);
+   if(!s||typeof s!=="object"||Array.isArray(s)){errs.push("[SCHEMA] "+at+" không hợp lệ.");continue}
+   if(!Number.isInteger(s.duration_minutes)||s.duration_minutes<=0||!Number.isInteger(s.start_minute)||s.start_minute!==t)errs.push("[TIMELINE] "+at+" không liên tục hoặc sai phút.");
+   if(Number.isInteger(s.duration_minutes)&&s.duration_minutes>0)t+=s.duration_minutes;
+   if(!textList(s.slide_refs,true)||s.slide_refs.some(r=>!codes.has(r)))errs.push("[REF] "+at+" có mã nguồn không hợp lệ.");
+   for(const k of ["title","activity_type","teacher_script","teacher_actions","student_activity","expected_outcome","assessment","fallback_strategy"]){
+     if(!isText(s[k]))errs.push("[SCHEMA] "+at+" thiếu "+k);
+     else if(unsafeText(s[k]))errs.push("[UNSAFE] "+at+"."+k+" chứa HTML/script.");
+   }
+ }
+ if(t!==p.duration_minutes)errs.push("[TIMELINE] Tổng "+t+" phút, cần "+p.duration_minutes+" phút.");
  return errs;
 }
 function reflow(p){let t=0;p.segments.forEach(s=>{s.start_minute=t;t+=s.duration_minutes})}
 let draft=null,approved=null,index=0,completed=new Set(),seconds=0,timer=null,exported=false;
-let lessons=[],revision=0,pending=false,reader=null;
+let lessons=[],revision=0,pending=false,reader=null,draftDuration=null,draftCodes=null;
 function notice(text,bad=true){const n=$("inputNotice");n.hidden=!text;n.className="notice "+(bad?"bad":"ok");n.textContent=text}
 function stopTimer(){if(timer!==null)clearInterval(timer);timer=null;if(typeof document!=="undefined"&&$("timerToggle"))$("timerToggle").textContent="Bắt đầu timer"}
 function setLesson(){
@@ -86,7 +110,7 @@ function context(){
  return req;
 }
 
-function updateButtons(){const valid=!!draft&&validate(draft).length===0;$("approve").disabled=!valid||!$("reviewed").checked||!!approved;for(const id of ["teach","exportText","exportJson"])$(id).disabled=!approved;$("status").textContent=approved?"Đã duyệt":draft?"Chờ duyệt":"Chưa tạo"}
+function updateButtons(){const valid=!!draft&&validate(draft,draftDuration,draftCodes).length===0;$("approve").disabled=!valid||!$("reviewed").checked||!!approved;for(const id of ["teach","exportText","exportJson"])$(id).disabled=!approved;$("status").textContent=approved?"Đã duyệt":draft?(valid?"Chờ duyệt":"Cần sửa"):pending?"Đang sinh":"Chưa tạo"}
 function invalidate(){stopTimer();if(reader&&!reader.closed)reader.close();reader=null;approved=null;$("reviewed").checked=false;$("teachPanel").hidden=true;$("review").hidden=false;if(draft)draft.status="pending_review";updateButtons()}
 const fields={title:"Tên hoạt động",activity_type:"Phương pháp",teacher_script:"Lời dẫn",teacher_actions:"Việc giảng viên làm",student_activity:"Việc học viên làm",expected_outcome:"Kết quả mong đợi",assessment:"Kiểm tra hiểu / đáp án",fallback_strategy:"Phương án dự phòng"};
 function stats(p){return '<div class="stats"><div class="stat">Thời lượng<strong>'+p.duration_minutes+' phút</strong></div><div class="stat">Hoạt động<strong>'+p.segments.length+'</strong></div><div class="stat">Đoạn nguồn<strong>'+p.sources.length+'</strong></div></div>'}
@@ -94,8 +118,8 @@ function renderReview(){
  $("actions").hidden=!draft;
  if(!draft){$("result").className="empty";$("result").textContent="Chọn bài mẫu hoặc nhập nội dung rồi sinh kịch bản.";updateButtons();return}
  $("result").className="";
- const errors=validate(draft),p=draft;
- $("result").innerHTML='<h3 style="margin-top:16px">'+esc(p.lesson_title)+'</h3>'+stats(p)+'<div class="notice '+(errors.length?"bad":"ok")+'">'+esc(errors.length?errors.join("\n"):"Kiểm cấu trúc và timeline: đạt. Chưa xác minh ngữ nghĩa.")+'</div><p><strong>Mục tiêu:</strong> '+esc(p.learning_objectives.join("; "))+'</p><div class="notice">'+esc(p.warnings.join("\n"))+'</div><details><summary>Đối chiếu nguồn bài giảng</summary><p class="pre">'+esc(p.sources.map(s=>"["+s.code+"] "+s.text).join("\n"))+'</p></details><div class="timeline">'+p.segments.map(s=>'<span style="flex:'+Math.max(1,s.duration_minutes)+'"></span>').join("")+'</div>'+p.segments.map((s,i)=>'<details class="segment" '+(i===0?"open":"")+'><summary>'+esc(s.start_minute+"–"+(s.start_minute+s.duration_minutes)+" phút · "+s.title)+'</summary><p><span class="source">'+esc(s.slide_refs.join(", "))+'</span></p><label class="field">Thời lượng (phút)<input type="number" min="1" data-i="'+i+'" data-k="duration_minutes" value="'+s.duration_minutes+'"></label>'+Object.entries(fields).map(([k,v])=>'<label class="field">'+esc(v)+'<textarea data-i="'+i+'" data-k="'+k+'" rows="'+(k==="teacher_script"?4:2)+'">'+esc(s[k])+'</textarea></label>').join("")+'</details>').join("");
+ const errors=validate(draft,draftDuration,draftCodes),p=draft;
+ $("result").innerHTML='<h3 style="margin-top:16px">'+esc(p.lesson_title)+'</h3>'+stats(p)+'<div id="validationNotice" class="notice '+(errors.length?"bad":"ok")+'">'+esc(errors.length?errors.join("\n"):"Kiểm cấu trúc và timeline: đạt. Chưa xác minh ngữ nghĩa.")+'</div><p><strong>Mục tiêu:</strong> '+esc(p.learning_objectives.join("; "))+'</p><div class="notice">'+esc(p.warnings.join("\n"))+'</div><details><summary>Đối chiếu nguồn bài giảng</summary><p class="pre">'+esc(p.sources.map(s=>"["+s.code+"] "+s.text).join("\n"))+'</p></details><div class="timeline">'+p.segments.map(s=>'<span style="flex:'+Math.max(1,s.duration_minutes)+'"></span>').join("")+'</div>'+p.segments.map((s,i)=>'<details class="segment" '+(i===0?"open":"")+'><summary>'+esc(s.start_minute+"–"+(s.start_minute+s.duration_minutes)+" phút · "+s.title)+'</summary><p><span class="source">'+esc(s.slide_refs.join(", "))+'</span></p><label class="field">Thời lượng (phút)<input type="number" min="1" data-i="'+i+'" data-k="duration_minutes" value="'+s.duration_minutes+'"></label>'+Object.entries(fields).map(([k,v])=>'<label class="field">'+esc(v)+'<textarea data-i="'+i+'" data-k="'+k+'" rows="'+(k==="teacher_script"?4:2)+'">'+esc(s[k])+'</textarea></label>').join("")+'</details>').join("");
  updateButtons();
 }
 async function generate(){
@@ -103,20 +127,29 @@ async function generate(){
  invalidate();draft=null;renderReview();
  const req=context(),version=++revision;
  if(!$("permission").checked){notice("Xác nhận quyền sử dụng nguồn trước.");return;}
- pending=true;$("generate").disabled=true;notice("Backend đang xử lý yêu cầu...",false);
+ pending=true;$("generate").disabled=true;$("generate").textContent="Đang sinh kịch bản…";$("result").setAttribute("aria-busy","true");updateButtons();
+ const started=Date.now();
+ const showWait=()=>{if(version===revision)notice("Backend đang xử lý yêu cầu ("+Math.floor((Date.now()-started)/1000)+" giây). AI thật có thể mất thời gian; không cần gửi lại.",false)};
+ showWait();const waiting=setInterval(showWait,1000);
  try{
    const response=await fetch("/api/generate",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(req)});
    const result=await response.json();
    if(version!==revision)return;
-   if(!response.ok||result.status!=="pending_review"){notice(result.message||"Không có kịch bản hợp lệ.");return;}
+   if(!response.ok||!result||result.status!=="pending_review"){notice(result?.message||"Không có kịch bản hợp lệ.");return;}
+   const sourcePool=req.lesson_id==="custom"?req.sources:lessons.find(l=>l.id===req.lesson_id)?.segments||[];
+   const sourceCodes=new Set(sourcePool.map(x=>x.code));
+   draftDuration=req.duration_minutes;draftCodes=new Set(req.source_refs?req.source_refs.filter(code=>sourceCodes.has(code)):sourceCodes);
+   if(result.warnings===undefined)result.warnings=[];
+   if(result.assumptions===undefined)result.assumptions=[];
+   const errors=validate(result,draftDuration,draftCodes);
+   if(errors.length){notice("Backend trả kịch bản không hợp lệ:\n"+errors.join("\n"));return;}
    draft=result;
-   if(validate(draft).length){draft=null;notice("Backend trả kịch bản sai cấu trúc.");return;}
    notice(result.generation_mode==="mock"?"Đã nhận kịch bản MOCK từ Python backend; không phải AI thật.":"Đã nhận bản nháp từ AI; cần đối chiếu nguồn.",false);
  }catch(err){if(version===revision)notice("Không kết nối được backend hoặc phản hồi không hợp lệ. Kiểm tra python run.py.")}
- finally{pending=false;$("generate").disabled=false;renderReview()}
+ finally{clearInterval(waiting);pending=false;$("generate").disabled=false;$("generate").textContent="Sinh kịch bản";$("result").removeAttribute("aria-busy");if(version!==revision)notice("Context đã thay đổi trong lúc sinh. Hãy gửi yêu cầu mới.");renderReview()}
 }
 
-function approve(){if(!draft||validate(draft).length||!$("reviewed").checked)return;approved=clone(draft);approved.status="approved";draft.status="approved";updateButtons();notice("Phiên bản đã được giảng viên duyệt.",false)}
+function approve(){if(!draft||approved||validate(draft,draftDuration,draftCodes).length||!$("reviewed").checked)return;approved=clone(draft);approved.status="approved";updateButtons();notice("Phiên bản đã được giảng viên duyệt.",false)}
 function clock(){const el=$("clock");if(el)el.textContent=String(Math.floor(seconds/60)).padStart(2,"0")+":"+String(seconds%60).padStart(2,"0")}
 function renderTeach(){
  const p=approved;if(!p)return;const s=p.segments[index];
@@ -175,7 +208,7 @@ async function init(){
  $("upload").addEventListener("change",async e=>{const f=e.target.files[0];if(!f)return;if(f.size>1500000||! /\.(txt|md)$/i.test(f.name)){notice("Chỉ hỗ trợ TXT/MD dưới 1.5 MB.");return}try{$("source").value=await f.text();revision++;invalidate();draft=null;renderReview();notice("Đã đọc file; nhập mục tiêu rồi sinh kịch bản.",false)}catch{notice("Không đọc được file.")}});
  $("generate").onclick=generate;
  $("reviewed").onchange=updateButtons;
- $("result").addEventListener("input",e=>{const i=e.target.dataset.i,k=e.target.dataset.k;if(!draft||i===undefined||!k)return;invalidate();draft.segments[Number(i)][k]=k==="duration_minutes"?Number(e.target.value):e.target.value;if(k==="duration_minutes")reflow(draft);updateButtons()});
+ $("result").addEventListener("input",e=>{const i=e.target.dataset.i,k=e.target.dataset.k;if(!draft||i===undefined||!Object.hasOwn(fields,k)&&k!=="duration_minutes")return;invalidate();draft.segments[Number(i)][k]=k==="duration_minutes"?Number(e.target.value):e.target.value;if(k==="duration_minutes")reflow(draft);const errors=validate(draft,draftDuration,draftCodes),v=$("validationNotice");if(v){v.className="notice "+(errors.length?"bad":"ok");v.textContent=errors.length?errors.join(String.fromCharCode(10)):"Kiểm cấu trúc và timeline: đạt. Chưa xác minh ngữ nghĩa."}updateButtons()});
  $("result").addEventListener("change",e=>{if(e.target.dataset.k==="duration_minutes")renderReview()});
  $("approve").onclick=approve;$("teach").onclick=openReader;
  $("exportText").onclick=()=>{if(approved)download("teaching-script.md",markdown(approved),"text/markdown;charset=utf-8")};
@@ -194,6 +227,7 @@ async function init(){
    setLesson();$("generate").disabled=false;
  }catch{notice("Không tải được dữ liệu. Chạy python run.py rồi tải lại.")}
 }
+if(typeof module!=="undefined")module.exports={validate};
 if(typeof document!=="undefined")init();
 
 </script>
