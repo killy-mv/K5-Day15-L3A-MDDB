@@ -44,16 +44,16 @@ Bàn giao module xử lý đầu vào và xác minh kịch bản; dùng fixture 
 
 | Mã việc | Mô tả | Người phụ trách | Tiêu chí hoàn thành | Trạng thái | Ghi chú |
 |---|---|---|---|:---:|---|
-| B3-01 | Chuẩn hóa input | Hoàng Văn Bảo | Parser đọc text/Markdown và fixture theo lesson_id; hỗ trợ slide/PDF có text nếu khả thi; lỗi định dạng báo rõ | ❌ | Không cần OCR cho MVP |
-| B3-02 | Chunk và mã nguồn | Hoàng Văn Bảo | Mỗi đoạn có code duy nhất, text và tham chiếu slide/trang nếu có; không trộn tài liệu khác | ❌ | |
-| B3-03 | Kiểm tra context | Hoàng Văn Bảo | Phát hiện thiếu nguồn, thời lượng, trình độ, điều kiện lớp; yêu cầu bổ sung thay vì tự đoán | ❌ | |
-| B3-04 | Validator schema | Hoàng Văn Bảo | Kiểm tất cả trường bắt buộc theo metric đã khóa; trả lỗi có mã và vị trí; không duyệt tự động | ❌ | |
-| B3-05 | Validator timeline | Hoàng Văn Bảo | Phút nguyên dương, bắt đầu 0, liên tục, không trùng và tổng khớp yêu cầu; thiếu output tính fail | ❌ | |
-| B3-06 | Validator tham chiếu | Hoàng Văn Bảo | Mã nguồn tồn tại trong tài liệu được chọn; cảnh báo kiểm ngữ nghĩa thủ công, không coi mã hợp lệ là đủ căn cứ | ❌ | |
-| B3-07 | Guardrail input/tool | Hoàng Văn Bảo | Tách dữ liệu khỏi lệnh, chặn truy cập file bí mật/tool ngoài allowlist; xử lý injection và yêu cầu chấm điểm/xếp hạng | ❌ | RAG không thay guardrails |
-| B3-08 | Kiểm soát duyệt và xuất | Hoàng Văn Bảo | Chỉ phiên bản hợp lệ và được duyệt rõ ràng mới xuất; sửa mất duyệt; escape nội dung, không thực thi script ngoài | ❌ | Phối hợp Minh nối UI |
-| B3-09 | Unit test độc lập | Hoàng Văn Bảo | Test nguồn hợp lệ/sai, thiếu context, timeline lỗi, schema thiếu, injection, bypass duyệt; có lệnh chạy và kết quả thật | ❌ | |
-| B3-10 | Bàn giao module và Data Card | Hoàng Văn Bảo | PR parser/validator/guardrails, ví dụ gọi hàm, cập nhật Data Card nếu thêm nguồn; không đổi dữ liệu benchmark cũ | ❌ | |
+| B3-01 | Chuẩn hóa input | Hoàng Văn Bảo | Parser đọc text/Markdown và fixture theo lesson_id; hỗ trợ slide/PDF có text nếu khả thi; lỗi định dạng báo rõ | ✅ | 28/11: codebase/parser.py — lesson_id đã đăng ký, custom sources/source_text (text, Markdown, text PDF tách bằng ); PDF có text qua CLI pypdf, không OCR; lỗi ValueError tiếng Việt. Test: python -m unittest tests/test_bao_modules.py (32/32 pass, model giả lập) |
+| B3-02 | Chunk và mã nguồn | Hoàng Văn Bảo | Mỗi đoạn có code duy nhất, text và tham chiếu slide/trang nếu có; không trộn tài liệu khác | ✅ | 28/11: chunk_text mã U001… cố định, giữ page/title, cắt đoạn >2500 ký tự; chặn mã trùng/mã không an toàn; source_refs mã lạ → lỗi |
+| B3-03 | Kiểm tra context | Hoàng Văn Bảo | Phát hiện thiếu nguồn, thời lượng, trình độ, điều kiện lớp; yêu cầu bổ sung thay vì tự đoán | ✅ | 28/11: guardrails.check_request — MISSING_DURATION/LEVEL/CLASS_SIZE/MODE/EQUIPMENT/OBJECTIVES/SOURCES → needs_clarification; B03, B04, B22, B23 hỏi lại |
+| B3-04 | Validator schema | Hoàng Văn Bảo | Kiểm tất cả trường bắt buộc theo metric đã khóa; trả lỗi có mã và vị trí; không duyệt tự động | ✅ | 28/11: validator.validate_script — [SCHEMA]/[STATUS] có vị trí segments[i].field; status chỉ pending_review |
+| B3-05 | Validator timeline | Hoàng Văn Bảo | Phút nguyên dương, bắt đầu 0, liên tục, không trùng và tổng khớp yêu cầu; thiếu output tính fail | ✅ | 28/11: [TIMELINE] phút nguyên dương, start 0, liên tục, tổng = input |
+| B3-06 | Validator tham chiếu | Hoàng Văn Bảo | Mã nguồn tồn tại trong tài liệu được chọn; cảnh báo kiểm ngữ nghĩa thủ công, không coi mã hợp lệ là đủ căn cứ | ✅ | 28/11: [REF] mã phải thuộc nguồn được cung cấp; warning [REVIEW]/[SOURCE_REVIEW], mã hợp lệ không coi là đủ căn cứ |
+| B3-07 | Guardrail input/tool | Hoàng Văn Bảo | Tách dữ liệu khỏi lệnh, chặn truy cập file bí mật/tool ngoài allowlist; xử lý injection và yêu cầu chấm điểm/xếp hạng | ✅ | 28/11: refused GRADING, SELF_APPROVE, EXTERNAL_SCRIPT, SECRETS, EXTERNAL_ACTION, SURVEILLANCE, PERSONAL_DATA, FOLLOW_SOURCE, INJECTION_REQUEST/SOURCE (B08, B09, B10, B24); 131 đoạn OOP không bắt nhầm. Lọc theo mẫu câu, không toàn diện; allowlist tool nằm ở agent.py |
+| B3-08 | Kiểm soát duyệt và xuất | Hoàng Văn Bảo | Chỉ phiên bản hợp lệ và được duyệt rõ ràng mới xuất; sửa mất duyệt; escape nội dung, không thực thi script ngoài | ✅ | 28/11: validator chặn approved/HTML từ model ([STATUS], [UNSAFE]); python tests/browser_studio_smoke.py PASS trên Edge (mock mode): duyệt cần tích đối chiếu, sửa → mất duyệt và đóng màn hình riêng, xuất JSON chỉ sau duyệt; review dùng esc(), màn hình riêng dùng textContent. Đề xuất Minh thêm kiểm thẻ HTML trong validate() phía trình duyệt |
+| B3-09 | Unit test độc lập | Hoàng Văn Bảo | Test nguồn hợp lệ/sai, thiếu context, timeline lỗi, schema thiếu, injection, bypass duyệt; có lệnh chạy và kết quả thật | ✅ | 28/11: tests/test_bao_modules.py 32 test: nguồn hợp lệ/sai, thiếu context, timeline, schema, injection, PII, tự duyệt, tích hợp agent.build_response real-mode với mock generator; toàn bộ 77 test Python nhóm pass |
+| B3-10 | Bàn giao module và Data Card | Hoàng Văn Bảo | PR parser/validator/guardrails, ví dụ gọi hàm, cập nhật Data Card nếu thêm nguồn; không đổi dữ liệu benchmark cũ | ✅ | 28/11: PR nhánh HoangVanBao (parser/guardrails/validator + tests/test_bao_modules.py + docs/parser-validator-guardrails.md); Data Card không đổi vì không thêm nguồn |
 
 ## 3. CP3 — Tạ Tiến Dũng: Benchmark và Evaluation
 
@@ -110,7 +110,7 @@ Deadline 14:30 ngày 28/11. Run 2 phải dùng đúng benchmark đã chạy Run 
 | T4-05 | Mô phỏng >=50 phiên thật | Tạ Tiến Dũng | Seed cố định; qua answer thật; CSV và trace có token in/out, lượt gọi, latency, model; không tính mock | ❌ | BLOCKER: chờ M3-04/M4-01 và T4-03; đã kiểm plan_sessions 50 phiên seed=42 |
 | T4-06 | Chi phí và quy mô | Tạ Tiến Dũng | cost-estimate.md có thấp/cơ sở/cao, >=2 mức model, chi phí/task thành công = trung bình phiên chia tỷ lệ đạt lượt 2; ghi giới hạn nếu giá ước tính | ❌ | Đã hoàn thiện §1 đầu vào; BLOCKER: chờ T4-05 và tỷ lệ đạt Run 2 (T4-03) để điền §2–§3 |
 | M4-02 | Impact so với chi phí | Nguyễn Văn Minh | Spec §8 và cost-estimate có so sánh chi phí/người/tháng với impact cùng đơn vị hoặc giải thích quy đổi, kết luận go/iterate/stop có căn cứ | ❌ | Chờ T4-06 |
-| B4-02 | Hồ sơ an toàn | Hoàng Văn Bảo | §9 mô tả ẩn danh, quyền, rủi ro, giới hạn; test guardrails có kết quả thật | ❌ | |
+| B4-02 | Hồ sơ an toàn | Hoàng Văn Bảo | §9 mô tả ẩn danh, quyền, rủi ro, giới hạn; test guardrails có kết quả thật | ❌ | 28/11: đã điền spec §9 (ẩn danh, quyền, việc AI không được làm, người bị hại, giới hạn); test guardrails mới chạy với model giả lập — chờ Run 1 để có kết quả thật |
 | B4-03 | Người dùng thử (bonus) | Hoàng Văn Bảo | 2–3 người ngoài nhóm đúng vai, khoảng 10 phút/người, log hành vi và trích dẫn thật, tổng hợp 4 ý | ❌ | Không thay thế evidence pain |
 | D4-02 | Chuẩn bị demo AI Core | Nguyễn Đức Đạt | Case thường và khó chạy thật; giải thích quyết định, dữ liệu, tool, trace và giới hạn | ❌ | |
 | M4-03 | Slide demo | Nguyễn Văn Minh | 8 phần theo guide §5.1, mỗi trang có số/trích dẫn có nguồn/kết quả; cả nhóm bổ sung nội dung phụ trách; file hoặc link mở được | ❌ | |

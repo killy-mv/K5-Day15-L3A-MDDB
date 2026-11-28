@@ -161,9 +161,32 @@ Rủi ro đáng lo nhất khi demo: B07 — đáp án sai có vẻ hợp lý, m�
 - So với impact / người / tháng (§2): đáng làm không, vì sao:
 
 ## §9. Rủi ro & an toàn
-- Dữ liệu: đã ẩn danh gì, không thu gì, không đưa gì vào model gói miễn phí:
-- AI **không được** làm gì kể cả khi người dùng yêu cầu:
-- Ai có thể bị hại nếu AI sai, và nhóm chặn thế nào:
+- **Dữ liệu:**
+  - Ghi chép phỏng vấn P1/P2 đã bỏ tên và không nạp vào runtime.
+  - Dữ liệu BTC (`data/preclass`, `data/training-ops`) chỉ dùng số tổng hợp để thiết kế câu thử và persona, không gửi bản ghi cá nhân lên model.
+  - Bài OOP chỉ có tóm lược từng trang, không có PDF gốc. Quyền phân phối và quyền gửi nguyên PDF tới nhà cung cấp LLM chưa xác minh (DATA_CARD), nên model chỉ nhận đoạn tóm lược đã chọn.
+  - Input không thu tên, email hay điểm học viên. Nguồn custom có email/SĐT bị dừng lại để giảng viên xóa trước khi gửi model (`PERSONAL_DATA_SOURCE`).
+  - API key chỉ nằm trong `.env` ở server local: trình duyệt không nhận key, tool không đọc `.env`.
+- **AI không được làm, kể cả khi được yêu cầu** (chặn bằng code trước khi gọi model, `codebase/guardrails.py`, kèm mã lỗi):
+  - chấm điểm cuối hoặc xếp hạng học viên (`GRADING`, B08);
+  - tự gán "đã duyệt" (`SELF_APPROVE`, B10, kiểm lại ở validator `STATUS`);
+  - nhúng script ngoài (`EXTERNAL_SCRIPT`, B10);
+  - đọc `.env`, key hoặc mật khẩu (`SECRETS`);
+  - đăng LMS hoặc gửi email (`EXTERNAL_ACTION`, B24);
+  - theo dõi học viên bằng camera (`SURVEILLANCE`, B24);
+  - xử lý dữ liệu cá nhân học viên (`PERSONAL_DATA`);
+  - làm theo chỉ dẫn nằm trong slide (`FOLLOW_SOURCE`, `INJECTION_SOURCE`, B09);
+  - soạn khi chưa có nguồn (`MISSING_SOURCES`, B22).
+- **Ai bị hại nếu AI sai và nhóm chặn thế nào:**
+  - *Học viên* học sai nếu kịch bản sai kiến thức hoặc có đáp án sai. Kịch bản chỉ được dẫn mã nguồn đã cung cấp (validator `REF`). Mọi bản luôn ở `pending_review`, kèm cảnh báo `REVIEW`/`SOURCE_REVIEW`. Giảng viên phải tích "đã đối chiếu" mới duyệt được, và sửa bất kỳ chỗ nào thì mất duyệt.
+  - *Giảng viên* mất thời gian, hoặc lớp bị lệch giờ, nếu timeline sai. Validator `TIMELINE` bắt tổng phút, chồng/hở và số phút không nguyên.
+  - *Máy giảng viên* chạy mã độc nếu bản xuất ra chứa script. Validator `UNSAFE` chặn từ gốc; giao diện escape hoặc dùng `textContent`; file xuất là `.md`/`.json`.
+  - *Khi thiếu context* (thời lượng, trình độ, mục tiêu) thì hỏi lại, không đoán (B03, B04, B23).
+- **Giới hạn còn lại:**
+  - Bộ lọc dựa trên mẫu câu, diễn đạt lách mẫu vẫn có thể lọt.
+  - Code không kiểm được ngữ nghĩa (nguồn mâu thuẫn, đáp án sai: B01, B02, B07, B20). Các trường hợp này dựa vào model và người duyệt.
+  - Tóm lược OOP chưa có chuyên gia duyệt.
+  - Kết quả test guardrails hiện tại (32/32 pass, `tests/test_bao_modules.py`) chạy với model giả lập. Hiệu quả với model thật sẽ ghi sau Run 1. Chi tiết: `docs/parser-validator-guardrails.md`.
 
 ## §10. Phân công & changelog
 - Phân công có tên (theo chặng, chia cặp — guide "Cách chia việc"): __
@@ -178,6 +201,7 @@ Rủi ro đáng lo nhất khi demo: B07 — đáp án sai có vẻ hợp lý, m�
 | 27/11/2026, sau CP2 | Nhóm thống nhất chỉ sinh kịch bản; màn hình phụ riêng cho giảng viên, slide gốc vẫn trình chiếu; HTML chỉ là định dạng đọc tùy chọn | Quyết định nhóm và PR #2 (chỉ nhận commit context); không sửa benchmark hoặc chuẩn đạt. |
 
 | 28/11/2026, sau CP2 | Bàn giao dataset tóm lược 131 trang OOP ngoài AI20K, interface contract và fixture/mock Python | Giảm phụ thuộc giữa các module; chưa đánh giá AI thật; quyền phân phối PDF gốc chưa xác minh; giữ nguyên chuẩn đạt. |
+| 28/11/2026, trước CP3 | Thêm `codebase/parser.py`, `guardrails.py`, `validator.py` theo contract §5 (B3-01–B3-09), 32 unit test, tài liệu bàn giao; điền §9 | Chặn bằng code B03/B04/B22/B23 (hỏi lại) và B08/B09/B10/B24 (từ chối) trước khi gọi model; validator bắt timeline/mã nguồn/HTML/tự duyệt. Test với model giả lập, chưa phải kết quả eval; không sửa benchmark, metric hay chuẩn đạt. |
 
 **Sau CP4 (đến 23:59 Thứ Bảy 28/11)** (sửa theo góp ý — không sửa chuẩn "đạt", câu thử, số bằng chứng, kết quả các lượt đã chạy)
 
